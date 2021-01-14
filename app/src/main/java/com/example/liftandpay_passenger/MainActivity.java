@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new MainFragment()).commit();
+
+
 
 
 
@@ -28,22 +32,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottom_navigation = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment fragment = null;
-            switch (item.getItemId())
-            {
-                case R.id.main:
-                     fragment = new Fragment();
-                    break;
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
+        Fragment fragment = null;
+        switch (item.getItemId())
+        {
+            case R.id.navigation_home:
+                 fragment = new MainFragment();
+                 break;
 
-              //  case R.id.pa
+            case R.id.navigation_radar:
+                fragment = new RidesFragment();
+                break;
 
-            }
+            case R.id.navigation_payment:
+                fragment = new PayFragment();
+                break;
 
-            return false;
+            case R.id.navigation_profile:
+                fragment = new ProfileFragment();
+
+
+
+
         }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
+
+        return true;
     };
 
     
