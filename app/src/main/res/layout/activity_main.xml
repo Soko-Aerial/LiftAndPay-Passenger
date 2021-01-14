@@ -22,7 +22,7 @@
 
             app:itemIconTint="#808080"
             app:itemTextColor="@color/white"
-            app:itemIconSize="@android:dimen/app_icon_size"
+            app:itemIconSize="@android:dimen/notification_large_icon_height"
 
             app:menu="@menu/bottom_navigation_menu"
 
