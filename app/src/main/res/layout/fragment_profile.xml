@@ -41,8 +41,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="14dp"
         android:layout_marginTop="125dp"
+        
         android:layout_marginBottom="360dp"
-        card_view:cardBackgroundColor="#ff2345"
+        card_view:cardBackgroundColor="#ffffff"
         card_view:cardCornerRadius="8dp"
         android:layout_marginRight="20dp"
         card_view:cardElevation="500dp">
@@ -65,7 +66,7 @@
 
             android:layout_marginEnd="4dp"
             android:text="Chris Bailey"
-            android:textColor="#f2f2f2"
+            android:textColor="#3d56f5"
 
 
             android:textSize="20dp"
@@ -83,7 +84,7 @@
 
             android:layout_marginEnd="4dp"
             android:text="555 - 555 - 5555"
-            android:textColor="#f2f2f2"
+            android:textColor="#3d56f5"
 
 
             android:textSize="20dp"
@@ -101,7 +102,7 @@
 
             android:layout_marginEnd="4dp"
             android:text="Chris.baily@gmail.com"
-            android:textColor="#f2f2f2"
+            android:textColor="#3d56f5"
 
 
             android:textSize="20dp"
@@ -111,16 +112,16 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="330dp"
-        android:layout_height="119dp"
+        android:layout_width="331dp"
+        android:layout_height="122dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="11dp"
-        android:layout_marginTop="253dp"
+        android:layout_marginTop="250dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="217dp"
-        card_view:cardBackgroundColor="#ff2345"
+        android:layout_marginBottom="228dp"
+        card_view:cardBackgroundColor="#FFFFFF"
         card_view:cardCornerRadius="8dp"
         card_view:cardElevation="500dp">
 
@@ -141,8 +142,8 @@
 
 
             android:layout_marginEnd="4dp"
-            android:text="Chris Bailey"
-            android:textColor="#f2f2f2"
+            android:text="Privacy Settings"
+            android:textColor="#3d56f5"
 
 
             android:textSize="20dp"
@@ -159,8 +160,70 @@
 
 
             android:layout_marginEnd="4dp"
-            android:text="555 - 555 - 5555"
-            android:textColor="#f2f2f2"
+            android:text="Manage your privacy \n settings"
+            android:textColor="#3d56f5"
+
+
+            android:textSize="20dp"
+
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="331dp"
+        android:layout_height="122dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="380dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="100dp"
+        card_view:cardBackgroundColor="#ffffff"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="500dp">
+
+        <!-- Main Content View -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="Help Center"
+            android:textColor="#3d56f5"
+
+
+            android:textSize="20dp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="42dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="Having troubles? Feel free \n to pop us a question or two."
+            android:textColor="#3d56f5"
 
 
             android:textSize="20dp"
