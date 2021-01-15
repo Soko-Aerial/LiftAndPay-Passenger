@@ -1,15 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#32a9dc"
-        android:text="Payer" />
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <!-- Here you put the rest of your current view-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="25dp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:textColor="#ffbe0b"
+
+            android:text="Your Payments" />
+
+
+
+    </ScrollView>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <!-- Here you put the rest of your current view-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="50dp"
+
+            android:layout_marginEnd="-36dp"
+            android:layout_marginBottom="-1dp"
+            android:text="Choose desired vehicle type.We offer cars\n suitable for most every day needs."
+            android:textColor="#ffbe0b"
+            android:textSize="18dp" />
+    </ScrollView>
+
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <!-- Here you put the rest of your current view-->
+        <Button
+            android:id="@+id/containedButton"
+            android:layout_width="320dp"
+            android:layout_height="850dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginEnd="20dp"
+
+
+            android:backgroundTint="#ffbe0b"
+            android:text="Add Payment Method"
+            android:textColor="#3d56f5"
+            app:rippleColor="#2535DA" />
+    </ScrollView>
+
 
 </RelativeLayout>
