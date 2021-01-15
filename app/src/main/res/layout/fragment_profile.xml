@@ -12,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="30dp"
+        android:layout_marginTop="5dp"
         android:textStyle="bold"
         android:layout_marginStart="10dp"
-        android:textColor="#181F4D"
+        android:textColor="#ffbe0b"
 
         android:text="Your Profile" />
 
@@ -30,7 +31,7 @@
         android:layout_marginEnd="-36dp"
         android:layout_marginBottom="-1dp"
         android:text="Here you can see the rides you have\n completed"
-        android:textColor="#33181F4D"
+        android:textColor="#ffbe0b"
         android:textSize="20dp" />
 
     <androidx.cardview.widget.CardView
@@ -41,7 +42,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="14dp"
         android:layout_marginTop="125dp"
-        
+
         android:layout_marginBottom="360dp"
         card_view:cardBackgroundColor="#ffffff"
         card_view:cardCornerRadius="8dp"
@@ -109,6 +110,19 @@
 
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="295dp"
+
+            android:layout_marginRight="500dp"
+            android:layout_marginTop="42dp"
+            android:outlineSpotShadowColor="#f2345a"
+            android:src="@drawable/ic_next"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -166,6 +180,19 @@
 
             android:textSize="20dp"
 
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="295dp"
+
+            android:layout_marginRight="500dp"
+            android:layout_marginTop="42dp"
+            android:outlineSpotShadowColor="#f2345a"
+            android:src="@drawable/ic_next"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -228,6 +255,20 @@
 
             android:textSize="20dp"
 
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="295dp"
+
+            android:layout_marginRight="500dp"
+            android:layout_marginTop="42dp"
+            android:outlineSpotShadowColor="#f2345a"
+            android:src="@drawable/ic_next"
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
