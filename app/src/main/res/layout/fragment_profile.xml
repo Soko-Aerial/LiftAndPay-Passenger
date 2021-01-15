@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,14 +21,155 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
-        android:textSize="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
 
         android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+
+        android:layout_marginEnd="-36dp"
+        android:layout_marginBottom="-1dp"
+        android:text="Here you can see the rides you have\n completed"
         android:textColor="#33181F4D"
+        android:textSize="20dp" />
 
-        android:text="Here you can see the rides you have\n completed" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="330dp"
+        android:layout_height="119dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginBottom="360dp"
+        card_view:cardBackgroundColor="#ff2345"
+        card_view:cardCornerRadius="8dp"
+        android:layout_marginRight="20dp"
+        card_view:cardElevation="500dp">
 
+        <!-- Main Content View -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="Chris Bailey"
+            android:textColor="#f2f2f2"
+
+
+            android:textSize="20dp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="42dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="555 - 555 - 5555"
+            android:textColor="#f2f2f2"
+
+
+            android:textSize="20dp"
+
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="62dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="Chris.baily@gmail.com"
+            android:textColor="#f2f2f2"
+
+
+            android:textSize="20dp"
+
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="330dp"
+        android:layout_height="119dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="253dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="217dp"
+        card_view:cardBackgroundColor="#ff2345"
+        card_view:cardCornerRadius="8dp"
+        card_view:cardElevation="500dp">
+
+        <!-- Main Content View -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="Chris Bailey"
+            android:textColor="#f2f2f2"
+
+
+            android:textSize="20dp"
+            android:textStyle="bold"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="42dp"
+
+
+            android:layout_marginEnd="4dp"
+            android:text="555 - 555 - 5555"
+            android:textColor="#f2f2f2"
+
+
+            android:textSize="20dp"
+
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>
