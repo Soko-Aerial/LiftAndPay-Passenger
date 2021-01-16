@@ -21,18 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
         getSupportFragmentManager().beginTransaction().replace(R.id.container,new MainFragment()).commit();
-
-
-
-
-
-
-
-
-
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
+    private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
         Fragment fragment = null;
         switch (item.getItemId())
         {
@@ -50,10 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.navigation_profile:
                 fragment = new ProfileFragment();
-
-
-
-
+                break;
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment).commit();
 
