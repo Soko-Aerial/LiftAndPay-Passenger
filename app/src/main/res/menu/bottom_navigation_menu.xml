@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_radar_active_icn"
+
+         />
+    <item
+        android:id="@+id/navigation_radar"
+        android:icon="@drawable/ic_route_history_icn"
+
+
+         />
+    <item
+        android:id="@+id/navigation_payment"
+        android:icon="@drawable/ic_payment_icn"
+
+
+        />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile_icn"
+
+
+
+        />
+
+
+
+</menu>
