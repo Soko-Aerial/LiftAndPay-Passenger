@@ -2,6 +2,7 @@
 <resources>
     <color name="primaryColors">#3D56F5</color>
     <color name="mainBackgroundColor">#F2F2F2</color>
+    <color name="fadedBlue">#333D56F5</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>

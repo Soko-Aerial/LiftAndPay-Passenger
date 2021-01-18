@@ -97,10 +97,6 @@
             style="@style/ProfileCardText"
             android:text="Manage you privacy settings"
           />
-        <TextView
-            style="@style/ProfileCardText"
-            android:text="Chris.baily@gmail.com"
-         />
         </LinearLayout>
 
         <ImageView
@@ -129,16 +125,13 @@
             android:orientation="vertical">
         <TextView
             style="@style/ProfileCardText"
-            android:text="Chris Bailey"
+            android:text="Help Center"
+            android:textStyle="bold"
             />
         <TextView
             style="@style/ProfileCardText"
-            android:text="555 - 555 - 5555"
+            android:text="Feel free to pop us a question or two"
           />
-        <TextView
-            style="@style/ProfileCardText"
-            android:text="Chris.baily@gmail.com"
-         />
         </LinearLayout>
 
         <ImageView
