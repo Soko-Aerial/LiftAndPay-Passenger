@@ -1,14 +1,521 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<ScrollView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Rides" />
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:layout_width="443dp"
+            android:layout_height="57dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="9dp"
+            android:text="Your Rides"
+            android:textColor="#ffbe0b"
+            android:textSize="25dp"
+
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginTop="-10dp"
+            android:layout_marginStart="10dp"
+
+
+            android:layout_marginBottom="5dp"
+            android:text="Here you can see the rides you have\n completed"
+            android:textColor="#ffbe0b"
+            android:textSize="20dp" />
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+
+
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            card_view:cardBackgroundColor="#ffffff"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="500dp"
+            tools:ignore="MissingClass">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="08.09.2018 9:59 PM"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="260dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="$9.00"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="Ford Fiesta"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="24km"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+
+
+                android:layout_marginTop="60dp"
+
+                android:outlineSpotShadowColor="#f2345a"
+                android:src="@drawable/mapper"
+                />
+
+
+            <Button
+                android:id="@+id/textButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:backgroundTint="#3d56f5"
+                android:textColor="#ffffff"
+                android:layout_marginStart="210dp"
+                android:text="Details"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+
+
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            card_view:cardBackgroundColor="#ffffff"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="500dp"
+            tools:ignore="MissingClass">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="08.09.2018 9:59 PM"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="260dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="$4.00"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="Ford Fiesta"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="10km"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+
+
+                android:layout_marginTop="60dp"
+
+                android:outlineSpotShadowColor="#f2345a"
+                android:src="@drawable/mapper"
+                />
+
+            <Button
+                android:id="@+id/textButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:backgroundTint="#3d56f5"
+                android:textColor="#ffffff"
+                android:layout_marginStart="210dp"
+                android:text="Details"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+
+
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            card_view:cardBackgroundColor="#ffffff"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="500dp"
+            tools:ignore="MissingClass">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="08.09.2018 9:59 PM"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="260dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="$5.34"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="Ford Fiesta"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="5km"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+
+
+                android:layout_marginTop="60dp"
+
+                android:outlineSpotShadowColor="#f2345a"
+                android:src="@drawable/mapper"
+                />
+
+            <Button
+                android:id="@+id/textButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:backgroundTint="#3d56f5"
+                android:textColor="#ffffff"
+                android:layout_marginStart="210dp"
+                android:text="Details"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+
+
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="70dp"
+            card_view:cardBackgroundColor="#ffffff"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="500dp"
+            tools:ignore="MissingClass">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="08.09.2018 9:59 PM"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="260dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="$7.00"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="18dp"
+                android:textStyle="bold"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="Ford Fiesta"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="270dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="42dp"
+
+
+                android:layout_marginEnd="4dp"
+                android:text="6.4km"
+                android:textColor="#3d56f5"
+
+
+                android:textSize="16dp"
+
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+
+
+                android:layout_marginTop="60dp"
+
+                android:outlineSpotShadowColor="#f2345a"
+                android:src="@drawable/mapper"
+                />
+
+            <Button
+                android:id="@+id/textButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:backgroundTint="#3d56f5"
+                android:textColor="#ffffff"
+                android:layout_marginStart="210dp"
+                android:text="Details"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+
+
+
+</ScrollView>
