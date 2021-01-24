@@ -107,7 +107,7 @@
                 android:src="@drawable/ic_icons8_visa" />
 
             <Button
-                android:id="@+id/edit_btn"
+                android:id="@+id/payment_btn"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

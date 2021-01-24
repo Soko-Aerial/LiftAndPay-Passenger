@@ -2,4 +2,8 @@
 <resources>
     <item name="main" type="id" />
     <item name="pay" type="id" />
+    <item name="ride_view" type="id"></item>
+    <item name="recyclerView" type="id" />
+    <item name="textViewTitle" type="id" />
+    <item name="textViewShortDesc" type="id" />
 </resources>
