@@ -1,10 +1,10 @@
 package com.example.liftandpay_passenger;
-public class datamodel {
+public class completedRidesModel {
     int image;
     String header,desc,distance,price;
 //data for ride history for the recycler view
 
-    public datamodel(int image, String header, String desc, String distance, String price) {
+    public completedRidesModel(int image, String header, String desc, String distance, String price) {
         this.image = image;
         this.header = header;
         this.desc = desc;
@@ -19,7 +19,6 @@ public class datamodel {
     public void setImage(int image) {
         this.image = image;
     }
-
 
 
     public String getHeader() {
