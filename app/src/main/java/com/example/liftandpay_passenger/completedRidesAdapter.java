@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class myadapter extends RecyclerView.Adapter<myadapter.myviewholder> {
-    ArrayList<datamodel> dataholder;
+public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAdapter.myviewholder> {
+    ArrayList<completedRidesModel> dataholder;
 
 
-    public myadapter(ArrayList<datamodel> dataholder) {
+    public completedRidesAdapter(ArrayList<completedRidesModel> dataholder) {
         this.dataholder = dataholder;
     }
 
@@ -34,8 +34,6 @@ public class myadapter extends RecyclerView.Adapter<myadapter.myviewholder> {
         holder.desc.setText(dataholder.get(position).getDesc());
         holder.distance.setText(dataholder.get(position).getDistance());
         holder.price.setText(dataholder.get(position).getPrice());
-
-
     }
 
     @Override
