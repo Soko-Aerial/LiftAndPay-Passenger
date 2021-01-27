@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAdapter.myviewholder> {
+public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAdapter.myViewHolder> {
     ArrayList<completedRidesModel> dataholder;
 
 
@@ -22,13 +22,13 @@ public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAd
 
     @NonNull
     @Override
-    public myviewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_row_design,parent,false);
-        return  new myviewholder(view);
+        return new myViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull myviewholder holder, int position) {
+    public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
         holder.img.setImageResource(dataholder.get(position).getImage());
         holder.header.setText(dataholder.get(position).getHeader());
         holder.desc.setText(dataholder.get(position).getDesc());
@@ -41,11 +41,11 @@ public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAd
         return dataholder.size();
     }
 
-    class myviewholder extends RecyclerView.ViewHolder{
+    static class myViewHolder extends RecyclerView.ViewHolder{
         ImageView img;
         TextView header,desc,distance,price;
 
-        public myviewholder(@NonNull View itemView) {
+        public myViewHolder(@NonNull View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.img1);
             header = itemView.findViewById(R.id.t1);

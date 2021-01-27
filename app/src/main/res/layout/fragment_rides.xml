@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="15dp"
     tools:context=".RidesFragment"
     >
 
@@ -15,52 +16,28 @@
 
         <!-- TODO: Update blank fragment layout -->
         <TextView
-            android:layout_width="443dp"
-            android:layout_height="57dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="9dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Your Rides"
-            android:textColor="#ffbe0b"
+            android:textColor="@color/black"
             android:textSize="25dp"
-
             android:textStyle="bold"
-            android:layout_marginLeft="10dp" />
+       />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="-20dp"
-
-
-
-            android:layout_marginBottom="35dp"
-            android:text="Here you can see the rides you have\n completed"
-            android:textColor="#ffbe0b"
+            android:text="Here you can see the rides you have completed"
+            android:textColor="@color/black"
             android:textSize="20dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="-30dp"
-            android:layout_marginBottom="70dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="-30dp"
-            android:layout_marginBottom="70dp" />
-
+            android:layout_height="wrap_content"
+          />
 
     </LinearLayout>
 

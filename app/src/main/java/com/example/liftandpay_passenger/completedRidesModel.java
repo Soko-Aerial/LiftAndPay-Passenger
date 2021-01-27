@@ -20,7 +20,6 @@ public class completedRidesModel {
         this.image = image;
     }
 
-
     public String getHeader() {
         return header;
     }
@@ -44,9 +43,6 @@ public class completedRidesModel {
     public void setDistance(String distance) {
         this.distance = distance;
     }
-
-
-
 
     public String getPrice() {
         return price;
