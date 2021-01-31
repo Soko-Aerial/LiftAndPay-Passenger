@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AddCardDetails"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/yourProfileTextId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginTop="9dp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:text="Add Card" />
+
+    <TextView
+        android:id="@+id/activityDescriptionTextId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/yourProfileTextId"
+        android:text="Choose Desired Payment method to add"
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField"
+        app:endIconDrawable="@drawable/ic_icons8_visa"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#f2f2f2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="card number">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</FrameLayout>

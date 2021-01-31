@@ -3,17 +3,21 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_radar_active_icn"
+        android:title="Home"
+
 
          />
     <item
         android:id="@+id/navigation_radar"
         android:icon="@drawable/ic_route_history_icn"
+        android:title="Rides"
 
 
          />
     <item
         android:id="@+id/navigation_payment"
         android:icon="@drawable/ic_payment_icn"
+        android:title="Payments"
 
 
         />
@@ -21,6 +25,7 @@
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_profile_icn"
+        android:title="Profile"
 
 
 

@@ -37,7 +37,10 @@
         >
 
         <com.google.android.material.card.MaterialCardView
+
             style="@style/ProfileCardViewStyle"
+            android:id="@+id/cardPayment"
+
             android:layout_margin="10dp"
             android:layout_height="80dp"
             card_view:cardElevation="5dp"
@@ -54,7 +57,7 @@
                     android:orientation="vertical">
                     <ImageView
                         style="@style/ProfileCardText"
-                        android:src="@drawable/ic_icons8_visa"
+                        android:src="@drawable/ic_icons8_mastercard"
                         android:textStyle="bold"
                         />
 
@@ -63,7 +66,7 @@
                         android:layout_width="82dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="60dp"
-                      android:layout_marginTop="-35dp"
+                        android:layout_marginTop="-35dp"
                         android:text="Visa"
                         android:textStyle="bold"
                         android:textSize="20dp" />
@@ -86,6 +89,7 @@
         <com.google.android.material.card.MaterialCardView
             style="@style/ProfileCardViewStyle"
             android:layout_margin="10dp"
+            android:id="@+id/cardPayment2"
             android:layout_height="80dp"
             card_view:cardElevation="5dp"
             card_view:cardCornerRadius="4dp"

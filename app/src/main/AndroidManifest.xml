@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"
-            >
+        <activity android:name=".AddCardDetails"></activity>
+        <activity android:name=".RideDetailsActivity" />
+        <activity android:name=".PaymentMethodsActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

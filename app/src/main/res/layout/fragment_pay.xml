@@ -52,7 +52,10 @@
                 <ImageView
                     android:id="@+id/imageView4"
                     style="@style/PaymentMethodCardViewStyle.CardLogoStyle"
-                    android:src="@drawable/ic_icons8_visa" />
+                    android:background="#FFCC00"
+                    android:layout_height="48dp"
+                    android:layout_width="48dp"
+                    android:src="@drawable/ic_mtnmomologo" />
 
                 <Button
                     android:id="@+id/payment_btn"
@@ -137,7 +140,7 @@
 
 
         <Button
-            android:id="@+id/textButton"
+            android:id="@+id/paymentButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
