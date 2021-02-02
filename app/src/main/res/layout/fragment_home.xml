@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+   >
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -11,4 +11,11 @@
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
 
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tilesource="Mapnik"
+        tools:replace="android:allowBackup"/>
 </FrameLayout>
