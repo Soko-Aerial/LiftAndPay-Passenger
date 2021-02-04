@@ -34,13 +34,17 @@
         android:id="@+id/filledTextField"
         app:endIconDrawable="@drawable/ic_icons8_visa"
         android:layout_marginTop="100dp"
-        android:backgroundTint="#f2f2f2"
+        app:startIconTintMode="src_in"
+        android:backgroundTint="#3d567d"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="card number">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
+            android:backgroundTint="#f2f2f2"
+            app:startIconDrawable="@drawable/ic_currency"
+            android:layout_marginStart="10dp"
             android:layout_height="wrap_content"
             />
 
