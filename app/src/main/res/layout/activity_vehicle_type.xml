@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RideDetailsActivity">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_left_arrow_1_"/>
+
+    <TextView
+        android:id="@+id/yourProfileTextId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginTop="45dp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/black"
+        android:text="Vehicle Type" />
+
+    <TextView
+        android:id="@+id/activityDescriptionTextId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_below="@id/yourProfileTextId"
+        android:text="Choose desired vehicle type. We offer cars suitable for most every day needs."
+        android:textColor="@color/black"
+        android:textSize="20dp" />
+
+
+
+</RelativeLayout>

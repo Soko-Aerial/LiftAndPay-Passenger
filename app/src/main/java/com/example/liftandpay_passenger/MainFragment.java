@@ -1,5 +1,6 @@
 package com.example.liftandpay_passenger;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,57 +9,52 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.MapView;
+
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
+import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.OverlayManager;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
+
  * create an instance of this fragment.
  */
 public class MainFragment extends Fragment {
+    MapView mapView;
+    private MapView m_mapView;
+    private int MAP_DEFAULT_ZOOM = 16;
+    private double MAP_DEFAULT_LATITUDE =  33.6667;
+    // Default map Longitude:
+    private double MAP_DEFAULT_LONGITUDE = 73.1667;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MainFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View v =  inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        m_mapView = (MapView) v.findViewById(R.id.m_mapview);
+        // m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+        m_mapView.setTileSource(TileSourceFactory.MAPNIK);
+        m_mapView.setBuiltInZoomControls(true);
+        m_mapView.setMultiTouchControls(true);
+        m_mapView.setClickable(true);
+        m_mapView.setUseDataConnection(true);
+        m_mapView.getController().setZoom(16);
+        m_mapView.getController().setCenter(new GeoPoint(33.6667, 73.1667));
+
+
+
+        return  v;
     }
 }
