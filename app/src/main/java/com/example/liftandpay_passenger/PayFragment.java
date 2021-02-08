@@ -25,7 +25,7 @@ public class PayFragment extends Fragment {
         paymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),PaymentMethodsActivity.class));
+                startActivity(new Intent(getActivity(),VehicleTypeActivity.class));
             }
         });
 

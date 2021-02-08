@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
         if(savedInstanceState==null){
             animatedBottomBar.selectTabById(R.id.navigation_home,true);
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 
 
