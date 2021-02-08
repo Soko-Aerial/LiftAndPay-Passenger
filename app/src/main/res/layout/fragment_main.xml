@@ -2,13 +2,105 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_height="match_parent"
     tools:context=".MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="home" />
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/m_mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_tranmissiontype2"
+        style="@style/MaterialAlertDialog.MaterialComponents.Title.Icon"
+        android:layout_width="218dp"
+        android:layout_height="213dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="40dp"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="400dp"
+        android:backgroundTint="@color/white"
+        android:checkable="true"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
+
+            <ImageView
+                android:id="@+id/img5"
+                android:layout_width="21dp"
+
+                android:layout_height="77dp"
+                android:layout_alignParentBottom="true"
+
+                android:layout_marginStart="40dp"
+
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="99dp"
+                android:src="@drawable/ic_manual_transmission" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="5dp"
+
+
+                android:text="More info"
+                android:textColor="@color/primaryColors"
+                android:textSize="20dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_upload" />
+
+
+            <TextView
+                android:id="@+id/yourProfileTextId2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+
+                android:text="Ford Fiesta"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="64dp"
+
+                android:text="Manual"
+                android:textColor="@color/primaryColors"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
 
 </RelativeLayout>

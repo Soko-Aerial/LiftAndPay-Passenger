@@ -3,13 +3,15 @@
     package="com.example.liftandpay_passenger">
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
-        <activity android:name=".AddCardDetails"></activity>
+        <activity android:name=".VehicleTypeActivity"></activity>
+        <activity android:name=".AddCardDetails" />
         <activity android:name=".RideDetailsActivity" />
         <activity android:name=".PaymentMethodsActivity" />
         <activity
@@ -22,5 +24,16 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.location.network" />
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.wifi" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
 </manifest>
