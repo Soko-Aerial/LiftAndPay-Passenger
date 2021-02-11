@@ -24,7 +24,7 @@ public class RidesFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_rides, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         dataholder = new ArrayList<>();
 
         completedRidesModel ob1 = new completedRidesModel(R.drawable.img_map,"Toyota Auris","08.09.2018 9:59 PM","20km","$3.00");

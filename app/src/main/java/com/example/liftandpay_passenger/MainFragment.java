@@ -1,63 +1,83 @@
 package com.example.liftandpay_passenger;
 
-import android.graphics.Canvas;
-import android.os.Bundle;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.LinearLayout;
 
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
-import org.osmdroid.views.MapView;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.OverlayManager;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
-
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
-    MapView mapView;
-    private MapView m_mapView;
-    private int MAP_DEFAULT_ZOOM = 16;
-    private double MAP_DEFAULT_LATITUDE =  33.6667;
-    // Default map Longitude:
-    private double MAP_DEFAULT_LONGITUDE = 73.1667;
+    private RecyclerView recyclerView;
+    ArrayList<carBookingModel> carholder;
 
 
+    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+
+        /**
+         * Manipulates the map once available.
+         * This callback is triggered when the map is ready to be used.
+         * This is where we can add markers or lines, add listeners or move the camera.
+         * In this case, we just add a marker near Sydney, Australia.
+         * If Google Play services is not installed on the device, the user will be prompted to
+         * install it inside the SupportMapFragment. This method will only be triggered once the
+         * user has installed Google Play services and returned to the app.
+         */
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+            LatLng sydney = new LatLng(-34, 151);
+            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        }
+    };
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        recyclerView = v.findViewById(R.id.recyclerViewId);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        carholder = new ArrayList<>();
+
+       carBookingModel on1 = new carBookingModel(1);
+       carBookingModel on2 = new carBookingModel(1);
+       carBookingModel on3 = new carBookingModel(1);
+       carholder.add(on1);
+       carholder.add(on2);
+       carholder.add(on3);
+
+        recyclerView.setAdapter(new carBookAdapter(carholder));
+
+        return v;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_main, container, false);
-
-
-        m_mapView = (MapView) v.findViewById(R.id.m_mapview);
-        // m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
-        m_mapView.setTileSource(TileSourceFactory.MAPNIK);
-        m_mapView.setBuiltInZoomControls(true);
-        m_mapView.setMultiTouchControls(true);
-        m_mapView.setClickable(true);
-        m_mapView.setUseDataConnection(true);
-        m_mapView.getController().setZoom(16);
-        m_mapView.getController().setCenter(new GeoPoint(33.6667, 73.1667));
-
-
-
-        return  v;
-
-
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(callback);
+        }
     }
 }
