@@ -34,6 +34,15 @@
             android:layout_margin="7dp"
             android:orientation="vertical">
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:drawableLeft="@drawable/ic_upload"
+
+                android:text="More Info"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,6 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"
+                    android:background="#FFF8E7"
                     android:text="$1.20 - 1.40"/>
 
 
@@ -65,6 +75,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
+                android:id="@+id/book_car"
                 android:layout_height="wrap_content"
                 android:text="Book This Car"/>
         </LinearLayout>
@@ -76,8 +87,9 @@
         android:id="@+id/carID"
         android:layout_width="150dp"
         android:layout_height="130dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="130dp"
+
+
         android:background="@color/transparent"
         android:src="@drawable/car2"/>
 
