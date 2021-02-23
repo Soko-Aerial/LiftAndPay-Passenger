@@ -94,7 +94,7 @@ public class MainFragment extends Fragment {
         }
 
 
-        recyclerView.setAdapter(new carBookAdapter(carholder));
+        recyclerView.setAdapter(new carBookAdapter(carholder,getContext()));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
