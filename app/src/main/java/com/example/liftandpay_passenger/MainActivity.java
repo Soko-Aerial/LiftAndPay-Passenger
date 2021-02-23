@@ -24,10 +24,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
         if(savedInstanceState==null){
+
             animatedBottomBar.selectTabById(R.id.navigation_home,true);
             fragmentManager = getSupportFragmentManager();
             MainFragment homeFragment = new MainFragment();
@@ -39,25 +38,27 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(int lastIndex, @Nullable AnimatedBottomBar.Tab lastTab, int newIndex, @NotNull AnimatedBottomBar.Tab newTab) {
                 Fragment fragment = null;
                 switch (newTab.getId()){
+
                     case R.id.navigation_home:
                         fragment = new MainFragment();
                         break;
+
                     case R.id.navigation_radar:
                         fragment = new RidesFragment();
                         break;
+
                     case R.id.navigation_payment:
                         fragment = new PayFragment();
                         break;
+
                     case R.id.navigation_profile:
                         fragment = new ProfileFragment();
                         break;
-
 
                 }
                 if(fragment!=null){
                     fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
-
                 }
 
             }
@@ -68,14 +69,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
-
-
-
-
 
 }

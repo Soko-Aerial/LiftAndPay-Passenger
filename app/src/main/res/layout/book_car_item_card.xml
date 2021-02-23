@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="190dp"
+    android:layout_width="170dp"
     android:layout_height="200dp"
     android:layout_marginHorizontal="5dp"
+    app:cardCornerRadius="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/transparent"
+    app:cardBackgroundColor="@color/white"
     app:strokeColor="@color/white"
-    app:cardElevation="0dp"
+    app:cardElevation="15dp"
   >
 
 
@@ -38,10 +39,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:drawableLeft="@drawable/ic_upload"
-
-                android:text="More Info"/>
+                android:text="  More Info"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"
-                    android:background="#FFF8E7"
+                    android:background="@color/fadedOrange"
                     android:text="$1.20 - 1.40"/>
 
 
@@ -85,11 +84,11 @@
     </LinearLayout>
     <ImageView
         android:id="@+id/carID"
-        android:layout_width="150dp"
-        android:layout_height="130dp"
-        android:layout_marginTop="130dp"
-
-
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@color/transparent"
         android:src="@drawable/car2"/>
 

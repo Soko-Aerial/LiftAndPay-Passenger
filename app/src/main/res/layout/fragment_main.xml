@@ -12,6 +12,15 @@
     android:layout_height="match_parent"
     tools:context=".MainFragment" />
 
+    <SearchView
+        android:id="@+id/searchId"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search ..."
+        android:background="@drawable/searchbar_bkg"
+        android:iconifiedByDefault="false"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewId"
         android:layout_width="match_parent"

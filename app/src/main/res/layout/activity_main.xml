@@ -19,22 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="#FFFFFF"
+            android:background="@color/white"
             app:abb_iconSize="60sp"
-            app:abb_indicatorAppearance="square"
             app:abb_indicatorColor="@color/primaryColors"
-            app:abb_indicatorHeight="4dp"
-
-            app:abb_indicatorLocation="top"
-            app:abb_indicatorMargin="0dp"
-            app:abb_selectedIndex="0"
             app:abb_selectedTabType="text"
             app:abb_tabAnimationSelected="slide"
             app:abb_tabColor="#454545"
             app:abb_tabColorSelected="#3f51b5"
             app:abb_tabs="@menu/bottom_navigation_menu"
-
-
             />
 
 
