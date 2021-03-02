@@ -111,12 +111,13 @@
         app:layout_constraintTop_toBottomOf="@+id/app_name"
         app:layout_constraintVertical_bias="0.40"
         app:endIconTint="@color/black"
-        
+
         app:hintAnimationEnabled="true"
         android:autofillHints="Password"
         app:endIconMode="password_toggle"
         app:passwordToggleEnabled="true"
         android:hint="Password"
+        app:endIconTintMode="multiply"
 
 
         tools:ignore="DuplicateIds">
@@ -126,9 +127,87 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:inputType="textPassword"
+            android:drawableTint="@color/black"
+
 
             android:layout_height="wrap_content"
             />
 
+
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filledTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/white"
+        app:boxBackgroundColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/app_name"
+        app:layout_constraintVertical_bias="0.55"
+        app:endIconTint="@color/black"
+
+        app:hintAnimationEnabled="true"
+        android:autofillHints="Password"
+        app:endIconMode="password_toggle"
+        app:passwordToggleEnabled="true"
+        android:hint="Confirm Password"
+
+
+
+        tools:ignore="DuplicateIds">
+
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:inputType="textPassword"
+            android:drawableTint="@color/black"
+
+
+            android:layout_height="wrap_content"
+            />
+
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioButton
+        android:id="@+id/radio_button_1"
+        android:layout_width="match_parent"
+        android:layout_marginTop="265dp"
+        android:layout_height="match_parent"
+        android:text="Remember me"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:checked="false"
+        android:layout_marginTop="320dp"
+        android:text="Please read and check the box to agree to\n our Terms and Privacy Policy"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="416dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/white"
+        android:elevation="20dp"
+        android:padding="10dp"
+        android:text="Sign Up"
+        app:cornerRadius="20dp"
+        app:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>
