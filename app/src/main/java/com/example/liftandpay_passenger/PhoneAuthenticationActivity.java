@@ -2,7 +2,6 @@ package com.example.liftandpay_passenger;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +36,7 @@ public class PhoneAuthenticationActivity extends AppCompatActivity {
                     return;
                 }
 
-             
+                Toast.makeText(PhoneAuthenticationActivity.this, "+"+countryCode.getText().toString()+phoneNumber.getText().toString(),Toast.LENGTH_SHORT).show();
 
             }
         });
