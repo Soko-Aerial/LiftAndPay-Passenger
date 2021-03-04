@@ -16,6 +16,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.bottomsheetlayout, container, false);
+        carholder = new ArrayList<>();
+        carBookingModel ob1 = new carBookingModel(R.drawable.car2);
+        carholder.add(ob1);
 
         return v;
     }

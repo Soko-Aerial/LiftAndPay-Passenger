@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "837244026201",
-    "project_id": "lift-and-pay",
-    "storage_bucket": "lift-and-pay.appspot.com"
+    "project_number": "11462994162",
+    "project_id": "lift-and-pay-b5fe5",
+    "storage_bucket": "lift-and-pay-b5fe5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:837244026201:android:8c73a2f005bd0c027a2048",
+        "mobilesdk_app_id": "1:11462994162:android:3e018d828d31f652c1486b",
         "android_client_info": {
           "package_name": "com.example.liftandpay_passenger"
         }
       },
       "oauth_client": [
         {
-          "client_id": "837244026201-ksupqqlclt6aso4td7dcp1htrgr0oo7a.apps.googleusercontent.com",
+          "client_id": "11462994162-35kl8s0mqvjk1l8mnhj529d0e44cmr1l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVkP8ROm0F4guG_uFxauT894A0WuwoCbw"
+          "current_key": "AIzaSyDMur9PHc8g0aGALP_QRTunTA3HMV4Y0-M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "837244026201-ksupqqlclt6aso4td7dcp1htrgr0oo7a.apps.googleusercontent.com",
+              "client_id": "11462994162-35kl8s0mqvjk1l8mnhj529d0e44cmr1l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
