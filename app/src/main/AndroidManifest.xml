@@ -44,7 +44,7 @@
         <activity android:name=".RideDetailsActivity" />
         <activity android:name=".PaymentMethodsActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".PhoneAuthenticationActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
