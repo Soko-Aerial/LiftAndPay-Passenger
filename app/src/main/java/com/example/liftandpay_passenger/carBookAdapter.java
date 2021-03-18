@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,12 +37,15 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
+//        holder.amount.setText(carHolder.get(position).getCostPerKilometer());
+//        holder.carName.setText(carHolder.get(position).getCarName());
+
+
         holder.bookCarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
-                FragmentManager manager = ((AppCompatActivity)carBookContext).getSupportFragmentManager();
+                FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
                 bottomSheetDialog.show(manager, null);
                 Toast.makeText(carBookContext,"Hellow" , Toast.LENGTH_LONG ).show();
             }
@@ -57,12 +61,17 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     public class myViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         MaterialButton bookCarBtn;
+        TextView amount;
+        TextView carName;
+
 
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.carID);
             bookCarBtn = itemView.findViewById(R.id.book_car);
+            amount = itemView.findViewById(R.id.amountPerKilometer);
+
         }
     }
 }

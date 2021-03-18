@@ -43,6 +43,7 @@
                 android:text="  More Info"/>
 
             <TextView
+                android:id="@+id/carNameId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
@@ -57,6 +58,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/amountPerKilometer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"
@@ -65,6 +67,7 @@
 
 
                 <TextView
+                    android:id="@+id/manualAutomaticId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="5dp"

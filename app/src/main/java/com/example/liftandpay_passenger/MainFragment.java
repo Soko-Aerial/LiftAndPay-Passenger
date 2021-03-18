@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,9 +28,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -39,14 +55,18 @@ public class MainFragment extends Fragment {
     private SearchView searchView;
     ArrayList<carBookingModel> carholder;
 
+
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LatLng myLoc;
-
     private GoogleMap mMap;
 
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -55,7 +75,8 @@ public class MainFragment extends Fragment {
          * If Google Play services is not installed on the device, the user will be prompted to
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
-         */
+         **/
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
           mMap = googleMap;
@@ -82,19 +103,79 @@ public class MainFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
+      /*  mAuth.signInWithEmailAndPassword("hubamp@gmail.com", "123456")
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toast.makeText(getContext(), "Successfully Signed in",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });*/
+
+
 
         searchView = v.findViewById(R.id.searchId);
         recyclerView = v.findViewById(R.id.recyclerViewId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         carholder = new ArrayList<>();
 
-        for(int i = 0 ; i < 5 ;i++) {
-            carBookingModel on1 = new carBookingModel(1);
-            carholder.add(on1);
-        }
+        recyclerView.setVisibility(View.GONE);
+
+//        CollectionReference pendingRidesReference =    db.collection("Rides").getParent().collection("Pending Rides");
 
 
-        recyclerView.setAdapter(new carBookAdapter(carholder,getContext()));
+        db.collection("Rides")
+            .get()
+               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Snackbar.make(recyclerView, "Completed", Snackbar.LENGTH_SHORT).show();
+                        carholder.clear();
+
+                        if(task.isSuccessful())
+                        {
+
+                            for(QueryDocumentSnapshot snapshots : task.getResult()){
+
+                                carBookingModel carBookingModel = new carBookingModel(1,"Lenovo",
+                                        Objects.requireNonNull(snapshots.getData().get("Ride Cost")).toString());
+                                carholder.add(carBookingModel);
+                                    Toast.makeText(getContext(), "It take " + snapshots.getData().get("Ride Cost")
+                                            , Toast.LENGTH_LONG).show();
+                            }
+                            recyclerView.setVisibility(View.VISIBLE);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+                            recyclerView.setAdapter(new carBookAdapter(carholder, getActivity()));
+
+
+                        }
+                        else  Toast.makeText(getContext(), "It is not successful "
+                                , Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+
+       /*
+       db.collection("Rides").getParent().collection("Pending Rides").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        Toast.makeText(getActivity(), "String", Toast.LENGTH_LONG).show();
+
+                    }
+                })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(),"Failed to Receive",Toast.LENGTH_LONG).show();
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
+        */
+
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -114,6 +195,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
