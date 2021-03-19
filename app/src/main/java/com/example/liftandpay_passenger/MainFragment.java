@@ -112,6 +112,7 @@ public class MainFragment extends Fragment {
                     }
                 });*/
 
+            
 
 
         searchView = v.findViewById(R.id.searchId);
