@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#083D56F5"
+    tools:context=".PhoneAuthenticationActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/wave_view"
+        android:rotation="180"
+        android:layout_alignParentTop="true"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="#083D56F5"
+        android:padding="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="15dp"
+            android:text="Phone Authentication"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/countryCodeId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:inputType="phone"
+                android:maxLength="4"
+                android:hint="+233"/>
+
+            <EditText
+                android:id="@+id/phoneNumberId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:minWidth="190dp"
+                android:hint="Number"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/verifyPhoneNumberBtnId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="verify"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Make sure you have enough SMS credit"
+            android:textColor="@color/primaryColors"/>
+
+        <ProgressBar
+            android:id="@+id/verifyProgressId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/wave_view"
+        android:layout_alignParentBottom="true"
+        />
+
+
+</RelativeLayout>
