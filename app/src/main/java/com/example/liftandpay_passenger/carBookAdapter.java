@@ -37,8 +37,8 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
-//        holder.amount.setText(carHolder.get(position).getCostPerKilometer());
-//        holder.carName.setText(carHolder.get(position).getCarName());
+        holder.amount.setText(carHolder.get(position).getCostPerKilometer().toString());
+        holder.carName.setText(carHolder.get(position).getCarName());
 
 
         holder.bookCarBtn.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +71,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
             image = itemView.findViewById(R.id.carID);
             bookCarBtn = itemView.findViewById(R.id.book_car);
             amount = itemView.findViewById(R.id.amountPerKilometer);
+            carName = itemView.findViewById(R.id.carNameId);
 
         }
     }
