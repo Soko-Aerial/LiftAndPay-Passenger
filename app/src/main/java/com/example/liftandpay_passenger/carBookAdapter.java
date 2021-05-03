@@ -41,13 +41,13 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         holder.carName.setText(carHolder.get(position).getCarName());
 
 
-        holder.bookCarBtn.setOnClickListener(new View.OnClickListener() {
+        holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog();
+                AvailableRideDialog availableRideDialog = new AvailableRideDialog();
                 FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
-                bottomSheetDialog.show(manager, null);
-                Toast.makeText(carBookContext,"Hellow" , Toast.LENGTH_LONG ).show();
+                availableRideDialog.show(manager, null);
+
             }
         });
 
@@ -60,7 +60,6 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
 
     public class myViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        MaterialButton bookCarBtn;
         TextView amount;
         TextView carName;
 
@@ -69,7 +68,6 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.carID);
-            bookCarBtn = itemView.findViewById(R.id.book_car);
             amount = itemView.findViewById(R.id.amountPerKilometer);
             carName = itemView.findViewById(R.id.carNameId);
 

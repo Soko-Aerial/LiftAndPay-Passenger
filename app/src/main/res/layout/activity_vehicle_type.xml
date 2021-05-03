@@ -107,14 +107,13 @@
             <ImageView
                 android:id="@+id/img2"
                 android:layout_width="195dp"
-
                 android:layout_height="71dp"
                 android:layout_alignParentBottom="true"
 
                 android:layout_marginLeft="-85dp"
 
                 android:layout_marginBottom="2dp"
-                android:src="@drawable/car2" />
+                android:src="@drawable/carimage" />
 
             <TextView
                 android:layout_width="wrap_content"

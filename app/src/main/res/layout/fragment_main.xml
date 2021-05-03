@@ -3,32 +3,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    <SearchView
-        android:id="@+id/searchId"
-        android:layout_margin="15dp"
+    <TextView
+        android:id="@+id/pageTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Search ..."
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_marginBottom="15dp"
+        android:background="@color/white"
+        android:textColor="@color/primaryColors"
+        android:text="Search For A Ride"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/pageTitle"
+
+        >
+        <com.mapbox.search.ui.view.SearchBottomSheetView
+            android:id="@+id/search_view001"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginBottom="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="text"
+            android:layout_marginTop="20dp"
+            android:saveEnabled="true"
+            android:closeIcon="@drawable/img_date"
+            android:searchIcon="@drawable/ic_radar_active_icn"
+            android:queryHint="From where"
+            android:background="@drawable/searchbar_bkg"
+            android:iconifiedByDefault="false"
+            android:elevation="8dp"
+            android:visibility="visible"
+            />
+
+    <SearchView
+        android:id="@+id/originSearchId"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_marginTop="20dp"
+        android:saveEnabled="true"
+        android:closeIcon="@drawable/ic_upload"
+        android:searchIcon="@drawable/ic_radar_active_icn"
+        android:queryHint="From where"
         android:background="@drawable/searchbar_bkg"
         android:iconifiedByDefault="false"/>
 
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewId"
+    <SearchView
+        android:id="@+id/destinationSearchId"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="25dp"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentBottom="true"
-      />
+        android:layout_height="wrap_content"
+        android:searchIcon="@drawable/ic_radar_active_icn"
+        android:inputType="text"
+        android:saveEnabled="true"
+        android:queryHint="To where"
+        android:background="@drawable/searchbar_bkg"
+        android:iconifiedByDefault="false"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/fadedBlue"/>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/searchNearBtnId003"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/primaryColors"
+        android:layout_alignParentEnd="true"
+        android:foregroundTint="@color/white"
+        android:src="@drawable/person_img"
+
+      />
 
 
 </RelativeLayout>

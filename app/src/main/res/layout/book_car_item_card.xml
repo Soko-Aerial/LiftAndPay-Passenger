@@ -1,100 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="170dp"
-    android:layout_height="200dp"
-    android:layout_marginHorizontal="5dp"
-    app:cardCornerRadius="15dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ripple"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingTop="5dp"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/white"
-    app:strokeColor="@color/white"
-    app:cardElevation="15dp"
   >
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-   <LinearLayout
-       android:layout_width="170dp"
-       android:layout_height="match_parent"
-       android:background="@color/white"
-       android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/bookCarTopLayout"
-        android:layout_width="170dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        >
+        android:padding="5dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/carID"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/person_img"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="@color/fadedBlue"/>
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_margin="7dp"
             android:orientation="vertical">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_upload"
-                android:text="  More Info"/>
-
-            <TextView
-                android:id="@+id/carNameId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Car Name"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-
+                android:textColor="@color/primaryColors"
+                android:text="Hubert Brako Amponsah"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text="From: "
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:id="@+id/carNameId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:maxLength="20"
+                    android:text="PointA Abeka labpa s d ti d44 mi"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/amountPerKilometer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="5dp"
-                    android:background="@color/fadedOrange"
-                    android:text="$1.20 - 1.40"/>
-
-
+                    android:textSize="15sp"
+                    android:text="To: "
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
                 <TextView
-                    android:id="@+id/manualAutomaticId"
+                    android:id="@+id/PlaceGoingToId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="5dp"
-                    android:text="Manual"/>
+                    android:textSize="15sp"
+                    android:text="Abeka"
+                    android:maxLength="20"
+                    android:textColor="@color/black"/>
 
             </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:id="@+id/book_car"
+
+            <TextView
+                android:id="@+id/amountPerKilometer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Book This Car"/>
+                android:paddingHorizontal="5dp"
+                android:background="@color/extraFadedBlue"
+                android:text="GHC1.20 - GHC 1.40"/>
+
         </LinearLayout>
+       <View
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:layout_weight="1"/>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/dateModelId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="12th Feb 2021"
+                app:drawableTint="@color/black"
+                app:drawableStartCompat="@drawable/img_date" />
+
+            <TextView
+                android:id="@+id/timeModelId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="12:00pm"
+                app:drawableTint="@color/black"
+                app:drawableStartCompat="@drawable/img_time" />
+        </LinearLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/carID"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/transparent"
-        android:src="@drawable/car2"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:orientation="vertical">
+
+
 
     </RelativeLayout>
 
-</com.google.android.material.card.MaterialCardView>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/fadedBlue"/>
+
+</LinearLayout>

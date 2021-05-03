@@ -14,27 +14,33 @@
        android:layout_gravity="center|top"
        />
 
-   <TextView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textColor="@color/black"
-       android:text="Ford Fiesta"
-       android:layout_marginTop="10dp"
-       android:textStyle="bold"
-       android:layout_marginStart="10dp"
-       android:textSize="30sp"
-       />
-
-   <com.google.android.material.button.MaterialButton
-       android:id="@+id/button1"
+   <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:background="@color/white"
-       android:elevation="30dp"
-       android:layout_marginTop="20dp"
-       app:cornerRadius="30dp"
-       android:text="Book this Car"
-       android:padding="10dp" />
+      android:orientation="horizontal">
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:textColor="@color/black"
+          android:text="Ford Fiesta"
+          android:layout_marginTop="10dp"
+          android:textStyle="bold"
+          android:layout_marginStart="10dp"
+          android:textSize="30sp"
+          />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="10dp"
+          android:textStyle="bold"
+          android:layout_marginStart="10dp"
+          android:textSize="18sp"
+         android:text="3/5 seats occupied"/>
+
+   </LinearLayout>
 
    <TextView
        android:layout_width="wrap_content"
@@ -80,6 +86,16 @@
        android:layout_height="1dp"
        android:background="?android:attr/listDivider" />
 
+   <com.google.android.material.button.MaterialButton
+       android:id="@+id/button1"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/white"
+       android:elevation="30dp"
+       android:layout_marginTop="20dp"
+       app:cornerRadius="30dp"
+       android:text="Book this Ride"
+       android:padding="10dp" />
    <TextView
        android:layout_width="wrap_content"
        android:layout_marginTop="20dp"

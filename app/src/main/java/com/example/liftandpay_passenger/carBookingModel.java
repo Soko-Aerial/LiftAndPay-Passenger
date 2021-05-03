@@ -6,9 +6,9 @@ public class carBookingModel {
     private String carName;
     private String costPerKilometer;
 
-    public carBookingModel(int image, String carName, String costPerKilometer) {
+    public carBookingModel(int image, String Trip, String costPerKilometer) {
         this.image = image;
-        this.carName = carName;
+        this.carName = Trip;
         this.costPerKilometer = costPerKilometer;
     }
 
