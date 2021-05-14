@@ -1,10 +1,12 @@
 package com.example.liftandpay_passenger;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -44,12 +46,10 @@ public class SearchedRides extends AppCompatActivity {
         carholder = new ArrayList<>();
 
 
-//        CollectionReference pendingRidesReference =    db.collection("Rides").getParent().collection("Pending Rides");
-
-
         db.collection("Rides")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         Snackbar.make(recyclerView, "Completed", Snackbar.LENGTH_SHORT).show();
@@ -61,8 +61,15 @@ public class SearchedRides extends AppCompatActivity {
 
                             for(QueryDocumentSnapshot snapshots : task.getResult()){
 
-                                carBookingModel carBookingModel = new carBookingModel(1,"Tesano",
-                                        Objects.requireNonNull(snapshots.getData().get("Ride Cost")).toString());
+                               String endLoc =  Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation","null")).toString();
+                               String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation","null")).toString();
+                               String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost","null")).toString();
+                               String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date","null")).toString();
+                               String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time","null")).toString();
+
+
+                                carBookingModel carBookingModel =
+                                        new carBookingModel(1,stLoc,endLoc, rideCost,rideDate,rideTime, snapshots.getId().toString());
                                 carholder.add(carBookingModel);
 
                             }

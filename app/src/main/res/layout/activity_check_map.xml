@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CheckMapActivity">
-
+   >
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
@@ -13,28 +12,111 @@
         android:layout_height="match_parent"
         >
 
+        <Button
+            android:id="@+id/mapButtonId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textColor="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@color/primaryColors"
+            android:text="Book Ride" />
+
+
+
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mapTitleId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColors"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Choose a pickup Location" />
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="3dp"
             android:background="@color/extraFadedBlue"
-            android:layout_margin="5dp"
-            >
-            <TextView
+            android:orientation="vertical">
+        <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp"
+        android:layout_margin="2dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColors"
+            android:textStyle="bold"
+            android:text="Distance : "
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14km"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp"
+        android:layout_margin="2dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColors"
+            android:textStyle="bold"
+            android:text="From - To : "
+            />
+        <TextView
+            android:id="@+id/distanceId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tesano to Abeka"/>
+    </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primaryColors"
-                android:textStyle="bold"
-                android:text="Distance : "
-                />
-            <TextView
-                android:id="@+id/distanceId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="N/A"/>
+                android:orientation="vertical"
+                android:padding="3dp"
+                android:layout_margin="2dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primaryColors"
+                    android:textStyle="bold"
+                    android:text="Starting Time : "
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11:00pm"/>
+            </LinearLayout>
+
         </LinearLayout>
+
+
+
+</LinearLayout>
+
+
 
     </com.mapbox.mapboxsdk.maps.MapView>
 

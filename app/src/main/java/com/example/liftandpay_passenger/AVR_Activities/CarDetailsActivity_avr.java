@@ -1,8 +1,10 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.AVR_Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.liftandpay_passenger.R;
 
 public class CarDetailsActivity_avr extends AppCompatActivity {
 

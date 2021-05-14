@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,7 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
+import com.example.liftandpay_passenger.AVR_Activities.AvailableRideDialog;
+import com.example.liftandpay_passenger.fastClass.StringFunction;
 
 import java.util.ArrayList;
 
@@ -38,15 +40,32 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
         holder.amount.setText(carHolder.get(position).getCostPerKilometer().toString());
-        holder.carName.setText(carHolder.get(position).getCarName());
+        holder.startLocation.setText(carHolder.get(position).getStartLocation());
+        holder.endLocation.setText(carHolder.get(position).getEndLocation());
+        holder.date.setText(carHolder.get(position).getDateId());
+        holder.time.setText(carHolder.get(position).getTimeId());
+        holder.rideDriverId = carHolder.get(position).getDriverId();
+        holder.driverId = new StringFunction(holder.rideDriverId).removeLastNumberOfCharacter(2);
 
+
+
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AvailableRideDialog availableRideDialog = new AvailableRideDialog();
+                availableRideDialog.setMainDriverId(holder.driverId);
+                availableRideDialog.setRideDriverId(holder.rideDriverId);
+                FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
+                availableRideDialog.show(manager, null);
+
+                Toast.makeText(carBookContext,holder.driverId,Toast.LENGTH_LONG).show();
+
+            }
+        });
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AvailableRideDialog availableRideDialog = new AvailableRideDialog();
-                FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
-                availableRideDialog.show(manager, null);
 
             }
         });
@@ -59,17 +78,30 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout itemLayout;
         ImageView image;
         TextView amount;
-        TextView carName;
+        TextView startLocation;
+        TextView endLocation;
+        TextView date;
+        TextView time;
+        String driverId;
+        String rideDriverId;
 
 
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
+
             image = itemView.findViewById(R.id.carID);
             amount = itemView.findViewById(R.id.amountPerKilometer);
-            carName = itemView.findViewById(R.id.carNameId);
+            startLocation = itemView.findViewById(R.id.startLocationId);
+            endLocation = itemView.findViewById(R.id.endLocationId);
+            date = itemView.findViewById(R.id.dateModelId);
+            time = itemView.findViewById(R.id.timeModelId);
+
+
+            itemLayout = itemView.findViewById(R.id.rideItemId);
 
         }
     }

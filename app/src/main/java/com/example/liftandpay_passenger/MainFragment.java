@@ -17,6 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.search.SearchEngine;
 import com.mapbox.search.SearchRequestTask;
@@ -31,6 +37,10 @@ public class MainFragment extends Fragment {
 
     SearchView searchOrigin;
     SearchView searchDestination;
+
+    View connectorView;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
     SearchBottomSheetView searchBottomSheetView;
     private SearchEngine searchEngine;
     private SearchRequestTask searchRequestTask;
@@ -47,25 +57,28 @@ public class MainFragment extends Fragment {
         inflater.inflate(R.layout.fragment_main, container, false);
 
 
-      /*  mAuth.signInWithEmailAndPassword("hubamp@gmail.com", "123456")
+        mAuth.signInWithEmailAndPassword("hubamp@gmail.com", "123456")
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Toast.makeText(getContext(), "Successfully Signed in",
                                 Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
 
         searchOrigin = v.findViewById(R.id.originSearchId);
         searchDestination = v.findViewById(R.id.destinationSearchId);
         searchDestination.setVisibility(View.GONE);
-        searchBottomSheetView = v.findViewById(R.id.search_view001);
+        connectorView = v.findViewById(R.id.connectorId);
+        connectorView.setVisibility(View.GONE);
+
 
 
         searchOrigin.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchDestination.setVisibility(View.VISIBLE);
+                connectorView.setVisibility(View.VISIBLE);
                 searchDestination.requestFocus(1);
                 searchOrigin.clearFocus();
                 return false;
@@ -77,6 +90,8 @@ public class MainFragment extends Fragment {
                 if(newText.isEmpty())
                 {
                     searchDestination.setVisibility(View.GONE);
+                    connectorView.setVisibility(View.GONE);
+
 
                 }
                 return false;
