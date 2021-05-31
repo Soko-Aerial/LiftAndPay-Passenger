@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="end"
     android:layout_margin="7dp"
     android:maxWidth="350dp"
     >
@@ -16,10 +14,14 @@
         android:padding="10dp"
         android:orientation="horizontal">
 
-
+        <ImageView
+            android:layout_gravity="bottom"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@color/white"
+            android:src="@drawable/person_img"/>
 
         <TextView
-            android:layout_gravity="bottom"
             android:id="@+id/MsgTxt"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -29,14 +31,6 @@
             android:textColor="@color/primaryColors"
             android:maxWidth="300dp"
             android:text="Hello driver I hope everything is going well"/>
-
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@color/white"
-            android:src="@drawable/person_img"
-            app:tint="@color/black" />
     </LinearLayout>
 
 </RelativeLayout>

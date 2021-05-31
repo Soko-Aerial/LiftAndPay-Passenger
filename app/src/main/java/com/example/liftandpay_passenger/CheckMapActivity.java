@@ -14,10 +14,12 @@ import android.util.Log;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.OnProgressListener;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -34,7 +36,9 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
+import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener;
 
 
 import java.util.List;
@@ -60,7 +64,6 @@ public class CheckMapActivity extends FragmentActivity implements OnMapReadyCall
     private final String symbolIconId = "symbolIconId";
     private final String mapBoxStyleUrl ="mapbox://styles/hubert-brako/cknk4g1t6031l17to153efhbs";
 
-
     private LatLng myLoc;
 
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -68,8 +71,9 @@ public class CheckMapActivity extends FragmentActivity implements OnMapReadyCall
     private PermissionsManager permissionsManager;
     private SharedPreferences sharedPreferences;
 
-
     private DirectionsRoute currentRoute;
+    private DirectionsWaypoint currentRoute1;
+
     private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
 
@@ -82,12 +86,9 @@ public class CheckMapActivity extends FragmentActivity implements OnMapReadyCall
         setContentView(R.layout.activity_check_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-
-
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(CheckMapActivity.this);
-
 
     }
 
@@ -229,12 +230,15 @@ public class CheckMapActivity extends FragmentActivity implements OnMapReadyCall
                         if (response.body() == null) {
                             Timber.e("No routes found, make sure you set the right user and access token.");
                             return;
-                        } else if (response.body().routes().size() < 1) {
+                        } else if (response.body().routes().size() <= 2) {
                             Timber.e("No routes found");
                             return;
                         }
 
-                        currentRoute = response.body().routes().get(0);
+                        response.body().waypoints();
+
+                        currentRoute = response.body().routes().get(1);
+
 
 // Draw the route on the map
                         if (navigationMapRoute != null) {
@@ -243,6 +247,7 @@ public class CheckMapActivity extends FragmentActivity implements OnMapReadyCall
                             navigationMapRoute = new NavigationMapRoute(null, mapView, mapboxMap, R.style.NavigationMapRoute);
                         }
                         navigationMapRoute.addRoute(currentRoute);
+
                     }
 
                     @Override

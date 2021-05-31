@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             minifyEnabled false
@@ -47,6 +48,8 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.11.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation 'hu.supercluster:overpasser:0.2.2'
 
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
 }

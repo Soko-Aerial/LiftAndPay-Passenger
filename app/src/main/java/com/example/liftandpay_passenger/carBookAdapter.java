@@ -1,6 +1,8 @@
 package com.example.liftandpay_passenger;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.example.liftandpay_passenger.AVR_Activities.AvailableRideDialog;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHolder> {
     ArrayList<carBookingModel> carHolder;
@@ -53,22 +56,26 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
             @Override
             public void onClick(View v) {
                 AvailableRideDialog availableRideDialog = new AvailableRideDialog();
+
+              SharedPreferences sharedPreferences = carBookContext.getSharedPreferences("AVRDialogFile",Context.MODE_PRIVATE);
+
+
+                sharedPreferences.edit().putString("TheMainDriverId",holder.driverId).apply();
+                sharedPreferences.edit().putString("TheRideDriverId",holder.rideDriverId).apply();
+
+
+
                 availableRideDialog.setMainDriverId(holder.driverId);
                 availableRideDialog.setRideDriverId(holder.rideDriverId);
                 FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
                 availableRideDialog.show(manager, null);
 
-                Toast.makeText(carBookContext,holder.driverId,Toast.LENGTH_LONG).show();
+//                Toast.makeText(carBookContext,holder.driverId,Toast.LENGTH_LONG).show();
 
             }
         });
 
-        holder.image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
 
     }
 

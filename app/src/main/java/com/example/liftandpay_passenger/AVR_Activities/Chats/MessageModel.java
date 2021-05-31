@@ -7,9 +7,9 @@ public class MessageModel {
     private int time;
     private int image;
 
-    MessageModel(String message, int vType){
+    MessageModel(String message){
         this.message = message;
-        this.vType =vType;
+
     }
 
 

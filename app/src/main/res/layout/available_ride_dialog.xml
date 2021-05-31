@@ -19,7 +19,7 @@
             android:textColor="@color/white"
             android:padding="5dp"
             android:textStyle="bold"
-            android:text="0/3 Seats Left"/>
+            android:text="2 Seat(s) Left"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -146,8 +146,8 @@
                 android:focusable="true"
                 android:background="@drawable/ripple"
                 android:layout_margin="3dp"
-                android:foreground="@color/fadedBlue"
-                android:textColor="@color/primaryColors"
+                android:foreground="#6A089C0E"
+                android:textColor="#0AAC11"
                 android:padding="8dp"
                 android:textSize="20sp"
                 android:text="Book This Ride"/>

@@ -1,10 +1,13 @@
 package com.example.liftandpay_passenger.AVR_Activities.Chats;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,9 +17,15 @@ import android.widget.Toast;
 import com.example.liftandpay_passenger.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +38,10 @@ public class ChatActivity_avr extends AppCompatActivity {
     ArrayList<MessageModel> messageModels;
     ImageButton sendBtn;
     EditText typedMessage;
+    MessageModel messageModel;
+    MessageAdapter messageAdapter = new MessageAdapter(messageModels,1);
+
+
 
     private HashMap<String, Object> chat = new HashMap<>();
 
@@ -44,18 +57,14 @@ public class ChatActivity_avr extends AppCompatActivity {
 
 
 
-        Bundle extras = getIntent().getExtras();
-        if (extras == null)
-            Toast.makeText(ChatActivity_avr.this,"Bundle is empty",Toast.LENGTH_LONG).show();
-        else
-        {
-            driverId = extras.get("DRIVER_ID").toString();
-            if (driverId.equals("null")) {
-                Toast.makeText(ChatActivity_avr.this, "Bundle is available", Toast.LENGTH_LONG).show();
-                ChatActivity_avr.this.finish();
-            }
-
+        SharedPreferences sharedPreferences = getSharedPreferences("AVRDialogFile", Context.MODE_PRIVATE);
+        driverId = sharedPreferences.getString("TheMainDriverId","Null");
+        if (driverId.equals("Null")) {
+            Toast.makeText(ChatActivity_avr.this, "Couldn't fetch driver's details", Toast.LENGTH_LONG).show();
+            ChatActivity_avr.this.finish();
         }
+
+
 
         sendBtn = findViewById(R.id.sendBtn);
         typedMessage = findViewById(R.id.typedMessage);
@@ -63,6 +72,8 @@ public class ChatActivity_avr extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatRecyler);
         recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity_avr.this,LinearLayoutManager.VERTICAL,true));
         messageModels = new ArrayList<>();
+
+      CollectionReference chatCollection =  db.collection("Chat").document(driverId).collection(thePassengerId);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,30 +84,70 @@ public class ChatActivity_avr extends AppCompatActivity {
                     chat.put("Message",typedMessage.getText().toString());
                     chat.put("Time","Not clear");
                     chat.put("ChatMode","2");
-                    db.collection("Chat").document("driverId" ).collection(thePassengerId).add(chat)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                    chatCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
-//                            Toast.makeText(ChatActivity_avr.this,"Added Successfully",Toast.LENGTH_LONG).show();
-                            MessageModel messageModel = new MessageModel(typedMessage.getText().toString(),2);
-                            messageModels.add(0,messageModel);
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            int size = queryDocumentSnapshots.size();
+                            chatCollection.document(size + "pA").set(chat)
+                                   .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                       @Override
+                                       public void onSuccess(Void aVoid) {
+                                           Toast.makeText(ChatActivity_avr.this,"Added Successfully",Toast.LENGTH_LONG).show();
 
-                            recyclerView.setAdapter(new MessageAdapter(messageModels));
+                                       }
+                                   })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(ChatActivity_avr.this,"Failed to add",Toast.LENGTH_LONG).show();
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ChatActivity_avr.this,"Failed to add",Toast.LENGTH_LONG).show();
-
+                                        }
+                                    });
                         }
                     });
+
 
                     typedMessage.setText("");
                 }
             }
         });
+
+
+        chatCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                assert value != null;
+                for (DocumentChange ds : value.getDocumentChanges()) {
+
+                    String mode = ds.getDocument().getString("ChatMode");
+
+                    if ( mode.equals("2")) {
+                       messageModel  = new MessageModel(ds.getDocument().getString("Message"));
+                        messageModels.add(0, messageModel);
+                        recyclerView.setAdapter(new MessageAdapter(messageModels,2));
+
+                    }
+                    if (mode.equals("1")) {
+                        messageModel = new MessageModel(ds.getDocument().getString("Message"));
+                        messageModels.add(0, messageModel);
+                        recyclerView.setAdapter(new MessageAdapter(messageModels,1));
+                    }
+                    if (!mode.equals("2") && !mode.equals("1"))  Snackbar.make(ChatActivity_avr.this, recyclerView, "Some messages are missing", 6000).show();
+
+
+
+                }
+
+
+
+
+            }
+        });
+
+
+
 
 
 

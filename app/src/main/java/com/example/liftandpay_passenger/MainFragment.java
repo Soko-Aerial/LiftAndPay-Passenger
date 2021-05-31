@@ -28,18 +28,33 @@ import com.mapbox.search.SearchEngine;
 import com.mapbox.search.SearchRequestTask;
 import com.mapbox.search.ui.view.SearchBottomSheetView;
 
+import org.jetbrains.annotations.NotNull;
+import org.xml.sax.SAXException;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 public class MainFragment extends Fragment {
 
+
     SearchView searchOrigin;
     SearchView searchDestination;
 
     View connectorView;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+
 
     SearchBottomSheetView searchBottomSheetView;
     private SearchEngine searchEngine;
@@ -57,14 +72,15 @@ public class MainFragment extends Fragment {
         inflater.inflate(R.layout.fragment_main, container, false);
 
 
-        mAuth.signInWithEmailAndPassword("hubamp@gmail.com", "123456")
+     /*   mAuth.signInWithEmailAndPassword("hubamp@gmail.com", "123456")
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Toast.makeText(getContext(), "Successfully Signed in",
                                 Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
+
 
         searchOrigin = v.findViewById(R.id.originSearchId);
         searchDestination = v.findViewById(R.id.destinationSearchId);
@@ -117,6 +133,25 @@ public class MainFragment extends Fragment {
     }
 
 
+    public static String getNodesViaOverpass(String query) throws IOException, ParserConfigurationException, SAXException {
+        String hostname = "http://overpass-turbo.eu";
+
+        URL osm = new URL(hostname);
+        HttpURLConnection connection = (HttpURLConnection) osm.openConnection();
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+        DataOutputStream printout = new DataOutputStream(connection.getOutputStream());
+        printout.writeBytes("data=" + URLEncoder.encode(query, "utf-8"));
+        printout.flush();
+        printout.close();
+
+
+
+        return osm.openConnection().getContentType();
+
+    }
 
     @Override
     public void onResume() {

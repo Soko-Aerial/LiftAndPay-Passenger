@@ -1,11 +1,10 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.AVR_Activities;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -21,11 +20,16 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.liftandpay_passenger.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.JsonElement;
-import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -37,13 +41,10 @@ import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -58,16 +59,16 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static androidx.annotation.VisibleForTesting.NONE;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
@@ -78,30 +79,44 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 public class PickUpLocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    //Shared prefferences
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferencesAVR;
 
+    //mapbox variables
     private MapView mapView;
     private MapboxMap mapboxMap;
     Button selectLocationButton;
 
+    //layers
     private final String geojsonSourceLayerId = "geojsonSourceLayerId";
     private final String symbolIconId = "symbolIconId";
     private final String mapBoxStyleUrl ="mapbox://styles/hubert-brako/cknk4g1t6031l17to153efhbs";
 
-
+    //markers
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
 
+    //location variables
     private LatLng myLoc;
-
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
-    private SharedPreferences sharedPreferences;
 
-
+    //routing variables
     private DirectionsRoute currentRoute;
     private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
+
+
+    //Firebase variables
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String thePassengersId = FirebaseAuth.getInstance().getUid();
+
+    //HashMap variables
+    private Map<String, Object> passengerBookingInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +142,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
         sharedPreferences =  getApplicationContext().getSharedPreferences("RIDEFILE",MODE_PRIVATE);
+        sharedPreferencesAVR =  getApplicationContext().getSharedPreferences("AVRDialogFile",MODE_PRIVATE);
         sharedPreferences.edit().putString("TheOrderId","hELLO").apply();
 
         this.mapboxMap = mapboxMap;
@@ -188,7 +204,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                             }
 
 // Use the map camera target's coordinates to make a reverse geocoding search
-                            reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+                            reverseGeocode(Point.fromLngLat(3.8105194993478397,51.204164723553774));
 //                            queryPoint(mapTargetLatLng);
 
                         } else {
@@ -210,6 +226,36 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                 droppedMarkerLayer.setProperties(visibility(Property.NONE));
                             }
                         }
+
+
+
+                        //When Booking is completed
+                        String theRideDriverId = sharedPreferencesAVR.getString("TheRideDriverId","Null");
+                        passengerBookingInfo = new HashMap<>();
+                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+
+                        passengerBookingInfo.put("Lat",mapTargetLatLng.getLatitude());
+                        passengerBookingInfo.put("Long",mapTargetLatLng.getLongitude());
+                        passengerBookingInfo.put("Name", "Hubert");
+                        passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
+                       DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("BookedBy").document(thePassengersId);
+
+                       bookedByRef.set(passengerBookingInfo)
+                              .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                  @Override
+                                  public void onComplete(@NonNull Task<Void> task) {
+                                      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PickUpLocationActivity.this);
+                                      AlertDialog alertDialog = alertDialogBuilder
+                                              .setMessage("You have booked the ride. Check the ride history")
+                                              .setTitle("Hurray")
+                                              .create();
+                                      alertDialog.show();
+
+                                      Toast.makeText(getApplicationContext(), "You have booked this ride. Check your ride history",Toast.LENGTH_LONG).show();
+                                  }
+                              });
+
+
                     }
                 });
 
@@ -320,10 +366,9 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 .getRoute(new Callback<DirectionsResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-// You can get the generic HTTP info about the response
-                        Log.d("TAG", "Response code: " + response.code());
+
                         if (response.body() == null) {
-                            Timber.e("No routes found, make sure you set the right user and access token.");
+                            Timber.e("Routes not generated");
                             return;
                         } else if (response.body().routes().size() < 1) {
                             Timber.e("No routes found");
@@ -372,7 +417,11 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
            }
        }
    }
-
+/*   AlertDialog.Builder builder = new AlertDialog.Builder(PickUpLocationActivity.this);
+                            builder.setTitle("Book Ride");
+                            builder.setMessage("Do you want to build this Ride");
+                            builder.create();
+*/
 
     private void reverseGeocode(final Point point) {
 
@@ -397,21 +446,12 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                     "Results: "+
                                             feature.placeName(), Toast.LENGTH_SHORT).show();
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(PickUpLocationActivity.this);
-                            builder.setTitle("Book Ride");
-                            builder.setMessage("Do you want to build this Ride");
-                            builder.create();
-
-
                         } else {
                             Toast.makeText(PickUpLocationActivity.this,
                                     "No results", Toast.LENGTH_SHORT).show();
                         }
 
-                        selectLocationButton.setBackgroundColor(
-                                ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
-                        selectLocationButton.setText("Pickup from this location");
-                        hoveringMarker.setImageResource(R.drawable.markerselecting);
+
 
                     }
                 }
@@ -419,10 +459,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 @Override
                 public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
                     Timber.e("Geocoding Failure: %s", throwable.getMessage());
-                    selectLocationButton.setBackgroundColor(
-                            ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
-                    selectLocationButton.setText("Pickup from this location");
-                    hoveringMarker.setImageResource(R.drawable.markerselecting);
+
 
                 }
             });
@@ -432,6 +469,10 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         }
     }
 
+    /* selectLocationButton.setBackgroundColor(
+             ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
+                    selectLocationButton.setText("Pickup from this location");
+                    hoveringMarker.setImageResource(R.drawable.markerselecting);*/
 
 
     // Add the mapView lifecycle to the activity's lifecycle methods

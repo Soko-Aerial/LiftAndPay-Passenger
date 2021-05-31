@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.liftandpay_passenger.AVR_Activities.Chats.ChatActivity_avr;
 import com.example.liftandpay_passenger.CheckMapActivity;
-import com.example.liftandpay_passenger.PickUpLocationActivity;
 import com.example.liftandpay_passenger.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +20,6 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.mapboxsdk.plugins.places.picker.PlacePicker;
 
 import java.util.Map;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -51,6 +50,8 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
         bookRide = v.findViewById(R.id.bookRide_avrId);
         chatDriver = v.findViewById(R.id.chatDriver_avrId);
 
+        Toast.makeText(getContext(),mainDriverId,Toast.LENGTH_LONG).show();
+
         carDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,10 +63,8 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
         checkMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), CheckMapActivity.class);
-                intent.putExtra("DRIVER_ID",    mainDriverId);
-                intent.putExtra("RIDEDRIVER_ID", rideDriverId);
-               getActivity().startActivity(intent);
+                Intent intent =new Intent(getContext(), CheckMapActivity.class);
+               startActivity(intent);
             }
         });
 
@@ -144,7 +143,6 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
     public void setMainDriverId(String mainDriverId) {
         this.mainDriverId = mainDriverId;
         /*the mainDriverId is the id on the firestore database. It has the Driver's id without an index attached to it. Can be accessed from the Drivers collection*/
-
     }
 
     public void setRideDriverId(String rideDriverId) {

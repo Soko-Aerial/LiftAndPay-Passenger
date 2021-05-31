@@ -19,8 +19,9 @@ public class MessageAdapter extends RecyclerView.Adapter{
     private int theViewtype;
     private ArrayList<MessageModel> messageModels;
 
-    public MessageAdapter(ArrayList<MessageModel> messageModels) {
+    public MessageAdapter(ArrayList<MessageModel> messageModels, int theViewtype) {
         this.messageModels = messageModels;
+        this.theViewtype = theViewtype;
     }
 
 
@@ -31,7 +32,7 @@ public class MessageAdapter extends RecyclerView.Adapter{
         View view;
 
 
-        if(theViewtype == 1)
+        if(theViewtype == 2)
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bubble_layout_chatsent,parent,false);
         else
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bubble_layout_chatreceived,parent,false);

@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
         <activity android:name=".AVR_Activities.Chats.ChatActivity_avr"></activity>
-        <activity android:name=".PickUpLocationActivity" />
+        <activity android:name=".AVR_Activities.PickUpLocationActivity" />
         <activity android:name=".ChoosePickupLocationActivity" />
         <activity android:name=".CheckMapActivity" />
         <activity android:name=".AVR_Activities.CarDetailsActivity_avr" />

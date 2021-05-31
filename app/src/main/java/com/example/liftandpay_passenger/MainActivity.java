@@ -8,12 +8,19 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import hu.supercluster.overpasser.library.output.OutputModificator;
+import hu.supercluster.overpasser.library.output.OutputOrder;
+import hu.supercluster.overpasser.library.output.OutputVerbosity;
+import hu.supercluster.overpasser.library.query.OverpassQuery;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
+
+import static hu.supercluster.overpasser.library.output.OutputFormat.JSON;
 
 public class MainActivity extends AppCompatActivity {
     AnimatedBottomBar animatedBottomBar;
@@ -68,6 +75,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        String query;
+        query = new OverpassQuery()
+                .format(JSON)
+                .timeout(30)
+                .filterQuery()
+                .node()
+                .amenity("parking")
+                .tagNot("access", "private")
+                .boundingBox(
+                        47.48047027491862, 19.039797484874725,
+                        47.51331674014172, 19.07404761761427
+                )
+                .end()
+                .output(OutputVerbosity.BODY, OutputModificator.CENTER, OutputOrder.QT, 100)
+                .build();
+
+        Toast.makeText(MainActivity.this,query,Toast.LENGTH_LONG).show();
 
     }
 
