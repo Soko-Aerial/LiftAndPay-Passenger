@@ -73,7 +73,7 @@ public class ChatActivity_avr extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity_avr.this,LinearLayoutManager.VERTICAL,true));
         messageModels = new ArrayList<>();
 
-      CollectionReference chatCollection =  db.collection("Chat").document(driverId).collection(thePassengerId);
+      CollectionReference chatCollection =  db.collection("Chat").document(driverId).collection("Passengers").document(thePassengerId).collection("messages");
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,8 +135,6 @@ public class ChatActivity_avr extends AppCompatActivity {
                         recyclerView.setAdapter(new MessageAdapter(messageModels,1));
                     }
                     if (!mode.equals("2") && !mode.equals("1"))  Snackbar.make(ChatActivity_avr.this, recyclerView, "Some messages are missing", 6000).show();
-
-
 
                 }
 

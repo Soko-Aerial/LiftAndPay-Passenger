@@ -2,45 +2,37 @@ package com.example.liftandpay_passenger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.gms.location.FusedLocationProviderClient;
 
-import android.app.Activity;
+import com.example.liftandpay_passenger.SettingUp.LogAuth;
+import com.example.liftandpay_passenger.SettingUp.SignUp003;
+import com.example.liftandpay_passenger.fastClass.LongiLati;
+
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.search.SearchEngine;
-import com.mapbox.search.SearchRequestTask;
-import com.mapbox.search.ui.view.SearchBottomSheetView;
 
-import org.jetbrains.annotations.NotNull;
-import org.xml.sax.SAXException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
@@ -48,17 +40,24 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 public class MainFragment extends Fragment {
 
 
-    SearchView searchOrigin;
-    SearchView searchDestination;
+    AppCompatAutoCompleteTextView searchOrigin;
+    AppCompatAutoCompleteTextView searchDestination;
+
+    private TextView rideSearchbtn;
+    private FloatingActionButton floatbtn;
 
     View connectorView;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private   String json = null;
+    private  int getNum;
+    private JSONObject obj001;
+    private  JSONObject obj002;
+    private JSONObject obj003;
+    private JSONObject obj004;
+    private JSONArray arr002;
 
 
-
-    SearchBottomSheetView searchBottomSheetView;
-    private SearchEngine searchEngine;
-    private SearchRequestTask searchRequestTask;
+    private LongiLati longiLati;
 
 
     @Nullable
@@ -71,17 +70,8 @@ public class MainFragment extends Fragment {
 
         inflater.inflate(R.layout.fragment_main, container, false);
 
-
-     /*   mAuth.signInWithEmailAndPassword("hubamp@gmail.com", "123456")
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getContext(), "Successfully Signed in",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
-
+        floatbtn = v.findViewById(R.id.floatBtn);
+        rideSearchbtn = v.findViewById(R.id.ridSearchBtn);
         searchOrigin = v.findViewById(R.id.originSearchId);
         searchDestination = v.findViewById(R.id.destinationSearchId);
         searchDestination.setVisibility(View.GONE);
@@ -90,67 +80,151 @@ public class MainFragment extends Fragment {
 
 
 
-        searchOrigin.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        rideSearchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                searchDestination.setVisibility(View.VISIBLE);
-                connectorView.setVisibility(View.VISIBLE);
-                searchDestination.requestFocus(1);
-                searchOrigin.clearFocus();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                if(newText.isEmpty())
+            public void onClick(View v) {
+                if (searchOrigin.getText().toString().equals ("") || searchDestination.getText().toString().equals(""))
                 {
-                    searchDestination.setVisibility(View.GONE);
-                    connectorView.setVisibility(View.GONE);
+                    Toast.makeText(getContext(),"Can't Search",Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Intent intent = new Intent(getContext(), SearchedRides.class);
+                    intent.putExtra("stLoc",searchOrigin.getText().toString());
+                    intent.putExtra("endLoc",searchDestination.getText().toString());
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+        floatbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                mAuth.signOut();
+                Intent intent = new Intent(getContext(), SignUp003.class);
+                startActivity(intent);
+            }
+        });
+
+
+        try {
+            InputStream is = getActivity().getAssets().open("overpass.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            obj001 = new JSONObject(json);
+
+            JSONArray arr001 = (JSONArray) obj001.get("features");
+            int sd = arr001.length();
+
+            ArrayList<String> arrayList = new ArrayList<String>();
+            HashMap<String,LongiLati> busProp = new HashMap<>();
+
+            longiLati = new LongiLati(11,11);
+            busProp.put("My Bus", longiLati);
+
+            longiLati = new LongiLati(22,22);
+            busProp.put("My Bus", longiLati);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    while (getNum<sd) {
+                        try {
+                            obj002 = (JSONObject) arr001.get(getNum);
+                            obj003 = (JSONObject) obj002.get("properties");
+                            if (obj003.has("name")) {
+                                String theBusStopName = (String) obj003.get("name");
+
+                                obj004 = (JSONObject) obj002.get("geometry");
+                                arr002 = (JSONArray) obj004.get("coordinates");
+
+                                String lon = (String) arr002.getString(0);
+                                String lat = (String) arr002.getString(1);
+
+                                if (!arrayList.contains(theBusStopName))
+                                arrayList.add(theBusStopName);
+
+                                busProp.put("my",longiLati);
+
+                                String fSt = "Lon: " + lon + "\n" + "Lat: " + lat + "\n" + "Name: " + arrayList.get(0);
+
+                                double lond = Double.parseDouble(lon);
+                                double latd = Double.parseDouble(lat);
+                            }
+
+                            getNum = getNum + 1;
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    boolean check;
+
+                  getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                makeSuggestion( searchOrigin,arrayList);
+                                makeSuggestion(searchDestination,arrayList);
+                                                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    });
 
 
                 }
-                return false;
-            }
-        });
+            }).start();
 
-
-        searchDestination.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(getContext(), SearchedRides.class);
-                startActivity(intent);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
+        } catch (IOException | JSONException ex) {
+            Log.e("Error Code: ",ex.getMessage());
+            Toast.makeText(getContext(),"Couldn't fetch "+ex.getMessage(),Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+        }
+                searchDestination.setVisibility(View.VISIBLE);
+                connectorView.setVisibility(View.VISIBLE);
 
         return v;
     }
 
 
-    public static String getNodesViaOverpass(String query) throws IOException, ParserConfigurationException, SAXException {
-        String hostname = "http://overpass-turbo.eu";
+    private void makeSuggestion(AutoCompleteTextView autoCompleteTextView, ArrayList<String> arrayList){
+        ArrayAdapter adapter = new ArrayAdapter(getContext(),R.layout.model_search_list, arrayList);
 
-        URL osm = new URL(hostname);
-        HttpURLConnection connection = (HttpURLConnection) osm.openConnection();
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setThreshold(1);
+        autoCompleteTextView.setDropDownVerticalOffset(10);
+        autoCompleteTextView.setVerticalScrollBarEnabled(false);
+        autoCompleteTextView.setDropDownHeight(400);
+        autoCompleteTextView.setValidator(new AutoCompleteTextView.Validator() {
+            @Override
+            public boolean isValid(CharSequence text) {
+                boolean check = false;
+                for (int j = 0; j < arrayList.size();j++)
+                {
+                    if (arrayList.get(j).contentEquals(text)) {
+                        check = true;
+                    }
+                }
 
-        DataOutputStream printout = new DataOutputStream(connection.getOutputStream());
-        printout.writeBytes("data=" + URLEncoder.encode(query, "utf-8"));
-        printout.flush();
-        printout.close();
+                return check;
+            }
 
+            @Override
+            public CharSequence fixText(CharSequence invalidText) {
+                Toast.makeText(getContext(),"incorrect bus stop",Toast.LENGTH_LONG).show();
+                return null;
+            }
+        });
 
-
-        return osm.openConnection().getContentType();
-
+        autoCompleteTextView.performValidation();
     }
 
     @Override
@@ -172,7 +246,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
     }
 
     @Override

@@ -25,7 +25,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
-        <activity android:name=".AVR_Activities.Chats.ChatActivity_avr"></activity>
+        <activity android:name=".SettingUp.SignUp003"></activity>
+        <activity android:name=".SettingUp.LogAuth" />
+        <activity android:name=".SettingUp.SignUp001" />
+        <activity android:name=".AVR_Activities.Chats.ChatActivity_avr" />
         <activity android:name=".AVR_Activities.PickUpLocationActivity" />
         <activity android:name=".ChoosePickupLocationActivity" />
         <activity android:name=".CheckMapActivity" />

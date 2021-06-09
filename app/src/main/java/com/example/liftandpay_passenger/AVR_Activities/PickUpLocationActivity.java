@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.liftandpay_passenger.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -108,7 +109,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
 
-
     //Firebase variables
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -121,20 +121,15 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Mapbox.getInstance(PickUpLocationActivity.this, getString(R.string.mapbox_access_token));
-
         setContentView(R.layout.activity_check_map);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         selectLocationButton = findViewById(R.id.mapButtonId);
         selectLocationButton.setText("Pickup From This Location");
 
-
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(PickUpLocationActivity.this);
-
 
     }
 
@@ -215,8 +210,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                             selectLocationButton.setText("Pickup from this location");
 
 
-// Show the red hovering ImageView marker
-
+// Show the blue hovering ImageView marker
                             hoveringMarker.setImageResource(R.drawable.markerselecting);
 
 
@@ -231,6 +225,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
                         //When Booking is completed
                         String theRideDriverId = sharedPreferencesAVR.getString("TheRideDriverId","Null");
+                        String theMainDriverId = sharedPreferencesAVR.getString("TheMainDriverId","Null");
                         passengerBookingInfo = new HashMap<>();
                         final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
 
@@ -238,22 +233,43 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                         passengerBookingInfo.put("Long",mapTargetLatLng.getLongitude());
                         passengerBookingInfo.put("Name", "Hubert");
                         passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
-                       DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("BookedBy").document(thePassengersId);
+                       DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
+                       DocumentReference bookedByRefToDriver = db.collection("Driver").document(theMainDriverId).collection("Pending Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
 
                        bookedByRef.set(passengerBookingInfo)
                               .addOnCompleteListener(new OnCompleteListener<Void>() {
                                   @Override
                                   public void onComplete(@NonNull Task<Void> task) {
-                                      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PickUpLocationActivity.this);
-                                      AlertDialog alertDialog = alertDialogBuilder
-                                              .setMessage("You have booked the ride. Check the ride history")
-                                              .setTitle("Hurray")
-                                              .create();
-                                      alertDialog.show();
 
-                                      Toast.makeText(getApplicationContext(), "You have booked this ride. Check your ride history",Toast.LENGTH_LONG).show();
+                                      bookedByRefToDriver.set(passengerBookingInfo)
+                                              .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                  @Override
+                                                  public void onComplete(@NonNull Task<Void> task) {
+                                                      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PickUpLocationActivity.this);
+                                                      AlertDialog alertDialog = alertDialogBuilder
+                                                              .setMessage("You have booked the ride. Check the ride history")
+                                                              .setTitle("Hurray")
+                                                              .create();
+                                                      alertDialog.show();
+
+                                                      Toast.makeText(getApplicationContext(), "You have booked this ride. Check your ride history",Toast.LENGTH_LONG).show();
+                                                  }
+                                              })
+                                      .addOnFailureListener(new OnFailureListener() {
+                                          @Override
+                                          public void onFailure(@NonNull Exception e) {
+                                              Toast.makeText(getApplicationContext(), "Couldn't add to driver",Toast.LENGTH_LONG).show();
+                                          }
+                                      });
+
                                   }
-                              });
+                              })
+                       .addOnFailureListener(new OnFailureListener() {
+                           @Override
+                           public void onFailure(@NonNull Exception e) {
+                               Toast.makeText(getApplicationContext(), "Couldn't add to Rides",Toast.LENGTH_LONG).show();
+                           }
+                       });
 
 
                     }

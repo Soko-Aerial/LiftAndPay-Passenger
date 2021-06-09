@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="25dp"
+    tools:context=".SettingUp.SignUp003">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:text="Upload Your Profile Photo"/>
+
+
+ <LinearLayout
+     android:id="@+id/photoUploadId"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_margin="20dp"
+     android:clickable="true"
+     android:focusable="true"
+     android:backgroundTint="@color/fadedBlue"
+     android:background="@drawable/ripple"
+     android:layout_gravity="center_horizontal"
+     android:orientation="vertical"
+     >
+     <ImageView
+         android:layout_width="30dp"
+         android:layout_height="30dp"
+         android:layout_margin="10dp"
+         android:src="@drawable/imc_camera"
+         android:layout_gravity="end"/>
+
+     <ImageView
+         android:id="@+id/profileImgId"
+         android:layout_width="150dp"
+         android:layout_height="150dp"
+         android:background="@color/fadedBlue"
+         android:src="@drawable/person_img"
+         android:contentDescription="SelectedImg" />
+ </LinearLayout>
+    
+    
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Write a little about yourself"
+        android:maxHeight="200dp"
+        android:maxLength="50"
+        android:maxEms="5"
+        android:maxLines="5"/>
+
+
+    <Button
+        android:id="@+id/signUp002"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="signUp"
+        android:layout_margin="10dp"
+        android:layout_gravity="end"
+        android:background="@color/primaryColors"
+        android:textColor="@color/white"/>
+</LinearLayout>
+

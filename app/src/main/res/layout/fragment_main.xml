@@ -13,7 +13,7 @@
         android:gravity="center"
         android:padding="5dp"
         android:layout_marginBottom="15dp"
-        android:background="@color/white"
+        android:background="@color/extraFadedBlue"
         android:textColor="@color/primaryColors"
         android:text="Search For A Ride"
         android:textSize="22sp"
@@ -25,22 +25,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/pageTitle"
+        android:paddingVertical="15dp"
+        android:layout_below="@id/pageTitle">
 
-        >
 
-
-    <SearchView
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
         android:id="@+id/originSearchId"
         android:layout_marginHorizontal="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:layout_marginTop="20dp"
+        android:layout_height="50dp"
+        android:inputType="textPersonName"
+        android:drawableStart="@drawable/ic_radar_active_icn"
         android:saveEnabled="true"
+        android:hint="From which bus stop"
         android:closeIcon="@drawable/ic_upload"
-        android:searchIcon="@drawable/ic_radar_active_icn"
-        android:queryHint="From where"
         android:background="@drawable/searchbar_bkg"
         android:iconifiedByDefault="false"/>
 
@@ -51,18 +49,31 @@
             android:layout_marginVertical="5dp"
             android:layout_marginStart="15dp"
             android:background="@color/primaryColors"/>
-    <SearchView
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
         android:id="@+id/destinationSearchId"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="25dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:searchIcon="@drawable/ic_radar_active_icn"
-        android:inputType="text"
+        android:layout_height="50dp"
+        android:drawableStart="@drawable/ic_radar_active_icn"
         android:saveEnabled="true"
-        android:queryHint="To where"
+        android:inputType="textPersonName"
+        android:hint="To which bus stop"
+        android:closeIcon="@drawable/ic_upload"
         android:background="@drawable/searchbar_bkg"
-        android:iconifiedByDefault="false"/>
+    />
+
+        <TextView
+            android:id="@+id/ridSearchBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:padding="10dp"
+            android:background="@drawable/ripple"
+            android:backgroundTint="@color/primaryColors"
+            android:textColor="@color/white"
+            android:layout_margin="15dp"
+            android:layout_gravity="end"/>
 
         <View
             android:layout_width="match_parent"
@@ -71,17 +82,15 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/searchNearBtnId003"
+        android:id="@+id/floatBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_alignParentBottom="true"
         android:backgroundTint="@color/primaryColors"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:foregroundTint="@color/white"
-        android:src="@drawable/person_img"
-
-      />
+        android:src="@drawable/person_img"/>
 
 
 </RelativeLayout>

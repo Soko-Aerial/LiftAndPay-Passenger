@@ -44,6 +44,9 @@ public class SearchedRides extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.searchedRidesRecycler);
         carholder = new ArrayList<>();
+        Bundle bundle = getIntent().getExtras();
+        String stLocs = bundle.getString("stLoc");
+        String endLocs = bundle.getString("endLoc");
 
 
         db.collection("Rides")
@@ -68,9 +71,12 @@ public class SearchedRides extends AppCompatActivity {
                                String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time","null")).toString();
 
 
-                                carBookingModel carBookingModel =
-                                        new carBookingModel(1,stLoc,endLoc, rideCost,rideDate,rideTime, snapshots.getId().toString());
-                                carholder.add(carBookingModel);
+                               if (endLoc.equals(endLocs) && stLoc.equals(stLocs)){
+                                   carBookingModel carBookingModel =
+                                           new carBookingModel(1,stLoc,endLoc, rideCost,rideDate,rideTime, snapshots.getId().toString());
+                                   carholder.add(carBookingModel);
+                               }
+
 
                             }
                             recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this,LinearLayoutManager.VERTICAL,false));
