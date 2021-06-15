@@ -1,6 +1,8 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.MainActivities.Rides;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +12,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.liftandpay_passenger.R;
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.ArrayList;
 
-public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAdapter.myViewHolder> {
-    ArrayList<completedRidesModel> dataholder;
+public class pendingRidesAdapter extends RecyclerView.Adapter<pendingRidesAdapter.myViewHolder> {
+    ArrayList<pendingRidesModel> dataholder;
+    Context context;
 
 
-    public completedRidesAdapter(ArrayList<completedRidesModel> dataholder) {
+    public pendingRidesAdapter(Context context, ArrayList<pendingRidesModel> dataholder) {
         this.dataholder = dataholder;
+        this.context = context;
     }
 
     @NonNull
@@ -29,11 +36,18 @@ public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAd
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.img.setImageResource(dataholder.get(position).getImage());
+        holder.img.setBackgroundResource(dataholder.get(position).getImage());
         holder.header.setText(dataholder.get(position).getHeader());
         holder.desc.setText(dataholder.get(position).getDesc());
         holder.distance.setText(dataholder.get(position).getDistance());
         holder.price.setText(dataholder.get(position).getPrice());
+        holder.theCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PendingRideMapActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -44,6 +58,7 @@ public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAd
     static class myViewHolder extends RecyclerView.ViewHolder{
         ImageView img;
         TextView header,desc,distance,price;
+        MaterialCardView theCardView;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +67,7 @@ public class completedRidesAdapter extends RecyclerView.Adapter<completedRidesAd
             desc = itemView.findViewById(R.id.t2);
             distance=itemView.findViewById(R.id.distance);
             price = itemView.findViewById(R.id.price);
+            theCardView =  itemView.findViewById(R.id.pendingCardView);
 
         }
     }

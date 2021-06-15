@@ -2,21 +2,26 @@ package com.example.liftandpay_passenger.AVR_Activities.Chats;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,9 +32,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import timber.log.Timber;
 
 public class ChatActivity_avr extends AppCompatActivity {
 
@@ -39,7 +50,7 @@ public class ChatActivity_avr extends AppCompatActivity {
     ImageButton sendBtn;
     EditText typedMessage;
     MessageModel messageModel;
-    MessageAdapter messageAdapter = new MessageAdapter(messageModels,1);
+    MessageAdapter messageAdapter = new MessageAdapter(messageModels);
 
 
 
@@ -74,15 +85,20 @@ public class ChatActivity_avr extends AppCompatActivity {
         messageModels = new ArrayList<>();
 
       CollectionReference chatCollection =  db.collection("Chat").document(driverId).collection("Passengers").document(thePassengerId).collection("messages");
+      DocumentReference passengerRef = db.collection("Chat").document(driverId).collection("Passengers").document(thePassengerId);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (!typedMessage.getText().equals("")){
 
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    System.out.println(dtf.format(now));
 
                     chat.put("Message",typedMessage.getText().toString());
-                    chat.put("Time","Not clear");
+                    chat.put("Time",dtf.format(now));
                     chat.put("ChatMode","2");
 
                     chatCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -93,7 +109,12 @@ public class ChatActivity_avr extends AppCompatActivity {
                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                        @Override
                                        public void onSuccess(Void aVoid) {
-                                           Toast.makeText(ChatActivity_avr.this,"Added Successfully",Toast.LENGTH_LONG).show();
+                                           passengerRef.set(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                               @Override
+                                               public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                   Timber.tag("Add Phone").e("Phone number added successfully");
+                                               }
+                                           });
 
                                        }
                                    })
@@ -101,7 +122,6 @@ public class ChatActivity_avr extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             Toast.makeText(ChatActivity_avr.this,"Failed to add",Toast.LENGTH_LONG).show();
-
                                         }
                                     });
                         }
@@ -123,20 +143,19 @@ public class ChatActivity_avr extends AppCompatActivity {
 
                     String mode = ds.getDocument().getString("ChatMode");
 
+                    assert mode != null;
                     if ( mode.equals("2")) {
-                       messageModel  = new MessageModel(ds.getDocument().getString("Message"));
-                        messageModels.add(0, messageModel);
-                        recyclerView.setAdapter(new MessageAdapter(messageModels,2));
-
+                       messageModel  = new MessageModel(ds.getDocument().getString("Message"),2);
                     }
                     if (mode.equals("1")) {
-                        messageModel = new MessageModel(ds.getDocument().getString("Message"));
-                        messageModels.add(0, messageModel);
-                        recyclerView.setAdapter(new MessageAdapter(messageModels,1));
+                        messageModel = new MessageModel(ds.getDocument().getString("Message"),1);
                     }
                     if (!mode.equals("2") && !mode.equals("1"))  Snackbar.make(ChatActivity_avr.this, recyclerView, "Some messages are missing", 6000).show();
 
+                    messageModels.add(0, messageModel);
                 }
+                recyclerView.setAdapter(new MessageAdapter(messageModels));
+
 
 
 

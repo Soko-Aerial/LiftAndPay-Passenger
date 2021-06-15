@@ -1,10 +1,10 @@
-package com.example.liftandpay_passenger;
-public class completedRidesModel {
+package com.example.liftandpay_passenger.MainActivities.Rides;
+public class pendingRidesModel {
     int image;
     String header,desc,distance,price;
 //data for ride history for the recycler view
 
-    public completedRidesModel(int image, String header, String desc, String distance, String price) {
+    public pendingRidesModel(int image, String header, String desc, String distance, String price) {
         this.image = image;
         this.header = header;
         this.desc = desc;

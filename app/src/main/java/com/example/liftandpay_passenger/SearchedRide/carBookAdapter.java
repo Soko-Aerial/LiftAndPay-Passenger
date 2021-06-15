@@ -1,7 +1,6 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.SearchedRide;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +16,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRideDialog;
+import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHolder> {
     ArrayList<carBookingModel> carHolder;
     Context carBookContext;
+    public LatLng startLatLng;
+    public LatLng endLatLng;
 
     public carBookAdapter(ArrayList<carBookingModel> carHolder, Context carBookContext){
         this.carHolder = carHolder;
@@ -48,6 +51,11 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         holder.date.setText(carHolder.get(position).getDateId());
         holder.time.setText(carHolder.get(position).getTimeId());
         holder.rideDriverId = carHolder.get(position).getDriverId();
+
+        holder.stLat = carHolder.get(position).getStLat();
+        holder.stLon = carHolder.get(position).getStLon();
+        holder.endLat = carHolder.get(position).getEndLat();
+        holder.endLon = carHolder.get(position).getEndLon();
         holder.driverId = new StringFunction(holder.rideDriverId).removeLastNumberOfCharacter(2);
 
 
@@ -58,19 +66,18 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
                 AvailableRideDialog availableRideDialog = new AvailableRideDialog();
 
               SharedPreferences sharedPreferences = carBookContext.getSharedPreferences("AVRDialogFile",Context.MODE_PRIVATE);
-
-
+              
                 sharedPreferences.edit().putString("TheMainDriverId",holder.driverId).apply();
                 sharedPreferences.edit().putString("TheRideDriverId",holder.rideDriverId).apply();
 
-
-
                 availableRideDialog.setMainDriverId(holder.driverId);
                 availableRideDialog.setRideDriverId(holder.rideDriverId);
+                availableRideDialog.setEndLat(holder.endLat);
+                availableRideDialog.setEndLon(holder.endLon);
+                availableRideDialog.setStartLat(holder.stLat);
+                availableRideDialog.setStartLon(holder.stLon);
                 FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
                 availableRideDialog.show(manager, null);
-
-//                Toast.makeText(carBookContext,holder.driverId,Toast.LENGTH_LONG).show();
 
             }
         });
@@ -94,6 +101,8 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         TextView time;
         String driverId;
         String rideDriverId;
+        double stLat,stLon;
+        double endLat, endLon;
 
 
 
@@ -106,7 +115,6 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
             endLocation = itemView.findViewById(R.id.endLocationId);
             date = itemView.findViewById(R.id.dateModelId);
             time = itemView.findViewById(R.id.timeModelId);
-
 
             itemLayout = itemView.findViewById(R.id.rideItemId);
 

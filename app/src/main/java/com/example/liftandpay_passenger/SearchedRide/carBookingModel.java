@@ -1,4 +1,6 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.SearchedRide;
+import com.google.type.LatLng;
+
 import timber.log.Timber;
 
 public class carBookingModel {
@@ -10,8 +12,22 @@ public class carBookingModel {
     private String dateId;
     private String timeId;
     private String driverId;
+    private double stLat;
+    private double stLon;
+    private double endLat;
+    private double endLon;
 
-    public carBookingModel(int image, String startLocation, String endLocation, String costPerKilometer, String dateId, String timeId,String driverId) {
+    public carBookingModel(int image,
+                           String startLocation,
+                           String endLocation,
+                           String costPerKilometer,
+                           String dateId,
+                           String timeId,
+                           String driverId,
+                           double stLat,double stLon,
+                           double endLat, double endLon
+                         )
+    {
         this.image = image;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
@@ -19,6 +35,10 @@ public class carBookingModel {
         this.dateId = dateId;
         this.timeId = timeId;
         this.driverId =driverId;
+        this.stLat = stLat;
+        this.stLon = stLon;
+        this.endLat = endLat;
+        this.endLon = endLon;
 
     }
 
@@ -76,5 +96,21 @@ public class carBookingModel {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public double getStLat() {
+        return stLat;
+    }
+
+    public double getStLon() {
+        return stLon;
+    }
+
+    public double getEndLat() {
+        return endLat;
+    }
+
+    public double getEndLon() {
+        return endLon;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.SearchedRide;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.liftandpay_passenger.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -18,11 +19,10 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.type.LatLng;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import static java.security.AccessController.getContext;
 
 public class SearchedRides extends AppCompatActivity {
 
@@ -30,6 +30,9 @@ public class SearchedRides extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SearchView searchView;
     ArrayList<carBookingModel> carholder;
+
+    LatLng endCord;
+    LatLng stCord;
 
 
     //Firebase components declarations
@@ -69,11 +72,25 @@ public class SearchedRides extends AppCompatActivity {
                                String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost","null")).toString();
                                String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date","null")).toString();
                                String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time","null")).toString();
+//                               GeoPoint stPoint =  snapshots.getGeoPoint("startCordinate");
+                              double startLat = (double) snapshots.getData().getOrDefault("startLat",null);
+                              double startLon = (double) snapshots.getData().getOrDefault("startLon",null);
+                              double endLon = (double) snapshots.getData().getOrDefault("endLon",null);
+                              double endLat = (double) snapshots.getData().getOrDefault("endLat",null);
+
 
 
                                if (endLoc.equals(endLocs) && stLoc.equals(stLocs)){
                                    carBookingModel carBookingModel =
-                                           new carBookingModel(1,stLoc,endLoc, rideCost,rideDate,rideTime, snapshots.getId().toString());
+                                           new carBookingModel(1,
+                                                   stLoc,
+                                                   endLoc,
+                                                   rideCost,
+                                                   rideDate,
+                                                   rideTime,
+                                                   snapshots.getId().toString(),
+                                                   startLat,startLon,
+                                                   endLat,endLon);
                                    carholder.add(carBookingModel);
                                }
 
@@ -97,4 +114,24 @@ public class SearchedRides extends AppCompatActivity {
                 });
 
     }
+
+
+    static class CordinateClass{
+        private int altitude;
+        private double lat;
+        private double lon;
+
+        public int getAltitude() {
+            return altitude;
+        }
+
+        public double getLat() {
+            return lat;
+        }
+
+        public double getLon() {
+            return lon;
+        }
+    }
 }
+

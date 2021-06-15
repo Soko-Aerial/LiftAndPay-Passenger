@@ -20,10 +20,7 @@ public class PaymentMethodsActivity extends AppCompatActivity implements View.On
         card2 = (MaterialCardView) findViewById(R.id.cardPayment2);
 
         card1.setOnClickListener(this);
-
         card2.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -35,10 +32,6 @@ public class PaymentMethodsActivity extends AppCompatActivity implements View.On
                 i = new Intent( this,AddCardDetails.class);
                 startActivity(i);
                 break;
-
-
         }
-
-
     }
 }

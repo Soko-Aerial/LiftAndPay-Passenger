@@ -1,4 +1,4 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.MainActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.liftandpay_passenger.R;
+import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
 
 public class PayFragment extends Fragment {
 
@@ -25,7 +28,7 @@ public class PayFragment extends Fragment {
         paymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),VehicleTypeActivity.class));
+                startActivity(new Intent(getActivity(), PendingRideMapActivity.class));
             }
         });
 

@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.plugins.places.picker.PlacePicker;
 
 import java.util.Map;
@@ -30,6 +31,10 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
     TextView bookRide;
     TextView chatDriver;
     private String mainDriverId;
+    private double startLat;
+    private double startLon;
+    private double endLat;
+    private double endLon;
     private String rideDriverId;
 
 
@@ -50,7 +55,6 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
         bookRide = v.findViewById(R.id.bookRide_avrId);
         chatDriver = v.findViewById(R.id.chatDriver_avrId);
 
-        Toast.makeText(getContext(),mainDriverId,Toast.LENGTH_LONG).show();
 
         carDetails.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,62 +83,12 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
         bookRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getContext(), PickUpLocationActivity.class);
+                intent.putExtra("endLat",endLat);
+                intent.putExtra("endLon", endLon);
+                intent.putExtra("startLat",startLat);
+                intent.putExtra("startLon", startLon);
                 startActivity(intent);
-
-            /*    Intent intent = new PlacePicker.IntentBuilder()
-                        .accessToken(Mapbox.getAccessToken())
-                        .placeOptions(
-                                PlacePickerOptions.builder()
-                                        .statingCameraPosition(
-                                                new CameraPosition.Builder()
-                                                        .target(new LatLng(5.5958, -0.1518))
-                                                        .zoom(14)
-                                                        .build())
-                                        .build())
-                        .build(getActivity());
-                startActivityForResult(intent, PLACE_SELECTION_REQUEST_CODE);*/
-
-               /* ride = new HashMap<>();
-                ride.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
-                ride.put("Phone", Objects.requireNonNull(mAuth.getCurrentUser()).getPhoneNumber());
-                ride.put("Name", Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
-                ride.put("Pickup Point", Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
-                ride.put("Destination", Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName());
-
-                CollectionReference pendingRidesDb = FirebaseFirestore.getInstance().collection("Driver").document(mainDriverId).collection("Pending Rides");
-
-                db.collection("Driver").document(mainDriverId).collection("Pending Rides").get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                                assert thePassengerId != null;
-                                db.collection("Driver").document(mainDriverId)
-                                        .collection("Pending Rides").document(rideDriverId)
-                                        .collection("Booked By").document(thePassengerId)
-                                        .set(ride,SetOptions.merge())
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                task.getResult().size();
-                                                db.collection("Rides").document(rideDriverId)
-                                                        .collection("Booked By").document(thePassengerId)
-                                                        .set(ride, SetOptions.merge());
-                                            }
-                                        });
-
-                                Toast.makeText(getActivity(), "Uploaded successfully",Toast.LENGTH_LONG).show();
-
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Could not upload. Restart app and Try again",Toast.LENGTH_LONG).show();
-                            }
-                        });*/
             }
         });
         return v;
@@ -150,15 +104,19 @@ public class AvailableRideDialog extends BottomSheetDialogFragment {
         /*the rideDriverId is the id on the firestore database. It has the Driver's id with an index attached to it. Can be accessed from the Rides collection*/
     }
 
+    public void setStartLat(double startLat) {
+        this.startLat = startLat;
+    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) { super.onActivityResult(requestCode, resultCode, data);
+    public void setStartLon(double startLon) {
+        this.startLon = startLon;
+    }
 
-        if (requestCode == PLACE_SELECTION_REQUEST_CODE && resultCode == RESULT_OK){
+    public void setEndLat(double endLat) {
+        this.endLat = endLat;
+    }
 
-            // Retrieve the information from the selected location's CarmenFeature
-
-            CarmenFeature carmenFeature = PlacePicker.getPlace(data);
-        }
+    public void setEndLon(double endLon) {
+        this.endLon = endLon;
     }
 }

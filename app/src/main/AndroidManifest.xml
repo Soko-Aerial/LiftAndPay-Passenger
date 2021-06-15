@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.location.network" />
@@ -33,7 +34,7 @@
         <activity android:name=".ChoosePickupLocationActivity" />
         <activity android:name=".CheckMapActivity" />
         <activity android:name=".AVR_Activities.CarDetailsActivity_avr" />
-        <activity android:name=".SearchedRides" />
+        <activity android:name=".SearchedRide.SearchedRides" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -46,12 +47,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".VehicleTypeActivity" />
         <activity android:name=".AddCardDetails" />
-        <activity android:name=".RideDetailsActivity" />
+        <activity android:name=".MainActivities.Rides.PendingRideMapActivity" />
         <activity android:name=".PaymentMethodsActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

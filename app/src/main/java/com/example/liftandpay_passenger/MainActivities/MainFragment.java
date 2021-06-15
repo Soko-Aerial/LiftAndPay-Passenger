@@ -1,11 +1,12 @@
-package com.example.liftandpay_passenger;
+package com.example.liftandpay_passenger.MainActivities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 
-import com.example.liftandpay_passenger.SettingUp.LogAuth;
+import com.example.liftandpay_passenger.R;
+import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
 import com.example.liftandpay_passenger.SettingUp.SignUp003;
 import com.example.liftandpay_passenger.fastClass.LongiLati;
 

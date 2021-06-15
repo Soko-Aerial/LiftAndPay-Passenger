@@ -1,14 +1,17 @@
 package com.example.liftandpay_passenger.AVR_Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,14 +22,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.liftandpay_passenger.MainActivities.MainActivity;
 import com.example.liftandpay_passenger.R;
+import com.example.liftandpay_passenger.SettingUp.LogAuth;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,6 +57,9 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
+import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
@@ -97,6 +107,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     //markers
     private ImageView hoveringMarker;
     private Layer droppedMarkerLayer;
+    private Style myStyle;
+
 
     //location variables
     private LatLng myLoc;
@@ -117,6 +129,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     //HashMap variables
     private Map<String, Object> passengerBookingInfo;
 
+    private TextView mapTitleID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,11 +141,14 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         selectLocationButton = findViewById(R.id.mapButtonId);
         selectLocationButton.setText("Pickup From This Location");
 
+        mapTitleID = findViewById(R.id.mapTitleId);
+
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(PickUpLocationActivity.this);
 
     }
+
 
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
@@ -147,15 +164,30 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         mapboxMap.setStyle(new Style.Builder().fromUri(mapBoxStyleUrl), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
+
+                myStyle = style;
                 // Add the symbol layer icon to map for future use
                 style.addImage(symbolIconId, BitmapFactory.decodeResource(
                         PickUpLocationActivity .this.getResources(), R.drawable.mapbox_logo_icon));
-                // Create an empty GeoJSON source using the empty feature collection
-                setUpSource(style);
-                // Set up a new symbol layer for displaying the searched location's feature coordinates
-                setupLayer(style);
 
-                addDestinationIconSymbolLayer(style);
+                style.addImage("origin",BitmapFactory.decodeResource(
+                        PickUpLocationActivity .this.getResources(), R.drawable.markerselected));
+
+                SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+
+                symbolManager.setIconAllowOverlap(true);
+                symbolManager.setTextAllowOverlap(true);
+
+                SymbolOptions symbolOptions = new SymbolOptions()
+                        .withLatLng(new LatLng(mapboxMap.getCameraPosition().target.getLatitude()+0.1, mapboxMap.getCameraPosition().target.getLongitude()+0.1))
+                        .withIconImage("origin")
+                        .withIconSize(0.5f)
+                        .withTextField("Original Destination");
+
+                symbolManager.create(symbolOptions);
+
+                setUpSource(style);
+                setupLayer(style);
 
                 hoveringMarker = new ImageView(PickUpLocationActivity.this);
                 hoveringMarker.setImageResource(R.drawable.markerselecting);
@@ -167,114 +199,91 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 hoveringMarker.setLayoutParams(params);
                 mapView.addView(hoveringMarker);
 
-
-
-                selectLocationButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (hoveringMarker.getVisibility() == View.VISIBLE) {
-
-// Use the map target's coordinates to make a reverse geocoding search
-                            final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
-
-// Hide the hovering red hovering ImageView marker
-                            hoveringMarker.setImageResource(R.drawable.markerselected);
-
-
-// Transform the appearance of the button to become the cancel button
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(PickUpLocationActivity.this, R.color.black));
-                            selectLocationButton.setText("Generating location ...");
+                selectLocationButton.setOnClickListener(view -> {
+                    if (hoveringMarker.getVisibility() == View.VISIBLE) {
+                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+                        hoveringMarker.setImageResource(R.drawable.markerselected);
+                        selectLocationButton.setBackgroundColor(
+                                ContextCompat.getColor(PickUpLocationActivity.this, R.color.black));
+                        selectLocationButton.setText("Generating location ...");
 
 // Show the SymbolLayer icon to represent the selected map location
-                            if (style.getLayer("DROPPED_MARKER_LAYER_ID") != null) {
-                                GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
-                                if (source != null) {
-                                    source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
-                                }
-                                droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
-                                if (droppedMarkerLayer != null) {
-                                    droppedMarkerLayer.setProperties(visibility(VISIBLE));
-                                }
+                        if (style.getLayer("DROPPED_MARKER_LAYER_ID") != null) {
+                            GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
+                            if (source != null) {
+                                source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
                             }
-
-// Use the map camera target's coordinates to make a reverse geocoding search
-                            reverseGeocode(Point.fromLngLat(3.8105194993478397,51.204164723553774));
-//                            queryPoint(mapTargetLatLng);
-
-                        } else {
-
-// Switch the button appearance back to select a location.
-                            selectLocationButton.setBackgroundColor(
-                                    ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
-                            selectLocationButton.setText("Pickup from this location");
-
-
-// Show the blue hovering ImageView marker
-                            hoveringMarker.setImageResource(R.drawable.markerselecting);
-
-
-// Hide the selected location SymbolLayer
                             droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
                             if (droppedMarkerLayer != null) {
-                                droppedMarkerLayer.setProperties(visibility(Property.NONE));
+                                droppedMarkerLayer.setProperties(visibility(VISIBLE));
                             }
                         }
 
-
-
-                        //When Booking is completed
-                        String theRideDriverId = sharedPreferencesAVR.getString("TheRideDriverId","Null");
-                        String theMainDriverId = sharedPreferencesAVR.getString("TheMainDriverId","Null");
-                        passengerBookingInfo = new HashMap<>();
-                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
-
-                        passengerBookingInfo.put("Lat",mapTargetLatLng.getLatitude());
-                        passengerBookingInfo.put("Long",mapTargetLatLng.getLongitude());
-                        passengerBookingInfo.put("Name", "Hubert");
-                        passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
-                       DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
-                       DocumentReference bookedByRefToDriver = db.collection("Driver").document(theMainDriverId).collection("Pending Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
-
-                       bookedByRef.set(passengerBookingInfo)
-                              .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                  @Override
-                                  public void onComplete(@NonNull Task<Void> task) {
-
-                                      bookedByRefToDriver.set(passengerBookingInfo)
-                                              .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                  @Override
-                                                  public void onComplete(@NonNull Task<Void> task) {
-                                                      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PickUpLocationActivity.this);
-                                                      AlertDialog alertDialog = alertDialogBuilder
-                                                              .setMessage("You have booked the ride. Check the ride history")
-                                                              .setTitle("Hurray")
-                                                              .create();
-                                                      alertDialog.show();
-
-                                                      Toast.makeText(getApplicationContext(), "You have booked this ride. Check your ride history",Toast.LENGTH_LONG).show();
-                                                  }
-                                              })
-                                      .addOnFailureListener(new OnFailureListener() {
-                                          @Override
-                                          public void onFailure(@NonNull Exception e) {
-                                              Toast.makeText(getApplicationContext(), "Couldn't add to driver",Toast.LENGTH_LONG).show();
-                                          }
-                                      });
-
-                                  }
-                              })
-                       .addOnFailureListener(new OnFailureListener() {
-                           @Override
-                           public void onFailure(@NonNull Exception e) {
-                               Toast.makeText(getApplicationContext(), "Couldn't add to Rides",Toast.LENGTH_LONG).show();
-                           }
-                       });
-
+//                            reverseGeocode(Point.fromLngLat(3.8105194993478397,51.204164723553774));
+                        reverseGeocode(Point.fromLngLat(mapTargetLatLng.getLongitude(),mapTargetLatLng.getLatitude()));
 
                     }
-                });
+                    else
+                        {
 
+// Switch the button appearance back to select a location.
+                        selectLocationButton.setBackgroundColor(
+                                ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
+                        selectLocationButton.setText("Pickup from this location");
+
+                        hoveringMarker.setImageResource(R.drawable.markerselecting);
+
+                        droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
+                        if (droppedMarkerLayer != null) {
+                            droppedMarkerLayer.setProperties(visibility(Property.NONE));
+                        }
+                    }
+
+                    //When Booking is completed
+                    String theRideDriverId = sharedPreferencesAVR.getString("TheRideDriverId","Null");
+                    String theMainDriverId = sharedPreferencesAVR.getString("TheMainDriverId","Null");
+                    passengerBookingInfo = new HashMap<>();
+                    final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+
+                    passengerBookingInfo.put("Lat",mapTargetLatLng.getLatitude());
+                    passengerBookingInfo.put("Long",mapTargetLatLng.getLongitude());
+                    passengerBookingInfo.put("Name", "Hubert");
+                    passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
+                   DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
+                   DocumentReference bookedByRefToDriver = db.collection("Driver").document(theMainDriverId).collection("Pending Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
+
+                   bookedByRef.set(passengerBookingInfo)
+                          .addOnCompleteListener(new OnCompleteListener<Void>() {
+                              @Override
+                              public void onComplete(@NonNull Task<Void> task) {
+
+                                  bookedByRefToDriver.set(passengerBookingInfo)
+                                          .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                              @SuppressLint("ResourceAsColor")
+                                              @Override
+                                              public void onComplete(@NonNull Task<Void> task) {
+                                                  Snackbar.make(PickUpLocationActivity.this,selectLocationButton,"Booked successfully",5000)
+                                                          .setTextColor(Color.WHITE)
+                                                          .setBackgroundTint(getResources().getColor(R.color.mapbox_plugins_green)).show();
+                                              }
+                                          })
+                                  .addOnFailureListener(new OnFailureListener() {
+                                      @Override
+                                      public void onFailure(@NonNull Exception e) {
+                                          Toast.makeText(getApplicationContext(), "Couldn't add to driver",Toast.LENGTH_LONG).show();
+                                      }
+                                  });
+                              }
+                          })
+                   .addOnFailureListener(new OnFailureListener() {
+                       @Override
+                       public void onFailure(@NonNull Exception e) {
+                           Toast.makeText(getApplicationContext(), "Couldn't add to Rides",Toast.LENGTH_LONG).show();
+                       }
+                   });
+
+
+                });
             }
         });
 
@@ -306,44 +315,95 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
                         if(!theCurrentLat.equals("Null") && !theCurrentLong.equals("Null")) {
 
-                            double myLat = Double.parseDouble(theCurrentLat);
-                            double myLong = Double.parseDouble(theCurrentLong);
-                            LatLng points = new LatLng( myLat, myLong);
-                            LatLng pointd = new LatLng(5.58860529, -0.184086699);
+                            double stLat = getIntent().getDoubleExtra("startLat",0.0);
+                            double stLon = getIntent().getDoubleExtra("startLon",0.0);
+                            double endLat = getIntent().getDoubleExtra("endLat",0.0);
+                            double endLon = getIntent().getDoubleExtra("endLon",0.0);
 
-                            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                                    .include(points)
-                                    .include(pointd)
-                                    .build();
+                            if (stLat != 0.0 || stLon != 0.0 || endLat != 0.0 || endLon != 0.0 )
+                            {
+                                LatLng points = new LatLng( stLat, stLon);
+                                LatLng pointd = new LatLng(endLat,endLon);
 
-                            mapboxMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 150));
+                                LatLngBounds latLngBounds = new LatLngBounds.Builder()
+                                        .include(points)
+                                        .include(pointd)
+                                        .build();
 
+                                mapboxMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 150));
 
-                            Point destinationPoint = Point.fromLngLat(pointd.getLongitude(), pointd.getLatitude());
-                            Point originPoint = Point.fromLngLat(points.getLongitude(), points.getLatitude());
-                            getRoute(originPoint,destinationPoint);
+                                Point originPoint = Point.fromLngLat(stLon, stLat);
+                                Point destinationPoint = Point.fromLngLat(endLon, endLat);
+
+                                getRoute(originPoint,destinationPoint);
+                                addMarker(myStyle,points,"origin",R.drawable.markerselected,"Start");
+                                addMarker(myStyle,pointd,"destination",R.drawable.markerselected,"Destination");
+                            }
+                            else
+                            {
+                                androidx.appcompat.app.AlertDialog.Builder builder
+                                        = new androidx.appcompat.app.AlertDialog
+                                        .Builder(PickUpLocationActivity.this);
+
+                                // Set the message show for the Alert time
+                                builder.setMessage("Unable to fetch cordinates");
+                                builder.setTitle("Routing Error!");
+                                builder.setCancelable(true);
+                                builder.create().show();
+
+                            }
                         }
                         else
                         {
-                            Toast.makeText(getApplicationContext(), "The Cordinates are null, Route could not render",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "ENABLE_YOUR_LOCATION",Toast.LENGTH_LONG).show();
                         }
 
 
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
 
+                androidx.appcompat.app.AlertDialog.Builder builder
+                        = new androidx.appcompat.app.AlertDialog
+                        .Builder(PickUpLocationActivity.this);
 
-
+                // Set the message show for the Alert time
+                builder.setMessage("Unable to fetch data");
+                builder.setTitle("Routing Error!");
+                builder.setCancelable(true);
+                builder.create().show();
+            }
+        });
     }
 
 
+    private void addMarker(@NonNull Style style, @NotNull LatLng latLng, String name, int resource, @Nullable String text)
+    {
+        style.addImage(name,BitmapFactory.decodeResource(
+                PickUpLocationActivity .this.getResources(), resource ));
+        SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
+
+        symbolManager.setIconAllowOverlap(true);
+        symbolManager.setTextAllowOverlap(true);
+
+        SymbolOptions symbolOptions = new SymbolOptions()
+                .withLatLng(new LatLng(latLng.getLatitude(), latLng.getLongitude()))
+                .withIconImage(name)
+                .withIconSize(0.5f)
+                .withTextField(text)
+                .withTextAnchor("Location")
+                .withTextColor("#4688F1");
+
+        symbolManager.create(symbolOptions);
+
+    }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
 
     private void setUpSource(@NonNull Style loadedMapStyle) {
         loadedMapStyle.addSource(new GeoJsonSource(geojsonSourceLayerId));
@@ -358,26 +418,13 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
 
 
-    private void addDestinationIconSymbolLayer(@NonNull Style loadedMapStyle) {
-        loadedMapStyle.addImage("destination-icon-id",
-                BitmapFactory.decodeResource(this.getResources(), R.drawable.mapbox_marker_icon_default));
-        GeoJsonSource geoJsonSource = new GeoJsonSource("destination-source-id");
-        loadedMapStyle.addSource(geoJsonSource);
-        SymbolLayer destinationSymbolLayer = new SymbolLayer("destination-symbol-layer-id", "destination-source-id");
-        destinationSymbolLayer.withProperties(
-                iconImage("destination-icon-id"),
-                iconAllowOverlap(true),
-                iconIgnorePlacement(true)
-        );
-        loadedMapStyle.addLayer(destinationSymbolLayer);
-    }
 
 
     private void getRoute(Point origin, Point destination) {
         NavigationRoute.builder(this)
                 .accessToken(Mapbox.getAccessToken())
-                .origin(origin)
-                .destination(destination)
+                .origin(destination)
+                .destination(origin)
                 .build()
                 .getRoute(new Callback<DirectionsResponse>() {
                     @Override
@@ -393,7 +440,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
                         currentRoute = response.body().routes().get(0);
 
-// Draw the route on the map
                         if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
@@ -405,39 +451,10 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                     @Override
                     public void onFailure(Call<DirectionsResponse> call, Throwable t) {
                         Timber.e(t.toString());
-
                     }
                 });
     }
 
-
-   private void queryPoint(LatLng point)
-   {
-
-// Convert LatLng coordinates to screen pixel and only query the rendered features.
-       final PointF pixel = mapboxMap.getProjection().toScreenLocation(point);
-
-       List<Feature> features = mapboxMap.queryRenderedFeatures(pixel);
-
-// Get the first feature within the list if one exist
-       if (features.size() > 0) {
-
-           Feature feature = features.get(0);
-
-// Ensure the feature has properties defined
-           if (feature.properties() != null) {
-               for (Map.Entry<String, JsonElement> entry : feature.properties().entrySet()) {
-// Log all the properties
-                 Toast.makeText(PickUpLocationActivity.this,entry.getValue().toString(),Toast.LENGTH_LONG).show();
-               }
-           }
-       }
-   }
-/*   AlertDialog.Builder builder = new AlertDialog.Builder(PickUpLocationActivity.this);
-                            builder.setTitle("Book Ride");
-                            builder.setMessage("Do you want to build this Ride");
-                            builder.create();
-*/
 
     private void reverseGeocode(final Point point) {
 
@@ -447,7 +464,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                     .query(Point.fromLngLat(point.longitude(), point.latitude()))
                     .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
                     .build();
-
 
             client.enqueueCall(new Callback<GeocodingResponse>() {
                 @Override
@@ -466,9 +482,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                             Toast.makeText(PickUpLocationActivity.this,
                                     "No results", Toast.LENGTH_SHORT).show();
                         }
-
-
-
                     }
                 }
 
