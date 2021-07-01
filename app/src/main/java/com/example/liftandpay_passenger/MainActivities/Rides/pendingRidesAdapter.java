@@ -36,7 +36,6 @@ public class pendingRidesAdapter extends RecyclerView.Adapter<pendingRidesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.img.setBackgroundResource(dataholder.get(position).getImage());
         holder.header.setText(dataholder.get(position).getHeader());
         holder.desc.setText(dataholder.get(position).getDesc());
         holder.distance.setText(dataholder.get(position).getDistance());
@@ -56,19 +55,16 @@ public class pendingRidesAdapter extends RecyclerView.Adapter<pendingRidesAdapte
     }
 
     static class myViewHolder extends RecyclerView.ViewHolder{
-        ImageView img;
         TextView header,desc,distance,price;
         MaterialCardView theCardView;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
-            img = itemView.findViewById(R.id.img1);
             header = itemView.findViewById(R.id.t1);
             desc = itemView.findViewById(R.id.t2);
             distance=itemView.findViewById(R.id.distance);
             price = itemView.findViewById(R.id.price);
             theCardView =  itemView.findViewById(R.id.pendingCardView);
-
         }
     }
 }

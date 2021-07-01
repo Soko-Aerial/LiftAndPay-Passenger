@@ -1,6 +1,7 @@
 package com.example.liftandpay_passenger.SearchedRide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRideDialog;
+import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -24,7 +26,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import java.util.ArrayList;
 
 public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHolder> {
-    ArrayList<carBookingModel> carHolder;
+    private ArrayList<carBookingModel> carHolder;
     Context carBookContext;
     public LatLng startLatLng;
     public LatLng endLatLng;
@@ -63,21 +65,25 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AvailableRideDialog availableRideDialog = new AvailableRideDialog();
+
 
               SharedPreferences sharedPreferences = carBookContext.getSharedPreferences("AVRDialogFile",Context.MODE_PRIVATE);
               
                 sharedPreferences.edit().putString("TheMainDriverId",holder.driverId).apply();
                 sharedPreferences.edit().putString("TheRideDriverId",holder.rideDriverId).apply();
 
-                availableRideDialog.setMainDriverId(holder.driverId);
-                availableRideDialog.setRideDriverId(holder.rideDriverId);
-                availableRideDialog.setEndLat(holder.endLat);
-                availableRideDialog.setEndLon(holder.endLon);
-                availableRideDialog.setStartLat(holder.stLat);
-                availableRideDialog.setStartLon(holder.stLon);
-                FragmentManager manager = ((AppCompatActivity) carBookContext).getSupportFragmentManager();
-                availableRideDialog.show(manager, null);
+
+                Intent intent = new Intent(carBookContext,AvailableRides.class);
+                intent.putExtra("theDriverId",holder.driverId);
+                intent.putExtra("theRideDriverId",holder.rideDriverId);
+                intent.putExtra("endLat",holder.endLat);
+                intent.putExtra("endLon",holder.endLon);
+                intent.putExtra("startLat",holder.stLat);
+                intent.putExtra("startLon",holder.stLon);
+                intent.putExtra("theTime", carHolder.get(position).getTimeId());
+                intent.putExtra("theDistance",carHolder.get(position).getCostPerKilometer());
+                intent.putExtra("theJourney",carHolder.get(position).getStartLocation()+" - "+carHolder.get(position).getEndLocation());
+                carBookContext.startActivity(intent);
 
             }
         });

@@ -2,12 +2,12 @@ package com.example.liftandpay_passenger.AVR_Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
@@ -28,6 +28,9 @@ import android.widget.Toast;
 import com.example.liftandpay_passenger.MainActivities.MainActivity;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SettingUp.LogAuth;
+import com.example.liftandpay_passenger.fastClass.DistanceCalc;
+import com.example.liftandpay_passenger.overpass.model;
+import com.example.liftandpay_passenger.overpass.modelface;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,6 +60,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.OnSymbolClickListener;
 import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
@@ -78,6 +82,8 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
@@ -129,7 +135,19 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     //HashMap variables
     private Map<String, Object> passengerBookingInfo;
 
+    //Text view declaration
+    private TextView startTimeText, distanceText, journeyText;
+
     private TextView mapTitleID;
+
+    private SymbolManager symbolManager;
+
+
+    //Overpass Retrofit Variable declaration
+    private Retrofit retrofit;
+    private modelface modelface;
+    private Call<model> call;
+    int i,z;
 
 
     @Override
@@ -141,12 +159,29 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         selectLocationButton = findViewById(R.id.mapButtonId);
         selectLocationButton.setText("Pickup From This Location");
 
-        mapTitleID = findViewById(R.id.mapTitleId);
+        startTimeText = findViewById(R.id.startTimeId);
+        distanceText = findViewById(R.id.distanceId);
+        journeyText = findViewById(R.id.journeyId);
 
+
+        startTimeText.setText(getIntent().getStringExtra("startTime"));
+        distanceText.setText(getIntent().getStringExtra("distance"));
+        journeyText.setText(getIntent().getStringExtra("journey"));
+
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl("https://overpass-api.de/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        modelface = retrofit.create(modelface.class);
+
+        call = modelface.getData();
+
+        mapTitleID = findViewById(R.id.mapTitleId);
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(PickUpLocationActivity.this);
-
     }
 
 
@@ -169,22 +204,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 // Add the symbol layer icon to map for future use
                 style.addImage(symbolIconId, BitmapFactory.decodeResource(
                         PickUpLocationActivity .this.getResources(), R.drawable.mapbox_logo_icon));
-
-                style.addImage("origin",BitmapFactory.decodeResource(
-                        PickUpLocationActivity .this.getResources(), R.drawable.markerselected));
-
-                SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
-
-                symbolManager.setIconAllowOverlap(true);
-                symbolManager.setTextAllowOverlap(true);
-
-                SymbolOptions symbolOptions = new SymbolOptions()
-                        .withLatLng(new LatLng(mapboxMap.getCameraPosition().target.getLatitude()+0.1, mapboxMap.getCameraPosition().target.getLongitude()+0.1))
-                        .withIconImage("origin")
-                        .withIconSize(0.5f)
-                        .withTextField("Original Destination");
-
-                symbolManager.create(symbolOptions);
 
                 setUpSource(style);
                 setupLayer(style);
@@ -226,7 +245,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                     else
                         {
 
-// Switch the button appearance back to select a location.
+                        // Switch the button appearance back to select a location.
                         selectLocationButton.setBackgroundColor(
                                 ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
                         selectLocationButton.setText("Pickup from this location");
@@ -264,7 +283,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                               public void onComplete(@NonNull Task<Void> task) {
                                                   Snackbar.make(PickUpLocationActivity.this,selectLocationButton,"Booked successfully",5000)
                                                           .setTextColor(Color.WHITE)
-                                                          .setBackgroundTint(getResources().getColor(R.color.mapbox_plugins_green)).show();
+                                                          .setBackgroundTint(getResources().getColor(R.color.mapbox_plugins_green,null)).show();
                                               }
                                           })
                                   .addOnFailureListener(new OnFailureListener() {
@@ -337,12 +356,70 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
                                 getRoute(originPoint,destinationPoint);
                                 addMarker(myStyle,points,"origin",R.drawable.markerselected,"Start");
-                                addMarker(myStyle,pointd,"destination",R.drawable.markerselected,"Destination");
+                                addMarker(myStyle,pointd,"origin",R.drawable.markerselected,"Destination");
+
+
+                                        call.enqueue(new Callback<model>() {
+                                            @Override
+                                            public void onResponse(@NotNull Call<model> call, @NotNull Response<model> response) {
+                                                if (response.code() == 200) {
+                                                    assert response.body() != null;
+                                                    if (!response.body().getElements().isEmpty()) {
+
+
+                                                        new Thread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                for (i = 0; i < response.body().getElements().size()/2; i++) {
+
+                                                                    double theDistancebetweenMainPoints = DistanceCalc.distanceBtnCoordinates(stLat, stLon, endLat, endLon)/2;
+                                                                    double theDistanceFromStart = DistanceCalc.distanceBtnCoordinates(stLat, stLon, response.body().getElements().get(i).getLat(), response.body().getElements().get(i).getLon());
+                                                                    double theDistanceFromEnd = DistanceCalc.distanceBtnCoordinates(endLat, endLon, response.body().getElements().get(i).getLat(), response.body().getElements().get(i).getLon());
+
+                                                                    if (theDistanceFromStart < theDistancebetweenMainPoints | theDistanceFromEnd < theDistancebetweenMainPoints) {
+
+                                                                        LatLng busStop = new LatLng(response.body().getElements().get(i).getLat(), response.body().getElements().get(i).getLon());
+                                                                        runOnUiThread(new Runnable() {
+                                                                            @Override
+                                                                            public void run() {
+                                                                                addMarker(myStyle, busStop, "bus stop " + i, R.drawable.bus_stop, "" + response.body().getElements().get(i).getTags().getName());
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+                                                            }
+                                                        }).start();
+
+
+                                                    }
+                                                }
+
+                                                else
+                                                {
+
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            journeyText.setText("002"+response.code());
+                                                        }
+                                                    });
+
+                                                }
+                                            }
+                                            @SuppressLint("SetTextI18n")
+                                            @Override
+                                            public void onFailure(Call<model> call, Throwable t) {
+                                                journeyText.setText("003"+t.getLocalizedMessage());
+                                            }
+
+                                        });
+
+
                             }
                             else
                             {
-                                androidx.appcompat.app.AlertDialog.Builder builder
-                                        = new androidx.appcompat.app.AlertDialog
+                                AlertDialog.Builder builder
+                                        = new AlertDialog
                                         .Builder(PickUpLocationActivity.this);
 
                                 // Set the message show for the Alert time
@@ -377,27 +454,37 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         });
     }
 
+    private void dis(){
+
+    }
 
     private void addMarker(@NonNull Style style, @NotNull LatLng latLng, String name, int resource, @Nullable String text)
     {
+
         style.addImage(name,BitmapFactory.decodeResource(
                 PickUpLocationActivity .this.getResources(), resource ));
-        SymbolManager symbolManager = new SymbolManager(mapView, mapboxMap, style);
-
-        symbolManager.setIconAllowOverlap(true);
-        symbolManager.setTextAllowOverlap(true);
 
         SymbolOptions symbolOptions = new SymbolOptions()
                 .withLatLng(new LatLng(latLng.getLatitude(), latLng.getLongitude()))
                 .withIconImage(name)
                 .withIconSize(0.5f)
                 .withTextField(text)
-                .withTextAnchor("Location")
                 .withTextColor("#4688F1");
 
+        symbolManager = new SymbolManager(mapView,mapboxMap,style);
         symbolManager.create(symbolOptions);
 
+
+     /*  symbolManager.addClickListener(new OnSymbolClickListener() {
+           @Override
+           public void onAnnotationClick(Symbol symbol) {
+               style.removeImage(name);
+               addMarker(style, latLng,name, R.drawable.btn_back,"wake");
+           }
+       });*/
+
     }
+
 
 
     @Override
@@ -474,13 +561,18 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                         if (results.size() > 0) {
                             CarmenFeature feature = results.get(0);
 
-                            Toast.makeText(PickUpLocationActivity.this,
-                                    "Results: "+
-                                            feature.placeName(), Toast.LENGTH_SHORT).show();
+                            selectLocationButton.setBackgroundColor(
+                                    ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
+                            selectLocationButton.setText("Pickup from this location");
+
+                            hoveringMarker.setImageResource(R.drawable.markerselecting);
 
                         } else {
-                            Toast.makeText(PickUpLocationActivity.this,
-                                    "No results", Toast.LENGTH_SHORT).show();
+                            selectLocationButton.setBackgroundColor(
+                                    ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
+                            selectLocationButton.setText("Pickup from this location");
+
+                            hoveringMarker.setImageResource(R.drawable.markerselecting);
                         }
                     }
                 }

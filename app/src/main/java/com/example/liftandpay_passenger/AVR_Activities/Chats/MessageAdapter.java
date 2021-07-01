@@ -31,7 +31,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.messageV
     public messageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view;
-        if(theViewtype == 2)
+        if(viewType == 2)
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bubble_layout_chatsent,parent,false);
         else
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bubble_layout_chatreceived,parent,false);
@@ -41,13 +41,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.messageV
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull MessageAdapter.messageViewHolder holder, int position) {
-        theViewtype = messageModels.get(position).getvType();
 
         TextView msgTxt = holder.itemView.findViewById(R.id.MsgTxt);
         msgTxt.setText(messageModels.get(position).getMessage());
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        theViewtype = messageModels.get(position).getvType();
 
+        return theViewtype;
+    }
 
     @Override
     public int getItemCount() {

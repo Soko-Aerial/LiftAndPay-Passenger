@@ -1,6 +1,7 @@
 package com.example.liftandpay_passenger.MainActivities.Rides;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -18,9 +19,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.liftandpay_passenger.MainActivities.MainActivity;
 import com.example.liftandpay_passenger.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +43,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
@@ -59,11 +63,13 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 public class PendingRideMapActivity extends FragmentActivity implements OnMapReadyCallback, PermissionsListener {
 
     private TextView actionBtn;
-    ImageView callBtn;
+    private ImageView callBtn;
+    private ProgressBar progressBar;
 
     private MapView mapView;
     private MapboxMap mapboxMap;
@@ -98,6 +104,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
         actionBtn = findViewById(R.id.actionBtn);
         callBtn = findViewById(R.id.callBtn);
+        progressBar = findViewById(R.id.progressbar);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -131,13 +138,16 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 actionBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        boolean simulateRoute = true;
-                        NavigationLauncherOptions options = NavigationLauncherOptions.builder()
-                                .directionsRoute(currentRoute)
-                                .shouldSimulateRoute(simulateRoute)
-                                .build();
-// Call this method with Context from within an Activity
-                        NavigationLauncher.startNavigation(PendingRideMapActivity.this, options);
+                        actionBtn.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.VISIBLE);
+                        AlertDialog.Builder builder
+                                = new AlertDialog
+                                .Builder(PendingRideMapActivity.this);
+
+                        // Set the message show for the Alert time
+                        builder.setMessage("Waiting for the driver to reach ...");
+                        builder.setCancelable(true);
+                        builder.create().show();
                     }
                 });
 
@@ -180,8 +190,6 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
                         sharedPreferences.edit().putString("TheDriverLatitude", (myLoc.getLatitude()+"")).apply();
                         sharedPreferences.edit().putString("TheDriverLongitude", (myLoc.getLongitude()+"")).apply();
-                        Toast.makeText(getApplicationContext(), myLoc.getLatitude()+"",Toast.LENGTH_LONG).show();
-                        Toast.makeText(getApplicationContext(), myLoc.getLongitude()+"",Toast.LENGTH_LONG).show();
 
                         String theCurrentLat = sharedPreferences.getString("TheDriverLatitude","Null");
                         String theCurrentLong = sharedPreferences.getString("TheDriverLongitude","Null");
@@ -199,7 +207,6 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                                     .build();
                             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 150));
 
-
                             Point destinationPoint = Point.fromLngLat(pointd.getLongitude(), pointd.getLatitude());
                             Point originPoint = Point.fromLngLat(points.getLongitude(), points.getLatitude());
                             getRoute(originPoint,destinationPoint);
@@ -208,8 +215,6 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                         {
                             Toast.makeText(getApplicationContext(), "The Cordinates are null, Route could not render",Toast.LENGTH_LONG).show();
                         }
-
-
 
                     }
                 });
@@ -340,13 +345,8 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                }
-                else
-                {
-
-                }
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {}
+                else{}
                 return;
             }
         }

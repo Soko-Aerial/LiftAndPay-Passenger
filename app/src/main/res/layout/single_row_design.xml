@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pendingCardView"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="5dp"
     android:layout_marginTop="1dp"
+    style="@style/ProfileCardViewStyle"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="10dp"
+        android:background="@color/fadedSuccess"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/t1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/fadedSuccess"
+            android:padding="10dp"
+            android:text="Start to Destination"
+            />
+
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -35,11 +49,10 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/t1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="Start to Destination"
+                android:text="Status: Pending ..."
                 android:textSize="16dp"
                 />
 
@@ -73,21 +86,6 @@
 
         </RelativeLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/pendingCardView"
-            style="@style/ProfileCardViewStyle"
-            app:cardCornerRadius="0dp">
-
-
-            <ImageView
-                android:id="@+id/img1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/img_map"/>
-
-
-        </com.google.android.material.card.MaterialCardView>
 
 
 

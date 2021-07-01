@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SettingUp.LogAuth;
+import com.example.liftandpay_passenger.SplashScreen;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -134,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     builder.setCancelable(true);
                     builder.create().show();
                     Toast.makeText(this, "PERMISSION_NOT_GRANTED_002", Toast.LENGTH_SHORT).show();
-                              }
+
+                }
             }
         }
     }

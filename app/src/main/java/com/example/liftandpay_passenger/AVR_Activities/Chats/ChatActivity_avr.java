@@ -50,7 +50,8 @@ public class ChatActivity_avr extends AppCompatActivity {
     ImageButton sendBtn;
     EditText typedMessage;
     MessageModel messageModel;
-    MessageAdapter messageAdapter = new MessageAdapter(messageModels);
+
+    private HashMap<String, Object> driverDetail =  new HashMap<>();
 
 
 
@@ -86,6 +87,7 @@ public class ChatActivity_avr extends AppCompatActivity {
 
       CollectionReference chatCollection =  db.collection("Chat").document(driverId).collection("Passengers").document(thePassengerId).collection("messages");
       DocumentReference passengerRef = db.collection("Chat").document(driverId).collection("Passengers").document(thePassengerId);
+      DocumentReference driverRef = db.collection("Chat").document(driverId);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -109,9 +111,16 @@ public class ChatActivity_avr extends AppCompatActivity {
                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                                        @Override
                                        public void onSuccess(Void aVoid) {
+
                                            passengerRef.set(chat).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                @Override
                                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                                   driverRef.set(driverDetail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                       @Override
+                                                       public void onComplete(@NonNull @NotNull Task<Void> task) {
+
+                                                       }
+                                                   });
                                                    Timber.tag("Add Phone").e("Phone number added successfully");
                                                }
                                            });

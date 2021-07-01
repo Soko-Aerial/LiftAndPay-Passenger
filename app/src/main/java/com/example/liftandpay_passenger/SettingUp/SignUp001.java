@@ -72,7 +72,7 @@ public class SignUp001 extends AppCompatActivity {
                     sharedPreferences.edit().putString("TheEmail", emailEdit.getText().toString()).apply();
 
                     HashMap<String,String> map = new HashMap<>();
-                    map.put("Name", mAuth.getUid());
+                    map.put("Name", usernameEdit.getText().toString());
                     map.put("Email","Not Set");
                     DocumentReference dRef = db.collection("Passenger").document(mAuth.getUid().toString());
                     dRef.set(map).addOnCompleteListener(new OnCompleteListener<Void>() {

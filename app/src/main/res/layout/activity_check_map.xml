@@ -9,8 +9,7 @@
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/mapButtonId"
@@ -23,13 +22,9 @@
             android:background="@color/primaryColors"
             android:text="Book Ride" />
 
-
-
-
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:orientation="vertical">
 
         <TextView
@@ -42,32 +37,11 @@
             android:gravity="center"
             android:text="Choose a pickup Location" />
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/extraFadedBlue"
+            android:background="#B3FFFFFF"
             android:orientation="vertical">
-        <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="3dp"
-        android:layout_margin="2dp"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primaryColors"
-            android:textStyle="bold"
-            android:text="Distance : "
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="14km"/>
-    </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -84,31 +58,53 @@
             android:text="From - To : "
             />
         <TextView
-            android:id="@+id/distanceId"
+            android:id="@+id/journeyId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tesano to Abeka"/>
     </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="3dp"
-                android:layout_margin="2dp"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/primaryColors"
-                    android:textStyle="bold"
-                    android:text="Starting Time : "
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="11:00pm"/>
-            </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp"
+        android:layout_margin="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColors"
+            android:textStyle="bold"
+            android:text="Starting Time : "
+            />
+        <TextView
+            android:id="@+id/startTimeId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11:00pm"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp"
+        android:layout_margin="2dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColors"
+            android:textStyle="bold"
+            android:text="Cost : "/>
+
+        <TextView
+            android:id="@+id/distanceId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14km"/>
+
+    </LinearLayout>
 
         </LinearLayout>
 
