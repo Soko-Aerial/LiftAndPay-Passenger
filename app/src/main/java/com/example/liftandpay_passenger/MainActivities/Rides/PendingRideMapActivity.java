@@ -1,9 +1,11 @@
 package com.example.liftandpay_passenger.MainActivities.Rides;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.navigation.Navigation;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -27,10 +29,16 @@ import com.example.liftandpay_passenger.MainActivities.MainActivity;
 import com.example.liftandpay_passenger.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -49,9 +57,11 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,14 +87,17 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private final String geojsonSourceLayerId = "geojsonSourceLayerId";
     private final String symbolIconId = "symbolIconId";
     private final String mapBoxStyleUrl ="mapbox://styles/hubert-brako/cknk4g1t6031l17to153efhbs";
-
+    private final String carIconId = "car-icon-id";
 
     private LatLng myLoc;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationComponent locationComponent;
     private PermissionsManager permissionsManager;
     private SharedPreferences sharedPreferences;
+    private ProgressBar routeProgress;
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {Manifest.permission.CALL_PHONE};
@@ -92,6 +105,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private DirectionsRoute currentRoute;
     private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
+    private String rideId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +119,10 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         actionBtn = findViewById(R.id.actionBtn);
         callBtn = findViewById(R.id.callBtn);
         progressBar = findViewById(R.id.progressbar);
+        routeProgress = findViewById(R.id.routeProgress);
+        routeProgress.setVisibility(View.VISIBLE);
+
+        rideId = getIntent().getStringExtra("rideId");
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -116,8 +134,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
-        sharedPreferences =  getApplicationContext().getSharedPreferences("RIDEFILE",MODE_PRIVATE);
-        sharedPreferences.edit().putString("TheOrderId","hELLO").apply();
+
 
         this.mapboxMap = mapboxMap;
         locationComponent = mapboxMap.getLocationComponent();
@@ -170,6 +187,20 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
 
 
+        db.collection("Rides").document(rideId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+
+                if(Objects.equals(value.getString("driversStatus"), "Started")){
+                   Toast.makeText(PendingRideMapActivity.this,""+value.getDouble("driversLat"),Toast.LENGTH_LONG).show();
+
+                   addMarkerToDestination(value.getDouble("driversLat"),value.getDouble("driversLon"));
+
+                }
+            }
+        });
+
+
         fusedLocationProviderClient = getFusedLocationProviderClient(PendingRideMapActivity.this);
 
         if (ActivityCompat.checkSelfPermission(PendingRideMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -188,22 +219,22 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                     public void onSuccess(Location location) {
                         myLoc = new LatLng(location.getLatitude(), location.getLongitude());
 
-                        sharedPreferences.edit().putString("TheDriverLatitude", (myLoc.getLatitude()+"")).apply();
-                        sharedPreferences.edit().putString("TheDriverLongitude", (myLoc.getLongitude()+"")).apply();
+                        double stLat = getIntent().getDoubleExtra("stLat",0);
+                        double stLon = getIntent().getDoubleExtra("stLon",0);
+                        double endLat = getIntent().getDoubleExtra("endLat",0);
+                        double endLon = getIntent().getDoubleExtra("endLon",0);
 
-                        String theCurrentLat = sharedPreferences.getString("TheDriverLatitude","Null");
-                        String theCurrentLong = sharedPreferences.getString("TheDriverLongitude","Null");
+//                        actionBtn.setText(stLat +"\n"+ stLon+"\n"+ endLat+"\n"+ endLon);
+                        if(stLat!= 0 && stLon!=0 && endLat!=0 && endLon!=0) {
 
-                        if(!theCurrentLat.equals("Null") && !theCurrentLong.equals("Null")) {
+                            LatLng points = new LatLng( stLat, stLon);
+                            LatLng pointd = new LatLng(endLat, endLon);
 
-                            double myLat = Double.parseDouble(theCurrentLat);
-                            double myLong = Double.parseDouble(theCurrentLong);
-                            LatLng points = new LatLng( myLat, myLong);
-                            LatLng pointd = new LatLng(5.58860529, -0.184086699);
 
                             LatLngBounds latLngBounds = new LatLngBounds.Builder()
                                     .include(points)
                                     .include(pointd)
+                                    .include(myLoc)
                                     .build();
                             mapboxMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 150));
 
@@ -287,17 +318,30 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
 
     private void addDestinationIconSymbolLayer(@NonNull Style loadedMapStyle) {
-        loadedMapStyle.addImage("destination-icon-id",
-                BitmapFactory.decodeResource(this.getResources(), R.drawable.mapbox_marker_icon_default));
+        loadedMapStyle.addImage("car-icon-id",
+                BitmapFactory.decodeResource(this.getResources(), R.drawable.img_car));
         GeoJsonSource geoJsonSource = new GeoJsonSource("destination-source-id");
         loadedMapStyle.addSource(geoJsonSource);
         SymbolLayer destinationSymbolLayer = new SymbolLayer("destination-symbol-layer-id", "destination-source-id");
         destinationSymbolLayer.withProperties(
-                iconImage("destination-icon-id"),
+                iconImage("car-icon-id"),
                 iconAllowOverlap(true),
                 iconIgnorePlacement(true)
         );
+
+
         loadedMapStyle.addLayer(destinationSymbolLayer);
+    }
+
+    private void addMarkerToDestination(double lat, double lon){
+        GeoJsonSource theMainStyle = mapboxMap.getStyle().getSourceAs("destination-source-id");
+
+        if (theMainStyle != null) {
+            theMainStyle.setGeoJson(FeatureCollection.fromFeature(
+                    Feature.fromGeometry(Point.fromLngLat(lon, lat))
+            ));
+
+        }
     }
 
 
@@ -316,7 +360,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                             Timber.e("No routes found, make sure you set the right user and access token.");
                             return;
                         } else if (response.body().routes().size() < 1) {
-                            Timber.e("No routes found");
+                            Toast.makeText(PendingRideMapActivity.this,"Couldn't generate route",Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -326,14 +370,15 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                         if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
-                            navigationMapRoute = new NavigationMapRoute(null, mapView, mapboxMap, R.style.NavigationMapRoute);
+                            navigationMapRoute = new NavigationMapRoute(null,mapView, mapboxMap, R.style.NavigationMapRoute);
+                            navigationMapRoute.addRoute(currentRoute);
                         }
-                        navigationMapRoute.addRoute(currentRoute);
                     }
 
                     @Override
                     public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-                        Timber.e(t.toString());
+//                        routeProgress.setVisibility(View.INVISIBLE);
+                        Toast.makeText(PendingRideMapActivity.this,"002:"+t.getMessage(),Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -370,7 +415,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     protected void onStop() {
         super.onStop();
         mapView.onStop();
-        sharedPreferences.edit().clear().apply();
+
     }
 
     @Override
@@ -389,7 +434,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
-        sharedPreferences.edit().clear().apply();
+
 
     }
 

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
@@ -31,6 +32,8 @@ public class SearchedRides extends AppCompatActivity {
     private SearchView searchView;
     ArrayList<carBookingModel> carholder;
 
+    private TextView backBtn;
+
     LatLng endCord;
     LatLng stCord;
 
@@ -51,6 +54,12 @@ public class SearchedRides extends AppCompatActivity {
         String stLocs = bundle.getString("stLoc");
         String endLocs = bundle.getString("endLoc");
 
+        backBtn =  findViewById(R.id.availableBckBtn);
+
+        backBtn.setOnClickListener( view->{
+            finish();
+        });
+
 
         db.collection("Rides")
                 .get()
@@ -66,23 +75,25 @@ public class SearchedRides extends AppCompatActivity {
                         {
 
                             for(QueryDocumentSnapshot snapshots : task.getResult()){
-
-                               String endLoc =  Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation","null")).toString();
-                               String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation","null")).toString();
-                               String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost","null")).toString();
-                               String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date","null")).toString();
-                               String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time","null")).toString();
-//                               GeoPoint stPoint =  snapshots.getGeoPoint("startCordinate");
+                              String name =  Objects.requireNonNull(snapshots.getData().getOrDefault("driverName","null")).toString();
+                              String endLoc =  Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation","null")).toString();
+                              String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation","null")).toString();
+                              String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost","null")).toString();
+                              String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date","null")).toString();
+                              String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time","null")).toString();
                               double startLat = (double) snapshots.getData().getOrDefault("startLat",null);
                               double startLon = (double) snapshots.getData().getOrDefault("startLon",null);
                               double endLon = (double) snapshots.getData().getOrDefault("endLon",null);
                               double endLat = (double) snapshots.getData().getOrDefault("endLat",null);
+                              int numberOfSeats = Integer.parseInt(snapshots.getData().get("Number Of Occupants").toString());
 
 
 
-                               if (endLoc.equals(endLocs) && stLoc.equals(stLocs)){
+                               if (endLoc.toUpperCase().trim().equals(endLocs.toUpperCase().trim()) && stLoc.toUpperCase().trim().equals(stLocs.toUpperCase().trim())){
                                    carBookingModel carBookingModel =
-                                           new carBookingModel(1,
+                                           new carBookingModel(
+                                                   name,
+                                                   numberOfSeats,
                                                    stLoc,
                                                    endLoc,
                                                    rideCost,
@@ -116,22 +127,5 @@ public class SearchedRides extends AppCompatActivity {
     }
 
 
-    static class CordinateClass{
-        private int altitude;
-        private double lat;
-        private double lon;
-
-        public int getAltitude() {
-            return altitude;
-        }
-
-        public double getLat() {
-            return lat;
-        }
-
-        public double getLon() {
-            return lon;
-        }
-    }
 }
 

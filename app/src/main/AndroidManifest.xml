@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-feature android:name="android.hardware.location.network" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.wifi" />
@@ -21,9 +20,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher_foreground"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
         <activity android:name=".SplashScreen" android:theme="@style/Theme.Transparent">
@@ -35,16 +34,17 @@
         <activity
             android:name=".MainActivities.MainActivity"
             android:screenOrientation="fullSensor">
-
         </activity>
         <activity android:name=".AVR_Activities.AvailableRides" />
         <activity android:name=".SettingUp.SignUp003" />
-        <activity android:name=".SettingUp.LogAuth" />
+        <activity android:name=".SettingUp.LogAuth">
+        </activity>
 
         <activity android:name=".SettingUp.SignUp001" />
         <activity android:name=".AVR_Activities.Chats.ChatActivity_avr" />
-        <activity android:name=".AVR_Activities.PickUpLocationActivity" />
-        <activity android:name=".AVR_Activities.CarDetailsActivity_avr" />
+        <activity android:name=".AVR_Activities.PickUpLocationActivity" >
+
+        </activity>
         <activity android:name=".SearchedRide.SearchedRides" />
         <activity android:name=".AddCardDetails" />
         <activity android:name=".MainActivities.Rides.PendingRideMapActivity" />

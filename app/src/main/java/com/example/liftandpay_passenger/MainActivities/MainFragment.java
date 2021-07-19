@@ -11,6 +11,9 @@ import com.example.liftandpay_passenger.SettingUp.SignUp003;
 import com.example.liftandpay_passenger.fastClass.LongiLati;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,17 +21,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,6 +64,7 @@ public class MainFragment extends Fragment {
     private FloatingActionButton floatbtn;
 
     View connectorView;
+    ImageView lowerView;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private   String json = null;
     private  int getNum;
@@ -57,6 +74,7 @@ public class MainFragment extends Fragment {
     private JSONObject obj004;
     private JSONArray arr002;
 
+    private FirebaseStorage storage =  FirebaseStorage.getInstance();
 
     private LongiLati longiLati;
 
@@ -66,10 +84,11 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Mapbox.getInstance(Objects.requireNonNull(getContext()), getString(R.string.mapbox_access_token));
+        Mapbox.getInstance(requireContext(), getString(R.string.mapbox_access_token));
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
         inflater.inflate(R.layout.fragment_main, container, false);
+
 
         floatbtn = v.findViewById(R.id.floatBtn);
         rideSearchbtn = v.findViewById(R.id.ridSearchBtn);
@@ -78,13 +97,21 @@ public class MainFragment extends Fragment {
         searchDestination.setVisibility(View.GONE);
         connectorView = v.findViewById(R.id.connectorId);
         connectorView.setVisibility(View.GONE);
+        lowerView = v.findViewById(R.id.viewId);
+
+        String url = "https://firebasestorage.googleapis.com/v0/b/lift-and-pay-b5fe5.appspot.com/o/driver%2Flogo.png?alt=media&token=fa838edf-a86d-4dbd-96a6-ac92bc7a1d46";
+
+        Picasso.get().load(/*"http://i.imgur.com/DvpvklR.png"*/ url).into(lowerView);
+
+
 
 
 
         rideSearchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchOrigin.getText().toString().equals ("") || searchDestination.getText().toString().equals(""))
+                if (searchOrigin.getText().toString().toUpperCase().trim().equals ("") ||
+                    searchDestination.getText().toString().toUpperCase().trim().equals(""))
                 {
                     Toast.makeText(getContext(),"Can't Search",Toast.LENGTH_LONG).show();
                 }
@@ -102,6 +129,7 @@ public class MainFragment extends Fragment {
         floatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 //                mAuth.signOut();
                 Intent intent = new Intent(getContext(), SignUp003.class);
                 startActivity(intent);
@@ -167,7 +195,7 @@ public class MainFragment extends Fragment {
                     }
                     boolean check;
 
-                  getActivity().runOnUiThread(new Runnable() {
+                  requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -210,7 +238,7 @@ public class MainFragment extends Fragment {
                 boolean check = false;
                 for (int j = 0; j < arrayList.size();j++)
                 {
-                    if (arrayList.get(j).contentEquals(text)) {
+                    if (arrayList.get(j).toUpperCase().trim().contentEquals(text.toString().trim().toUpperCase())) {
                         check = true;
                     }
                 }

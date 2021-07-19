@@ -57,38 +57,67 @@ tools:context=".SettingUp.LogAuth">
             android:inputType="phone"
             android:maxLength="10"
             android:minWidth="190dp"
-            android:hint="Number"/>
+            android:hint="233333333"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/btnTosignUp003"
-        android:layout_gravity="end"
-        android:layout_width="50dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:rotation="180"
-        android:layout_margin="8dp"
-        android:foreground="@drawable/btn_back"
-        android:foregroundTint="@color/primaryColors"
-        android:layout_height="50dp"
-        android:backgroundTint="@color/fadedBlue"
-        android:background="@drawable/ripple"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/verifyProgressId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="end"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:id="@+id/btnTosignUp002"
+            android:layout_gravity="end"
+            android:layout_width="50dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_margin="8dp"
+            android:foreground="@drawable/btn_back"
+            android:foregroundTint="@color/primaryColors"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/fadedBlue"
+            android:background="@drawable/ripple"
+            />
+
+
+        <TextView
+            android:id="@+id/btnTosignUp003"
+            android:layout_gravity="end"
+            android:layout_width="50dp"
+            android:clickable="true"
+            android:layout_alignParentEnd="true"
+            android:focusable="true"
+            android:rotation="180"
+            android:layout_margin="8dp"
+            android:foreground="@drawable/btn_back"
+            android:foregroundTint="@color/primaryColors"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/fadedBlue"
+            android:background="@drawable/ripple"
+            />
+
+
+
+    </RelativeLayout>
 
 
     <TextView
+        android:id="@+id/infoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="You are about to log onto the platform"
         android:textColor="@color/primaryColors"/>
 
-    <ProgressBar
-        android:id="@+id/verifyProgressId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        />
 
 </LinearLayout>
 
@@ -98,36 +127,6 @@ tools:context=".SettingUp.LogAuth">
     android:background="@drawable/type_msg_box"
     android:layout_alignParentBottom="true"
     />
-
-<LinearLayout
-    android:id="@+id/RideFooter"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_alignParentBottom="true"
-    android:gravity="start"
-    android:background="@color/white"
-    >
-
-    <TextView
-        android:id="@+id/signUpBtnId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:backgroundTint="@color/extraFadedBlue"
-        android:text="Login"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="20dp"
-        android:background="@drawable/ripple"/>
-
-</LinearLayout>
-
-
-
-
 
 
 </RelativeLayout>

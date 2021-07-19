@@ -14,14 +14,15 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/fadedSuccess"
+
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/t1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/fadedSuccess"
+            android:background="@color/primaryColors"
+            android:textColor="@color/white"
             android:padding="10dp"
             android:text="Start to Destination"
             />
@@ -48,13 +49,27 @@
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Status: Pending ..."
-                android:textSize="16dp"
-                />
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Status: "
+                    android:textSize="16dp"
+                    />
+                <TextView
+                    android:id="@+id/statusId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Approved"
+                    android:textSize="16dp"
+                    />
+            </LinearLayout>
+
 
             </LinearLayout>
 

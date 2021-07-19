@@ -5,7 +5,8 @@ import timber.log.Timber;
 
 public class carBookingModel {
 
-    public int image;
+    private String name;
+    private int numberOfSeats;
     private String startLocation;
     private String endLocation;
     private String costPerKilometer;
@@ -17,30 +18,32 @@ public class carBookingModel {
     private double endLat;
     private double endLon;
 
-    public carBookingModel(int image,
+    public carBookingModel(String name,
+                           int numberOfSeats,
                            String startLocation,
                            String endLocation,
                            String costPerKilometer,
                            String dateId,
                            String timeId,
                            String driverId,
-                           double stLat,double stLon,
-                           double endLat, double endLon
-                         )
-    {
-        this.image = image;
+                           double stLat,
+                           double stLon,
+                           double endLat,
+                           double endLon) {
+        this.name = name;
+        this.numberOfSeats = numberOfSeats;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.costPerKilometer = costPerKilometer;
         this.dateId = dateId;
         this.timeId = timeId;
-        this.driverId =driverId;
+        this.driverId = driverId;
         this.stLat = stLat;
         this.stLon = stLon;
         this.endLat = endLat;
         this.endLon = endLon;
-
     }
+
 
     public String getDriverId() {
         return driverId;
@@ -56,6 +59,30 @@ public class carBookingModel {
 
     public void setStartLocation(String startLocation) {
         this.startLocation = startLocation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setStLat(double stLat) {
+        this.stLat = stLat;
+    }
+
+    public void setStLon(double stLon) {
+        this.stLon = stLon;
+    }
+
+    public void setEndLat(double endLat) {
+        this.endLat = endLat;
+    }
+
+    public void setEndLon(double endLon) {
+        this.endLon = endLon;
     }
 
     public String getEndLocation() {
@@ -90,12 +117,12 @@ public class carBookingModel {
         this.timeId = timeId;
     }
 
-    public int getImage() {
-        return image;
+    public int getNumberOfSeats() {
+        return numberOfSeats;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setNumberOfSeats(int numberOfSeats) {
+        this.numberOfSeats = numberOfSeats;
     }
 
     public double getStLat() {

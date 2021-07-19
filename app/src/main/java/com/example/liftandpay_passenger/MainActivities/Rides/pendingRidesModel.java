@@ -1,39 +1,47 @@
 package com.example.liftandpay_passenger.MainActivities.Rides;
 public class pendingRidesModel {
-    int image;
-    String header,desc,distance,price;
+    private double startLon,endLon,startLat,endLat;
+    private String journey,dateTime,distance,price,status,rideId;
+
 //data for ride history for the recycler view
 
-    public pendingRidesModel(int image, String header, String desc, String distance, String price) {
-        this.image = image;
-        this.header = header;
-        this.desc = desc;
+    public pendingRidesModel(String journey, String dateTime, String distance, String price, double startLat, double endLat, double startLon, double endLon,String status, String rideId) {
+
+        this.journey = journey;
+        this.dateTime = dateTime;
         this.distance = distance;
         this.price =price;
+        this.startLat = startLat;
+        this.startLon =startLon;
+        this.endLat = endLat;
+        this.endLon = endLon;
+        this.status = status;
+        this.rideId =rideId;
     }
 
-    public int getImage() {
-        return image;
+
+    public String getRideId() {
+        return rideId;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setRideId(String rideId) {
+        this.rideId = rideId;
     }
 
-    public String getHeader() {
-        return header;
+    public String getJourney() {
+        return journey;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setJourney(String journey) {
+        this.journey = journey;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDateTime() {
+        return dateTime;
     }
 
     public void setDesc(String desc) {
-        this.desc = desc;
+        this.dateTime = desc;
     }
 
     public String getDistance() {
@@ -52,4 +60,43 @@ public class pendingRidesModel {
         this.price = price;
     }
 
+    public double getStartLon() {
+        return startLon;
+    }
+
+    public void setStartLon(long startLon) {
+        this.startLon = startLon;
+    }
+
+    public double getEndLon() {
+        return endLon;
+    }
+
+    public void setEndLon(long endLon) {
+        this.endLon = endLon;
+    }
+
+    public double getStartLat() {
+        return startLat;
+    }
+
+    public void setStartLat(long startLat) {
+        this.startLat = startLat;
+    }
+
+    public double getEndLat() {
+        return endLat;
+    }
+
+    public void setEndLat(long endLat) {
+        this.endLat = endLat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

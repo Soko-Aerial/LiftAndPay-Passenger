@@ -15,7 +15,7 @@ public class AvailableRides extends AppCompatActivity {
 
     TextView bookRide;
     ImageView chatDriver;
-    private String mainDriverId;
+    private String mainDriverId, name;
     private double startLat;
     private double startLon;
     private double endLat;
@@ -25,6 +25,8 @@ public class AvailableRides extends AppCompatActivity {
     private String distance;
     private String journey;
 
+    private TextView journeyText, nameText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,10 @@ public class AvailableRides extends AppCompatActivity {
 
         bookRide = findViewById(R.id.driverNxtBtnId);
         chatDriver = findViewById(R.id.messageBtn);
+        journeyText =  findViewById(R.id.journeyId);
+        nameText = findViewById(R.id.nameId);
 
+        //from carBookAdapter.java
         mainDriverId = getIntent().getStringExtra("theDriverId");
         startLat = getIntent().getDoubleExtra("startLat",0.0);
         startLon =getIntent().getDoubleExtra("startLon",0.0);
@@ -42,7 +47,10 @@ public class AvailableRides extends AppCompatActivity {
         startTime =getIntent().getStringExtra("theTime");
         journey = getIntent().getStringExtra("theJourney");
         distance =getIntent().getStringExtra("theDistance");
+        name = getIntent().getStringExtra("theName" );
 
+        journeyText.setText(journey);
+        nameText.setText(name);
 
         chatDriver.setOnClickListener(new View.OnClickListener() {
             @Override

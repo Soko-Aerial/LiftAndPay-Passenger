@@ -102,6 +102,7 @@ public class ChatActivity_avr extends AppCompatActivity {
                     chat.put("Message",typedMessage.getText().toString());
                     chat.put("Time",dtf.format(now));
                     chat.put("ChatMode","2");
+                    driverDetail.put("ID",driverId);
 
                     chatCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -124,6 +125,7 @@ public class ChatActivity_avr extends AppCompatActivity {
                                                    Timber.tag("Add Phone").e("Phone number added successfully");
                                                }
                                            });
+
 
                                        }
                                    })

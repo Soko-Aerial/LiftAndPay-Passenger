@@ -75,10 +75,12 @@
             android:layout_margin="15dp"
             android:layout_gravity="end"/>
 
-        <View
+        <ImageView
+            android:id="@+id/viewId"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/fadedBlue"/>
+            android:layout_height="200dp"
+            android:background="@color/fadedBlue"
+            />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

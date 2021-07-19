@@ -65,11 +65,18 @@ public class RidesFragment extends Fragment {
                                    {
                                        if (documentSnapshot1.getId().equals(mUId))
                                        {
+                                           String rideId = documentSnapshot.getId();
                                            String rideDistance = documentSnapshot.getString("Ride Distance");
                                            String rideCost = documentSnapshot.getString("Ride Cost");
+                                           String status = documentSnapshot1.getString("Status");
                                            String dateTime = documentSnapshot.getString("Ride Date") + " " + documentSnapshot.getString("Ride Time");
                                            String journey = documentSnapshot.getString("startLocation") + " - " + documentSnapshot.getString("endLocation");
-                                           ob1 = new pendingRidesModel(R.drawable.img_map,journey,dateTime,rideDistance,rideCost);
+                                           double startLat = documentSnapshot.getDouble("startLat");
+                                           double endtLat = documentSnapshot.getDouble("endLat");
+                                           double startLon = documentSnapshot.getDouble("startLon");
+                                           double endLon = documentSnapshot.getDouble("endLon");
+
+                                           ob1 = new pendingRidesModel(journey,dateTime,rideDistance,rideCost, startLat,endtLat,startLon,endLon,status,rideId);
                                            dataholder.add(ob1);
                                        }
                                    }
