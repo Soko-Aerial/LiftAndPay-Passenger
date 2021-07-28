@@ -22,13 +22,17 @@ import com.google.firebase.auth.FirebaseUser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 
 public class MainActivity extends AppCompatActivity {
-    AnimatedBottomBar animatedBottomBar;
-    FragmentManager fragmentManager;
+    private AnimatedBottomBar animatedBottomBar;
+    private FragmentManager fragmentManager;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    public Fragment fragment = new MainFragment();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+        MainFragment fragment1 = new MainFragment();
+
+
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
+        if (fragment.equals(fragment1)) {
+            animatedBottomBar.selectTabById(R.id.navigation_radar, true);
+        }
+        else
+            animatedBottomBar.selectTabById(R.id.navigation_payment, true);
+
 
         if(savedInstanceState==null){
             animatedBottomBar.selectTabById(R.id.navigation_home,true);
@@ -60,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         animatedBottomBar.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
             @Override
             public void onTabSelected(int lastIndex, @Nullable AnimatedBottomBar.Tab lastTab, int newIndex, @NotNull AnimatedBottomBar.Tab newTab) {
-                Fragment fragment = null;
+
                 switch (newTab.getId()){
 
                     case R.id.navigation_home:
@@ -78,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_profile:
                         fragment = new ProfileFragment();
                         break;
+
+
 
                 }
                 if(fragment!=null){
@@ -110,15 +126,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults){
-        switch (requestCode){
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
             case 1: {
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ContextCompat.checkSelfPermission(MainActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
 
                     try {
                         Thread.sleep(3000);

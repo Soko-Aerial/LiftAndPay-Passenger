@@ -93,31 +93,6 @@ public class SignUp003 extends AppCompatActivity {
 
 
 
-
-/*    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //Detects request codes
-        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                profileImg.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    }*/
-
-
-
     void imageChooser() {
 
         // create an instance of the

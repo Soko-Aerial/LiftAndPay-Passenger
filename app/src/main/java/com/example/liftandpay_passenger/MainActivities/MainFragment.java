@@ -2,6 +2,7 @@ package com.example.liftandpay_passenger.MainActivities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 
@@ -10,6 +11,8 @@ import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
 import com.example.liftandpay_passenger.SettingUp.SignUp003;
 import com.example.liftandpay_passenger.fastClass.LongiLati;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,6 +35,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -62,7 +66,6 @@ public class MainFragment extends Fragment {
 
     private TextView rideSearchbtn;
     private FloatingActionButton floatbtn;
-
     View connectorView;
     ImageView lowerView;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -77,6 +80,8 @@ public class MainFragment extends Fragment {
     private FirebaseStorage storage =  FirebaseStorage.getInstance();
 
     private LongiLati longiLati;
+
+    private TextInputEditText inputEditText;
 
 
     @Nullable
@@ -99,11 +104,14 @@ public class MainFragment extends Fragment {
         connectorView.setVisibility(View.GONE);
         lowerView = v.findViewById(R.id.viewId);
 
-        String url = "https://firebasestorage.googleapis.com/v0/b/lift-and-pay-b5fe5.appspot.com/o/driver%2Flogo.png?alt=media&token=fa838edf-a86d-4dbd-96a6-ac92bc7a1d46";
+      /*  Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.single_input_model);
+        dialog.setTitle("Title...");
 
-        Picasso.get().load(/*"http://i.imgur.com/DvpvklR.png"*/ url).into(lowerView);
+        // set the custom dialog components - text, image and button
+        TextInputEditText dialogInput = (TextInputEditText) dialog.findViewById(R.id.inputViewId);
 
-
+        dialog.show();*/
 
 
 
