@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layoutDescription="@xml/fragment_main_scene">
 
     <RelativeLayout
         android:id="@+id/topViewId"
@@ -12,15 +13,16 @@
         android:layout_height="wrap_content"
         android:background="@color/primaryColors"
         >
+
         <TextView
             android:id="@+id/pageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:textColor="@color/white"
             android:text="Lift &amp; Pay"
             android:textAlignment="textStart"
+            android:textColor="@color/white"
             android:textSize="17sp"
             tools:ignore="RtlCompat" />
 
@@ -33,11 +35,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/topViewId"
         android:background="@color/white"
-        android:elevation="10dp"
+        android:elevation="0dp"
         android:orientation="vertical"
         android:paddingHorizontal="25dp"
         android:paddingVertical="15dp"
-        android:visibility="visible">
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/rideViewText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topViewId">
 
         <TextView
             android:layout_width="match_parent"
@@ -53,12 +59,12 @@
             android:id="@+id/originSearchId"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center_vertical"
             android:background="@drawable/searchbar_bkg"
-           android:textSize="14sp"
+            android:gravity="center_vertical"
             android:hint="From where"
             android:iconifiedByDefault="false"
             android:saveEnabled="true"
+            android:textSize="14sp"
             app:drawableStartCompat="@drawable/ic_radar_active_icn" />
 
         <View
@@ -75,12 +81,12 @@
             android:id="@+id/destinationSearchId"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:gravity="center_vertical"
             android:background="@drawable/searchbar_bkg"
-            android:textSize="14sp"
+            android:gravity="center_vertical"
             android:hint="To where"
             android:iconifiedByDefault="false"
             android:saveEnabled="true"
+            android:textSize="14sp"
             app:drawableStartCompat="@drawable/ic_radar_active_icn" />
 
 
@@ -104,22 +110,32 @@
         android:id="@+id/rideViewText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/parentView"
-        android:layout_marginTop="16dp"
+
+        android:layout_marginTop="8dp"
         android:text="Current Ride"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parentView"
+        tools:ignore="MissingConstraints" />
 
     <RelativeLayout
-        android:layout_below="@id/rideViewText"
         android:id="@+id/rideViewDetails"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@id/rideViewText"
         android:layout_marginHorizontal="25dp"
-        android:visibility="gone"
-        >
+        android:visibility="visible"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rideViewText"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -131,24 +147,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingVertical="5dp"
-                >
+                android:paddingVertical="5dp">
 
                 <TextView
                     android:id="@+id/originToDestination"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/primaryColors"
                     android:text="Origin - Destination"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/primaryColors"
+                    android:textStyle="bold" />
 
                 <!--Divider-->
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="5dp"
-                    android:background="@color/fadedBlue"/>
+                    android:background="@color/fadedBlue" />
                 <!--Divider-->
 
                 <TextView
@@ -164,7 +179,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/fadedBlue"/>
+                android:background="@color/fadedBlue" />
             <!--Divider-->
 
 
@@ -187,24 +202,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pickup Location"
-                        android:textColor="@color/black"
-                        />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/dateAndTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Date , Time"
-                        android:textColor="@color/black"
-                        />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
                         android:text="Amount"
-                        />
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <!--Divider-->
@@ -212,7 +224,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_margin="5dp"
-                    android:background="@color/extraFadedBlue"/>
+                    android:background="@color/extraFadedBlue" />
                 <!--Divider-->
 
                 <!--secondView-->
@@ -220,16 +232,15 @@
                     android:id="@+id/driverDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:background="@drawable/ripple"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="@drawable/ripple"
-                    >
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@drawable/person_img"/>
+                        android:src="@drawable/person_img" />
 
 
                     <!--Divider-->
@@ -237,41 +248,40 @@
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="5dp"
-                        android:background="@color/extraFadedBlue"/>
+                        android:background="@color/extraFadedBlue" />
                     <!--Divider-->
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        >
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/driverNameId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
+                            android:text="Driver's Name"
                             android:textColor="@color/primaryColors"
-                            android:text="Driver's Name"/>
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/carNumberPlate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:text="Number Plate"/>
+                            android:text="Number Plate"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/ic_next"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:background="@drawable/ic_next" />
 
                 </LinearLayout>
 
@@ -279,7 +289,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/fadedBlue"/>
+                    android:background="@color/fadedBlue" />
                 <!--Divider-->
 
 
@@ -290,45 +300,46 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:background="@color/extraFadedBlue"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Ready?"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:layout_margin="3dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
+                    android:layout_weight="1"
                     android:background="@drawable/ripple"
                     android:backgroundTint="@color/transparentColor"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text="Ready?"
                     android:textColor="@color/primaryColors"
-                    android:padding="3dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <!--Divider-->
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:background="@color/fadedBlue"/>
+                    android:background="@color/fadedBlue" />
                 <!--Divider-->
 
                 <TextView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_margin="3dp"
                     android:background="@drawable/ripple"
+                    android:backgroundTint="@color/transparentColor"
                     android:clickable="true"
                     android:focusable="true"
-                    android:padding="3dp"
                     android:foreground="@drawable/ic_close"
                     android:foregroundTint="@color/primaryColors"
-                    android:backgroundTint="@color/transparentColor"
-                    android:layout_margin="3dp"/>
+                    android:padding="3dp" />
 
             </LinearLayout>
 
@@ -340,13 +351,16 @@
         android:id="@+id/floatBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/primaryColors"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/primaryColors"
         android:foregroundTint="@color/white"
-        android:src="@drawable/person_img"/>
+        android:src="@drawable/person_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
 
