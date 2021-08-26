@@ -1,7 +1,5 @@
 package com.example.liftandpay_passenger.overpass;
 
-import java.util.List;
-
 public class overpassModel {
 
     private String type;

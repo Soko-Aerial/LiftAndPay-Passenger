@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/ripple"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/theNameId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/primaryColors"
+        android:padding="4dp"
+        android:text="The Two names"/>
+
+    <TextView
+        android:id="@+id/theAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:text="The rest of the address"/>
+
+    <!--Divider-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="@color/extraFadedBlue"/>
+    <!--Divider-->
+
+
+
+</LinearLayout>

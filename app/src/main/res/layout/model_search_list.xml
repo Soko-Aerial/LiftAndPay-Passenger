@@ -11,6 +11,5 @@
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         app:drawableStartCompat="@drawable/mapbox_plugins_ic_user_location"
-
     />
 

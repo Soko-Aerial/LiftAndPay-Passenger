@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<model> call, Throwable t) {
-                txtV.setText("003"+t.getMessage());
+                txtV.setText("003");
             }
         });
 

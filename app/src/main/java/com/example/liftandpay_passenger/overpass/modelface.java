@@ -1,12 +1,5 @@
 package com.example.liftandpay_passenger.overpass;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-
-import androidx.core.content.ContextCompat;
-
-import com.example.liftandpay_passenger.R;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 import com.google.type.LatLng;
 
 import java.util.ArrayList;
@@ -62,7 +64,7 @@ public class SearchedRides extends AppCompatActivity {
 
 
         db.collection("Rides")
-                .get()
+                .get(Source.SERVER)
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -75,7 +77,7 @@ public class SearchedRides extends AppCompatActivity {
                         {
 
                             for(QueryDocumentSnapshot snapshots : task.getResult()){
-                              String name =  Objects.requireNonNull(snapshots.getData().getOrDefault("driverName","null")).toString();
+                              String name =  Objects.requireNonNull(snapshots.getData().getOrDefault("driverName","NO NAME")).toString();
                               String endLoc =  Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation","null")).toString();
                               String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation","null")).toString();
                               String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost","null")).toString();
@@ -86,7 +88,6 @@ public class SearchedRides extends AppCompatActivity {
                               double endLon = (double) snapshots.getData().getOrDefault("endLon",null);
                               double endLat = (double) snapshots.getData().getOrDefault("endLat",null);
                               int numberOfSeats = Integer.parseInt(snapshots.getData().get("Number Of Occupants").toString());
-
 
 
                                if (endLoc.toUpperCase().trim().equals(endLocs.toUpperCase().trim()) && stLoc.toUpperCase().trim().equals(stLocs.toUpperCase().trim())){
@@ -115,8 +116,10 @@ public class SearchedRides extends AppCompatActivity {
                        task.addOnFailureListener(new OnFailureListener() {
                            @Override
                            public void onFailure(@NonNull Exception e) {
-                               Toast.makeText(SearchedRides.this, e.getMessage()
+                               Toast.makeText(SearchedRides.this, "Slow or no internet connection"
                                        , Toast.LENGTH_LONG).show();
+
+                               Log.e("Searched Rides",e.getMessage());
                            }
                        });
 

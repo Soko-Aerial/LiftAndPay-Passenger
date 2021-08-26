@@ -9,7 +9,7 @@ public class DistanceCalc {
         double earthRadiusInKm = 6371;
 
 
-       double dlat = degreesToRadians(lat1-lat2);
+        double dlat = degreesToRadians(lat1-lat2);
         double dlon = degreesToRadians(lon1-lon2);
 
         lat1 = degreesToRadians(lat1);
@@ -24,4 +24,5 @@ public class DistanceCalc {
         return earthRadiusInKm * c;
 
     }
+
 }

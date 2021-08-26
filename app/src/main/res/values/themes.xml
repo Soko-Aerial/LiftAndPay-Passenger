@@ -103,7 +103,6 @@
     </style>
 
 
-
     <style name="TextLabelForPendingFragment">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -131,6 +130,18 @@
         <item name="android:textColor">@color/primaryColors</item>
     </style>
 
+    <style name="Theme.LiftAndPayPassenger.Fullscreen" parent="Theme.LiftAndPayPassenger">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.LiftAndPayPassenger.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.LiftAndPayPassenger.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
 
 
 </resources>

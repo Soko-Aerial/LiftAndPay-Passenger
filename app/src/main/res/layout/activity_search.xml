@@ -1,26 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Search">
+    tools:context=".search.SearchActivity">
 
-    <com.mapbox.search.ui.view.SearchBottomSheetView
-        android:id="@+id/search_view"
-        android:layout_marginHorizontal="3dp"
-        android:layout_marginBottom="25dp"
+    <SearchView
+        android:id="@+id/searchbarId"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:inputType="text"
-        android:layout_marginTop="60dp"
-        android:saveEnabled="true"
-        android:closeIcon="@drawable/img_date"
-        android:searchIcon="@drawable/ic_radar_active_icn"
-        android:queryHint="From where"
-        android:background="@drawable/searchbar_bkg"
-        android:iconifiedByDefault="false"
-        android:elevation="8dp"
-        />
+        android:layout_height="wrap_content"
+        android:queryHint="Search location here"
+        android:searchHintIcon="@drawable/btn_back"
+        android:closeIcon="@drawable/btn_back"
+        android:searchIcon="@drawable/img_circle"
+        android:commitIcon="@drawable/btn_back"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--Divider-->
+    <View
+        android:layout_below="@id/searchbarId"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/fadedBlue"/>
+    <!--Divider-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewId"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchbarId"
+        android:layout_above="@id/licenseText"/>
+
+    <LinearLayout
+        android:layout_above="@id/licenseText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryColors"
+            android:visibility="gone"
+            android:text="Information on your search"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:indeterminateTint="@color/primaryColors"
+            />
+
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/licenseText"
+        android:layout_alignParentBottom="true"
+        android:textAlignment="center"
+        android:text="openstreetMap , nominatim.com"/>
+
+</RelativeLayout>

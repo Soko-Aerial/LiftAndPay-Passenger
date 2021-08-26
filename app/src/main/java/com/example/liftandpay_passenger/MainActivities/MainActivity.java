@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private AnimatedBottomBar animatedBottomBar;
     private FragmentManager fragmentManager;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    public Fragment fragment = new MainFragment();
+
 
 
     @Override
@@ -39,75 +39,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)){
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }else{
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-        }
-
-
-
-        MainFragment fragment1 = new MainFragment();
-
-
-        animatedBottomBar = findViewById(R.id.animatedBottomBar);
-        if (fragment.equals(fragment1)) {
-            animatedBottomBar.selectTabById(R.id.navigation_radar, true);
-        }
-        else
-            animatedBottomBar.selectTabById(R.id.navigation_payment, true);
-
-
-        if(savedInstanceState==null){
-            animatedBottomBar.selectTabById(R.id.navigation_home,true);
-            fragmentManager = getSupportFragmentManager();
-            MainFragment homeFragment = new MainFragment();
-            fragmentManager.beginTransaction().replace(R.id.container,homeFragment).commit();
-        }
-        animatedBottomBar.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
-            @Override
-            public void onTabSelected(int lastIndex, @Nullable AnimatedBottomBar.Tab lastTab, int newIndex, @NotNull AnimatedBottomBar.Tab newTab) {
-
-                switch (newTab.getId()){
-
-                    case R.id.navigation_home:
-                        fragment = new MainFragment();
-                        break;
-
-                    case R.id.navigation_radar:
-                        fragment = new RidesFragment();
-                        break;
-
-                    case R.id.navigation_payment:
-                        fragment = new PayFragment();
-                        break;
-
-                    case R.id.navigation_profile:
-                        fragment = new ProfileFragment();
-                        break;
-
-
-
-                }
-                if(fragment!=null){
-                    fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.container,fragment).commit();
-                }
-
-            }
-
-            @Override
-            public void onTabReselected(int i, @NotNull AnimatedBottomBar.Tab tab) {
-
-            }
-        });
+        Intent intent  = new Intent(MainActivity.this, MainFragment.class);
+        startActivity(intent);
 
     }
 

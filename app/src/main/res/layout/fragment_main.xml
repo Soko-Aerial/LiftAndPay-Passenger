@@ -6,82 +6,335 @@
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/pageTitle"
+    <RelativeLayout
+        android:id="@+id/topViewId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_marginBottom="15dp"
-        android:background="@color/extraFadedBlue"
-        android:textColor="@color/primaryColors"
-        android:text="Search For A Ride"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"/>
+        android:background="@color/primaryColors"
+        >
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:text="Lift &amp; Pay"
+            android:textAlignment="textStart"
+            android:textSize="17sp"
+            tools:ignore="RtlCompat" />
+
+    </RelativeLayout>
 
 
     <LinearLayout
+        android:id="@+id/parentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/topViewId"
+        android:background="@color/white"
+        android:elevation="10dp"
         android:orientation="vertical"
+        android:paddingHorizontal="25dp"
         android:paddingVertical="15dp"
-        android:layout_below="@id/pageTitle">
+        android:visibility="visible">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Search For A Ride"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-        android:id="@+id/originSearchId"
-        android:layout_marginHorizontal="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:inputType="textPersonName"
-        android:drawableStart="@drawable/ic_radar_active_icn"
-        android:saveEnabled="true"
-        android:hint="From which bus stop"
-        android:closeIcon="@drawable/ic_upload"
-        android:background="@drawable/searchbar_bkg"
-        android:iconifiedByDefault="false"/>
+        <TextView
+            android:id="@+id/originSearchId"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/searchbar_bkg"
+           android:textSize="14sp"
+            android:hint="From where"
+            android:iconifiedByDefault="false"
+            android:saveEnabled="true"
+            app:drawableStartCompat="@drawable/ic_radar_active_icn" />
 
         <View
             android:id="@+id/connectorId"
-            android:layout_width="2dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="5dp"
-            android:layout_marginStart="15dp"
-            android:background="@color/primaryColors"/>
+            android:background="@drawable/ic_arrow_up"
+            android:backgroundTint="@color/primaryColors"
+            android:rotation="180" />
 
-    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-        android:id="@+id/destinationSearchId"
-        android:layout_marginHorizontal="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:drawableStart="@drawable/ic_radar_active_icn"
-        android:saveEnabled="true"
-        android:inputType="textPersonName"
-        android:hint="To which bus stop"
-        android:closeIcon="@drawable/ic_upload"
-        android:background="@drawable/searchbar_bkg"
-    />
+        <TextView
+            android:id="@+id/destinationSearchId"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/searchbar_bkg"
+            android:textSize="14sp"
+            android:hint="To where"
+            android:iconifiedByDefault="false"
+            android:saveEnabled="true"
+            app:drawableStartCompat="@drawable/ic_radar_active_icn" />
+
 
         <TextView
             android:id="@+id/ridSearchBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
-            android:padding="10dp"
+            android:layout_gravity="end"
+            android:layout_marginVertical="8dp"
+
             android:background="@drawable/ripple"
             android:backgroundTint="@color/primaryColors"
-            android:textColor="@color/white"
-            android:layout_margin="15dp"
-            android:layout_gravity="end"/>
+            android:padding="10dp"
+            android:text="Search"
+            android:textColor="@color/white" />
 
-        <ImageView
-            android:id="@+id/viewId"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/fadedBlue"
-            />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/rideViewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/parentView"
+        android:layout_marginTop="16dp"
+        android:text="Current Ride"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:layout_below="@id/rideViewText"
+        android:id="@+id/rideViewDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/originToDestination"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/primaryColors"
+                    android:text="Origin - Destination"
+                    android:textStyle="bold"/>
+
+                <!--Divider-->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="5dp"
+                    android:background="@color/fadedBlue"/>
+                <!--Divider-->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="11:00 min left"
+
+                    />
+
+            </LinearLayout>
+
+            <!--Divider-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/fadedBlue"/>
+            <!--Divider-->
+
+
+            <!--Ride Details-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
+
+                <!--firstView-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/locationDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pickup Location"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/dateAndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date , Time"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="Amount"
+                        />
+                </LinearLayout>
+
+                <!--Divider-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/extraFadedBlue"/>
+                <!--Divider-->
+
+                <!--secondView-->
+                <LinearLayout
+                    android:id="@+id/driverDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/ripple"
+                    >
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/person_img"/>
+
+
+                    <!--Divider-->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="5dp"
+                        android:background="@color/extraFadedBlue"/>
+                    <!--Divider-->
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/driverNameId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primaryColors"
+                            android:text="Driver's Name"/>
+
+                        <TextView
+                            android:id="@+id/carNumberPlate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="Number Plate"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_next"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"/>
+
+                </LinearLayout>
+
+                <!--Divider-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/fadedBlue"/>
+                <!--Divider-->
+
+
+            </LinearLayout>
+
+
+            <!--Footer tools-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/extraFadedBlue"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Ready?"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_margin="3dp"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/transparentColor"
+                    android:textColor="@color/primaryColors"
+                    android:padding="3dp"/>
+
+                <!--Divider-->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@color/fadedBlue"/>
+                <!--Divider-->
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="3dp"
+                    android:foreground="@drawable/ic_close"
+                    android:foregroundTint="@color/primaryColors"
+                    android:backgroundTint="@color/transparentColor"
+                    android:layout_margin="3dp"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </RelativeLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatBtn"

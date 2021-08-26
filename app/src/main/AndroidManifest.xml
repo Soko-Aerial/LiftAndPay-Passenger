@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-feature android:name="android.hardware.location.network" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.wifi" />
@@ -25,26 +26,27 @@
         android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
-        <activity android:name=".SplashScreen" android:theme="@style/Theme.Transparent">
+        <activity android:name=".ImageViewActivity"></activity>
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivities.MainActivity"
-            android:screenOrientation="fullSensor">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".AVR_Activities.AvailableRides" />
         <activity android:name=".SettingUp.SignUp003" />
-        <activity android:name=".SettingUp.LogAuth">
-        </activity>
-
+        <activity android:name=".SettingUp.LogAuth" />
+        <activity android:name=".search.SearchActivity" />
+        <activity android:name=".MainActivities.MainFragment"/>
         <activity android:name=".SettingUp.SignUp001" />
         <activity android:name=".AVR_Activities.Chats.ChatActivity_avr" />
-        <activity android:name=".AVR_Activities.PickUpLocationActivity" >
-
-        </activity>
+        <activity android:name=".AVR_Activities.PickUpLocationActivity" />
         <activity android:name=".SearchedRide.SearchedRides" />
         <activity android:name=".AddCardDetails" />
         <activity android:name=".MainActivities.Rides.PendingRideMapActivity" />
@@ -59,7 +61,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
     </application>
 
 </manifest>
