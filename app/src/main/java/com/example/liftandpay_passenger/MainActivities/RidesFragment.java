@@ -3,6 +3,9 @@ package com.example.liftandpay_passenger.MainActivities;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class RidesFragment extends Fragment {
+public class RidesFragment extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<pendingRidesModel> dataholder;
@@ -36,14 +39,15 @@ public class RidesFragment extends Fragment {
     private final String mUId = mAuth.getUid();
     private pendingRidesModel ob1;
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_pending_rides);
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_pending_rides, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(RidesFragment.this ,LinearLayoutManager.VERTICAL,false));
         dataholder = new ArrayList<>();
 
 
@@ -80,11 +84,11 @@ public class RidesFragment extends Fragment {
                                            dataholder.add(ob1);
                                        }
                                    }
-                                   recyclerView.setAdapter(new pendingRidesAdapter(getContext(),dataholder));
+                                   recyclerView.setAdapter(new pendingRidesAdapter(RidesFragment.this,dataholder));
                                }
                                else
                                {
-                                   Toast.makeText(getContext(),"taskNotSuccessful002",Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(RidesFragment.this,"taskNotSuccessful002",Toast.LENGTH_SHORT).show();
                                }
                            }
                        });
@@ -93,12 +97,9 @@ public class RidesFragment extends Fragment {
                 }
                 else
                 {
-                    Toast.makeText(getContext(),"taskNotSuccessful001",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RidesFragment.this,"taskNotSuccessful001",Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
-        return view;
     }
 }

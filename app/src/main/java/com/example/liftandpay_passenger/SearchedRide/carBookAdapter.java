@@ -79,6 +79,8 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
                 intent.putExtra("theTime", carHolder.get(position).getTimeId());
                 intent.putExtra("theDistance",carHolder.get(position).getCostPerKilometer());
                 intent.putExtra("theJourney",carHolder.get(position).getStartLocation()+" - "+carHolder.get(position).getEndLocation());
+                intent.putExtra("Purpose","For Booking");
+
                 carBookContext.startActivity(intent);
 
             }

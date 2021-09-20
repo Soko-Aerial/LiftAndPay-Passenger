@@ -3,12 +3,13 @@ package com.example.liftandpay_passenger.search;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private SearchView searchView;
+    private androidx.appcompat.widget.SearchView searchView;
     private RecyclerView recyclerView;
     private ArrayList<searchItemModel> searchItemModels = new ArrayList<>();
     public final String theNameID = "theLocationName";
@@ -37,7 +38,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private TextView infoText;
     private ProgressBar progressBar;
-
 
 
     @Override
@@ -52,109 +52,113 @@ public class SearchActivity extends AppCompatActivity {
         SearchAdapter searchAdapter;
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+                                              @Override
+                                              public boolean onQueryTextSubmit(String query) {
+                                                  query = query.trim() + " ";
+
+                                                      infoText.setVisibility(View.VISIBLE);
+                                                      infoText.setText("Searching ...");
+                                                      progressBar.setVisibility(View.VISIBLE);
+
+                                                      Retrofit retrofit = new Retrofit.Builder()
+                                                              .baseUrl("https://nominatim.openstreetmap.org/")
+                                                              .addConverterFactory(GsonConverterFactory.create())
+                                                              .build();
+
+                                                      nominatim_modelface modelface = retrofit.create(nominatim_modelface.class);
+
+                                                      Call<ArrayList<nominatim_model>> call = modelface.getData(query, "gh", 7, "json");
+
+                                                      searchItemModels.clear();
+
+                                                      call.enqueue(new Callback<ArrayList<nominatim_model>>() {
+                                                          @Override
+                                                          public void onResponse(Call<ArrayList<nominatim_model>> call, @NonNull Response<ArrayList<nominatim_model>> response) {
+                                                              if (response.code() == 200) {
+
+                                                                  Log.e("response","Successful");
+
+                                                                  assert response.body() != null;
+                                                                  if (response.body().size()>0) {
+                                                                      Log.e("response", "Not empty");
+
+                                                                      for (int i =0; i<response.body().size();i++)
+                                                                      {
+                                                                          String name = response.body().get(i).getDisplayName();
+
+                                                                          String[] arrOfStr = name.split(", ");
+
+                                                                          String theName = "", theAddress = "";
 
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
+                                                                          int iterate =0;
+                                                                          for (String theString: arrOfStr)
+                                                                          {
 
-                newText = newText.trim()+" ";
-                if (newText.trim().length() >= 2) {
-
-                    infoText.setVisibility(View.VISIBLE);
-                    infoText.setText("Searching ...");
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("https://nominatim.openstreetmap.org/")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    nominatim_modelface modelface = retrofit.create(nominatim_modelface.class);
-
-                    Call<ArrayList<nominatim_model>> call = modelface.getData(newText, "gh", 7, "json");
-
-                    searchItemModels.clear();
-
-                    call.enqueue(new Callback<ArrayList<nominatim_model>>() {
-                        @Override
-                        public void onResponse(Call<ArrayList<nominatim_model>> call, @NonNull Response<ArrayList<nominatim_model>> response) {
-                            if (response.code() == 200) {
-
-                                Log.e("response","Successful");
-
-                                assert response.body() != null;
-                                if (response.body().size()>0) {
-                                    Log.e("response", "Not empty");
-
-                                    for (int i =0; i<response.body().size();i++)
-                                    {
-                                    String name = response.body().get(i).getDisplayName();
-
-                                    String[] arrOfStr = name.split(", ");
-
-                                    String theName = "", theAddress = "";
+                                                                              if (iterate<2)
+                                                                              {
+                                                                                  theName = theName.concat(theString+", ");
+                                                                              }
+                                                                              else if(iterate<6)
+                                                                              {
+                                                                                  theAddress = theAddress.concat(theString+", ");
+                                                                              }
 
 
-                                    int iterate =0;
-                                    for (String theString: arrOfStr)
-                                    {
+                                                                              iterate++;
+                                                                          }
 
-                                        if (iterate<2)
-                                        {
-                                           theName = theName.concat(theString+", ");
-                                        }
-                                        else if(iterate<6)
-                                        {
-                                           theAddress = theAddress.concat(theString+", ");
-                                        }
+                                                                          theAddress = theAddress.concat(response.body().get(i).getType());
 
 
-                                            iterate++;
-                                    }
+                                                                          double theLat = response.body().get(i).getLat();
+                                                                          double theLon = response.body().get(i).getLon();
 
-                                        theAddress = theAddress.concat(response.body().get(i).getType());
+                                                                          searchItemModel searchItemModel = new searchItemModel(theName, theAddress, theLon, theLat);
+                                                                          searchItemModels.add(searchItemModel);
 
+                                                                      }
+                                                                      recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
+                                                                      recyclerView.setAdapter(new SearchAdapter(SearchActivity.this,SearchActivity.this,searchItemModels));
 
-                                    double theLat = response.body().get(i).getLat();
-                                    double theLon = response.body().get(i).getLon();
+                                                                      infoText.setVisibility(View.GONE);
+                                                                      progressBar.setVisibility(View.GONE);
+                                                                  }
 
-                                    searchItemModel searchItemModel = new searchItemModel(theName, theAddress, theLon, theLat);
-                                    searchItemModels.add(searchItemModel);
+                                                              } else {
+                                                                  Log.e("response","No response");
+                                                                  infoText.setText("No result");
+                                                                  progressBar.setVisibility(View.GONE);
+                                                              }
+                                                          }
 
-                                }
-                                    recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false));
-                                    recyclerView.setAdapter(new SearchAdapter(SearchActivity.this,SearchActivity.this,searchItemModels));
+                                                          @Override
+                                                          public void onFailure(Call<ArrayList<nominatim_model>> call, Throwable t) {
+                                                              Log.e("Retrofit", t.getMessage());
+                                                              infoText.setText("Slow internet connection");
+                                                              progressBar.setVisibility(View.GONE);
 
-                                    infoText.setVisibility(View.GONE);
-                                    progressBar.setVisibility(View.GONE);
-                                }
-
-                            } else {
-                               Log.e("response","No response");
-                                infoText.setText("No result");
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ArrayList<nominatim_model>> call, Throwable t) {
-                            Log.e("Retrofit", t.getMessage());
-                            infoText.setText("Slow internet connection");
-                            progressBar.setVisibility(View.GONE);
-
-                        }
+                                                          }
 
 
-                    });
-                }
+                                                      });
 
-                return false;
-            }
-        });
+
+                                                  return false;
+                                              }
+
+                                              @Override
+                                              public boolean onQueryTextChange(String newText) {
+
+
+                                                  return false;
+                                              }
+                                          });
+
+
+
+
+
     }
 
 

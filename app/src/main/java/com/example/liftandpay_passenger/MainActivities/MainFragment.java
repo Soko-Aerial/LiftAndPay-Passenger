@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
+import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
 import com.example.liftandpay_passenger.SettingUp.SignUp003;
@@ -39,6 +40,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,7 +95,7 @@ public class MainFragment extends AppCompatActivity {
     private TextView rideSearchbtn;
     private FloatingActionButton floatbtn;
     View connectorView;
-    RelativeLayout lowerView;
+    LinearLayout lowerView;
     LinearLayout parentView;
 
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -108,8 +110,12 @@ public class MainFragment extends AppCompatActivity {
 
     private LinearLayout driverDetails;
 
+    private LinearLayout historyBtn, profileBtn, paymentBtn;
+
     String infoNameS, infoLonS, infoLatS;
     String infoNameD, infoLonD, infoLatD;
+
+    private TextView statusActionBtn,rideViewText;
 
     private SharedPreferences lastRideSharedPrefs;
 
@@ -140,14 +146,39 @@ public class MainFragment extends AppCompatActivity {
         amount = findViewById(R.id.amount);
 
         driverName = findViewById(R.id.driverNameId);
+        statusActionBtn = findViewById(R.id.statusActionBtn);
+        rideViewText = findViewById(R.id.rideViewText);
 
+        historyBtn = findViewById(R.id.rideHistoryBtn);
+        paymentBtn = findViewById(R.id.paymentBtn);
+        profileBtn = findViewById(R.id.profileBtn);
+
+
+        historyBtn.setOnClickListener(view ->{
+            Intent i = new Intent(MainFragment.this, RidesFragment.class);
+            startActivity(i);
+        });
+
+        paymentBtn.setOnClickListener(view ->{
+            Intent i = new Intent(MainFragment.this, PayFragment.class);
+            startActivity(i);
+        });
+
+        profileBtn.setOnClickListener(view ->{
+            Intent i = new Intent(MainFragment.this, ProfileFragment.class);
+            startActivity(i);
+        });
+
+
+
+
+        lowerView.setVisibility(View.GONE);
 
         searchOrigin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainFragment.this, SearchActivity.class);
-                activityResultLauncher.launch(i);
-
+                startActivityIfNeeded(i, 110);
             }
         });
 
@@ -155,8 +186,7 @@ public class MainFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainFragment.this, SearchActivity.class);
-                        activityResultLauncher.launch(i);
-
+                startActivityIfNeeded(i, 100);
             }
         });
 
@@ -168,8 +198,8 @@ public class MainFragment extends AppCompatActivity {
                     Toast.makeText(MainFragment.this, "Can't Search", Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(MainFragment.this   , SearchedRides.class);
-                    intent.putExtra("stLoc", searchOrigin.getText().toString());
-                    intent.putExtra("endLoc", searchDestination.getText().toString());
+                    intent.putExtra("stLoc", infoLatS + ","+ infoLonS);
+                    intent.putExtra("endLoc", infoLatD + ","+ infoLonD);
                     startActivity(intent);
                 }
             }
@@ -185,6 +215,8 @@ public class MainFragment extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
 
         db.collection("Passenger").document(mAuth.getUid()).collection("Rides").document("Pending Rides").get(Source.SERVER)
@@ -225,11 +257,27 @@ public class MainFragment extends AppCompatActivity {
 
                                                         Log.e("BookedRides001", "Is Listening for data");
 
+                                                        lowerView.setVisibility(View.VISIBLE);
+
                                                         lastRideSharedPrefs.edit().putString("TheLocationDesc", value.getString("Location Desc")).apply();
+                                                        lastRideSharedPrefs.edit().putString("Status", value.getString("Status")).apply();
                                                         lastRideSharedPrefs.edit().putFloat("ThePickupLon", Float.parseFloat(String.valueOf(value.getDouble("Long")))).apply();
                                                         lastRideSharedPrefs.edit().putFloat("ThePickupLat", Float.parseFloat(String.valueOf(value.getDouble("Lat")))).apply();
 
-                                                        lowerView.setVisibility(View.VISIBLE);
+
+                                                        String status = value.getString("Status");
+
+                                                        Log.e("Status",status);
+
+                                                        //Check if Status on database is empty. If it is empty, Print Current Ride.
+
+                                                        assert status != null;
+                                                        if (!status.trim().equals(""))
+                                                        rideViewText.setText(status);
+                                                        else
+                                                        rideViewText.setText("Current Ride");
+
+
                                                         locationsDesc.setText(value.getString("Location Desc"));
 
 
@@ -237,12 +285,17 @@ public class MainFragment extends AppCompatActivity {
                                                             @Override
                                                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
+                                                                double stLat =value.getDouble("startLat");
+                                                                double stLon =value.getDouble("startLon");
+                                                                double eLat = value.getDouble("endLat");
+                                                                double eLon = value.getDouble("endLon");
+
                                                                 lastRideSharedPrefs.edit().putString("theDriverId", value.getString("myId")).apply();
                                                                 lastRideSharedPrefs.edit().putString("theDriverPhone", value.getString("phone number")).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theStartLon", Float.parseFloat(String.valueOf(value.getDouble("startLon")))).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(value.getDouble("startLat")))).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(value.getDouble("endLon")))).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(value.getDouble("endLat")))).apply();
+                                                                lastRideSharedPrefs.edit().putFloat("theStartLon", Float.parseFloat(String.valueOf(stLon))).apply();
+                                                                lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
+                                                                lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
+                                                                lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
                                                                 lastRideSharedPrefs.edit().putString("theRideCost", value.getString("Ride Cost")).apply();
                                                                 lastRideSharedPrefs.edit().putString("theRideTime", value.getString("Ride Time")).apply();
                                                                 lastRideSharedPrefs.edit().putString("theRideDate", value.getString("Ride Date")).apply();
@@ -260,6 +313,19 @@ public class MainFragment extends AppCompatActivity {
                                                                 amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/",0));
                                                                 driverName.setText(value.getString("driverName"));
 
+                                                                statusActionBtn.setOnClickListener(Viewv ->{
+                                                                    Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
+                                                                    intent.putExtra("journey",originDestination);
+                                                                    intent.putExtra("dateTime",dateTime);
+                                                                    intent.putExtra("distance",amount.getText().toString());
+                                                                    intent.putExtra("stLat",stLat);
+                                                                    intent.putExtra("stLon",stLon);
+                                                                    intent.putExtra("endLat",eLat);
+                                                                    intent.putExtra("endLon",eLon);
+                                                                    intent.putExtra("rideId",lastBookedRide);
+
+                                                                    startActivity(intent);
+                                                                });
 
                                                                 driverDetails.setOnClickListener(new View.OnClickListener() {
                                                                     @Override
@@ -279,7 +345,6 @@ public class MainFragment extends AppCompatActivity {
                                     });
                                 } else {
                                     Log.e("BookedRides", "Is empty");
-
                                 }
                             } else {
                                 Log.e("BookedRides", "Does not contain bookedrides");
@@ -305,8 +370,6 @@ public class MainFragment extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        startActivityForResultOrigin();
-        startActivityForResultDestination();
     }
 
     @Override
@@ -330,79 +393,6 @@ public class MainFragment extends AppCompatActivity {
         lastRideSharedPrefs.edit().clear().apply();
     }
 
-    private void startActivityForResultDestination() {
-
-        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-
-                    Log.e("onActivity001", "started");
-                    Log.e("onActivity001", "Result is ok");
-                    Log.e("onActivity001", "Data not null");
-
-                    if (result.getData().hasExtra(new SearchActivity().theNameID))
-                        Log.e("onActivity001", "has Name");
-                    if (result.getData().hasExtra(new SearchActivity().theLatID))
-                        Log.e("onActivity001", "has Latitude");
-                    if (result.getData().hasExtra(new SearchActivity().theLonID))
-                        Log.e("onActivity001", "has Longitude");
-                    String datas = result.getData().getExtras().getString("theLocationName") + " " + result.getData().getExtras().getDouble("theLat", 0.0) + " " + result.getData().getExtras().getDouble("theLon", 0.0);
-                    Log.e("onActivity001-Data", datas);
-
-                    searchDestination.setText(new StringFunction(result.getData().getExtras().getString("theLocationName")).splitStringWithAndGet(",",0));
-
-                    Log.e("Result", result.getData().getExtras().getString(new SearchActivity().theNameID));
-                    infoNameD = result.getData().getExtras().getString("theLocationName");
-                    infoLonD = String.valueOf(result.getData().getExtras().getDouble("theLon", 0.0));
-                    infoLatD = String.valueOf(result.getData().getExtras().getDouble("theLat", 0.0));
-
-                    Log.i("onActivity001", "Lon :" + infoLonS);
-                    Log.i("onActivity001", "Lat :" + infoLatS);
-
-                }
-            }
-        });
-    }
-
-
-    private void startActivityForResultOrigin() {
-
-        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-
-                    Log.e("onActivity001", "started");
-                    Log.e("onActivity001", "Result is ok");
-                    Log.e("onActivity001", "Data not null");
-
-                    if (result.getData().hasExtra(new SearchActivity().theNameID))
-                        Log.e("onActivity001", "has Name");
-                    if (result.getData().hasExtra(new SearchActivity().theLatID))
-                        Log.e("onActivity001", "has Latitude");
-                    if (result.getData().hasExtra(new SearchActivity().theLonID))
-                        Log.e("onActivity001", "has Longitude");
-                    String datas = result.getData().getExtras().getString("theLocationName") + " " + result.getData().getExtras().getDouble("theLat", 0.0) + " " + result.getData().getExtras().getDouble("theLon", 0.0);
-                    Log.e("onActivity001-Data", datas);
-
-                    searchOrigin.setText(new StringFunction(result.getData().getExtras().getString("theLocationName")).splitStringWithAndGet(",",0));
-
-                    Log.e("Result", result.getData().getExtras().getString(new SearchActivity().theNameID));
-                    infoNameS = result.getData().getExtras().getString("theLocationName");
-                    infoLonS = String.valueOf(result.getData().getExtras().getDouble("theLon", 0.0));
-                    infoLatS = String.valueOf(result.getData().getExtras().getDouble("theLat", 0.0));
-
-                    Log.i("onActivity001", "Lon :" + infoLonD);
-                    Log.i("onActivity001", "Lat :" + infoLatD);
-
-
-                }
-            }
-        });
-    }
 
 
     @Override
@@ -410,11 +400,11 @@ public class MainFragment extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.e("onActivity001", "started");
-        if (resultCode == Activity.RESULT_OK ) {
+        if (resultCode == Activity.RESULT_OK && requestCode == 100 ) {
 
             Log.e("onActivity001", "Result is ok");
 
-            if (data.getData() != null) {
+            if (data != null) {
                 Log.e("onActivity001", "Data not null");
 
                 if (data.hasExtra(new SearchActivity().theNameID))
@@ -429,12 +419,43 @@ public class MainFragment extends AppCompatActivity {
                 searchDestination.setText(data.getExtras().getString("theLocationName"));
 
                 Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
-                String startInfoName = data.getExtras().getString("theLocationName");
-                String startInfoLon = String.valueOf(data.getExtras().getDouble("theLon", 0.0));
-                String startInfoLat = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
+                infoNameD = data.getExtras().getString("theLocationName");
+                infoLonD = String.valueOf(data.getExtras().getDouble("theLon", 0.0));
+                infoLatD  = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
 
-                Log.i("onActivity001", "Lon :" + startInfoLon);
-                Log.i("onActivity001", "Lat :" + startInfoLat);
+                Log.i("onActivity001", "Lon :" + infoLonD);
+                Log.i("onActivity001", "Lat :" + infoLatD);
+            }
+
+
+        }
+
+
+        if (resultCode == Activity.RESULT_OK && requestCode == 110 ) {
+
+            Log.e("onActivity001", "Result is ok");
+
+            if (data != null) {
+                Log.e("onActivity001", "Data not null");
+
+                if (data.hasExtra(new SearchActivity().theNameID))
+                    Log.e("onActivity001", "has Name");
+                if (data.hasExtra(new SearchActivity().theLatID))
+                    Log.e("onActivity001", "has Latitude");
+                if (data.hasExtra(new SearchActivity().theLonID))
+                    Log.e("onActivity001", "has Longitude");
+                String datas = data.getExtras().getString("theLocationName") + " " + data.getExtras().getDouble("theLat", 0.0) + " " + data.getExtras().getDouble("theLon", 0.0);
+                Log.e("onActivity001-Data", datas);
+
+                searchOrigin.setText(data.getExtras().getString("theLocationName"));
+
+                Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
+                 infoNameS = data.getExtras().getString("theLocationName");
+                 infoLonS = String.valueOf(data.getExtras().getDouble("theLon", 0.0));
+                 infoLatS = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
+
+                Log.i("onActivity001", "Lon :" + infoLonS);
+                Log.i("onActivity001", "Lat :" + infoLatS);
             }
 
 

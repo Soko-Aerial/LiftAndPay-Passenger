@@ -3,6 +3,7 @@ package com.example.liftandpay_passenger.MainActivities;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,28 +14,24 @@ import android.widget.Button;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
 
-public class PayFragment extends Fragment {
+public class PayFragment extends AppCompatActivity {
 
     Button paymentButton;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_pay, container, false);
-        paymentButton = v.findViewById(R.id.paymentButton);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_pay);
+
+        paymentButton = findViewById(R.id.paymentButton);
 
         paymentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), PendingRideMapActivity.class));
+                startActivity(new Intent(PayFragment.this, PendingRideMapActivity.class));
             }
         });
-
-
-        return  v;
-
 
     }
 }

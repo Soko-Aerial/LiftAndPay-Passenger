@@ -50,6 +50,9 @@
         <activity android:name=".SearchedRide.SearchedRides" />
         <activity android:name=".AddCardDetails" />
         <activity android:name=".MainActivities.Rides.PendingRideMapActivity" />
+        <activity android:name=".MainActivities.ProfileFragment"/>
+        <activity android:name=".MainActivities.RidesFragment" />
+        <activity android:name=".MainActivities.PayFragment"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

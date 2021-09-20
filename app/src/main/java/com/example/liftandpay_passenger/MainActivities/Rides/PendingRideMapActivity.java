@@ -18,6 +18,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,11 +29,18 @@ import android.widget.Toast;
 import com.example.liftandpay_passenger.MainActivities.MainActivity;
 import com.example.liftandpay_passenger.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineCallback;
+import com.mapbox.android.core.location.LocationEngineProvider;
+import com.mapbox.android.core.location.LocationEngineRequest;
+import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
@@ -60,7 +68,10 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -74,6 +85,8 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacem
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+
+import org.jetbrains.annotations.NotNull;
 
 public class PendingRideMapActivity extends FragmentActivity implements OnMapReadyCallback, PermissionsListener {
 
@@ -95,6 +108,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationComponent locationComponent;
+    private LocationEngine locationEngine;
     private PermissionsManager permissionsManager;
     private SharedPreferences sharedPreferences;
     private ProgressBar routeProgress;
@@ -106,6 +120,14 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
     private String rideId;
+    private String mUid = FirebaseAuth.getInstance().getUid();
+
+    private Map<String, Object> passengerLoc = new HashMap<>();
+
+    private MainActivityLocationCallback callback = new MainActivityLocationCallback(this);
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +145,8 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         routeProgress.setVisibility(View.VISIBLE);
 
         rideId = getIntent().getStringExtra("rideId");
+
+
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -165,6 +189,26 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                         builder.setMessage("Waiting for the driver to reach ...");
                         builder.setCancelable(true);
                         builder.create().show();
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                builder.setMessage("Making you location visible to driver ...");
+                                builder.setCancelable(true);
+                                builder.create().show();
+                            }
+                        },4000);
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                builder.setMessage("Alerting Driver ...");
+                                builder.setCancelable(true);
+                                builder.create().show();
+                            }
+                        },8000);
+
+                        updateMyLocation();
                     }
                 });
 
@@ -264,6 +308,96 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
             }
         }
         return true;
+    }
+
+    private void updateMyLocation() {
+        locationEngine = LocationEngineProvider.getBestLocationEngine(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        LocationEngineRequest request = new LocationEngineRequest.Builder(5000)
+                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
+                .setMaxWaitTime(10000).build();
+
+        locationEngine.requestLocationUpdates(request, callback, getMainLooper());
+        locationEngine.getLastLocation(callback);
+    }
+
+
+    private class MainActivityLocationCallback
+            implements LocationEngineCallback<LocationEngineResult> {
+
+        private final WeakReference<PendingRideMapActivity> activityWeakReference;
+
+        MainActivityLocationCallback(PendingRideMapActivity activity) {
+            this.activityWeakReference = new WeakReference<>(activity);
+        }
+
+        /**
+         * The LocationEngineCallback interface's method which fires when the device's location has changed.
+         *
+         * @param result the LocationEngineResult object which has the last known location within it.
+         */
+        @Override
+        public void onSuccess(LocationEngineResult result) {
+            PendingRideMapActivity activity = activityWeakReference.get();
+
+            if (activity != null) {
+                Location location = result.getLastLocation();
+
+                if (location == null) {
+                    return;
+                }
+
+
+                passengerLoc.put("pALat", result.getLastLocation().getLatitude());
+                passengerLoc.put("pALon", result.getLastLocation().getLongitude());
+// Create a Toast which displays the new location's coordinates
+                db.collection("Rides").document(activity.rideId).collection("Booked By").document(mUid).update(passengerLoc).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                        Toast.makeText(activity, result.getLastLocation().getLatitude() + "" + result.getLastLocation().getLongitude(),
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        Timber.e(e);
+                    }
+                });
+
+// Pass the new location to the Maps SDK's LocationComponent
+                if (activity.mapboxMap != null && result.getLastLocation() != null) {
+                    activity.mapboxMap.getLocationComponent().forceLocationUpdate(result.getLastLocation());
+                }
+            }
+        }
+
+        /**
+         * The LocationEngineCallback interface's method which fires when the device's location can not be captured
+         *
+         * @param exception the exception message
+         */
+        @Override
+        public void onFailure(@NonNull Exception exception) {
+            Log.d("LocationChangeActivity", exception.getLocalizedMessage());
+            PendingRideMapActivity activity = activityWeakReference.get();
+            if (activity != null) {
+                Toast.makeText(activity, exception.getLocalizedMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @SuppressLint("WrongConstant")
@@ -388,10 +522,12 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {}
-                else{}
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                }
                 return;
             }
         }

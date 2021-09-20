@@ -3,10 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable-hdpi/img_money.xml" value="0.19322916666666667" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable-xxxhdpi/bottom_sheet_bkg.xml" value="0.24375" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_available_rides.xml" value="0.25416666666666665" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_chat_avr.xml" value="0.22760416666666666" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_search.xml" value="0.264" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/available_ride_dialog.xml" value="0.190625" />
-        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_main.xml" value="0.2" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_main.xml" value="0.4" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_pay.xml" value="0.15729166666666666" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_profile.xml" value="0.22760416666666666" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/model_search_item.xml" value="0.115625" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/model_view_pending_ride.xml" value="0.16041666666666668" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/single_input_model.xml" value="0.16041666666666668" />

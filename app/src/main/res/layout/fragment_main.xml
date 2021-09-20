@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:background="@color/white"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layoutDescription="@xml/fragment_main_scene">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/topViewId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primaryColors"
-        >
+        android:background="@color/primaryColors">
 
         <TextView
             android:id="@+id/pageTitle"
@@ -34,8 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/topViewId"
+        android:layout_marginBottom="8dp"
         android:background="@color/white"
-        android:elevation="0dp"
+        android:elevation="8dp"
         android:orientation="vertical"
         android:paddingHorizontal="25dp"
         android:paddingVertical="15dp"
@@ -96,7 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginVertical="8dp"
-
             android:background="@drawable/ripple"
             android:backgroundTint="@color/primaryColors"
             android:padding="10dp"
@@ -106,36 +105,18 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/rideViewText"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="8dp"
-        android:text="Current Ride"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentView"
-        tools:ignore="MissingConstraints" />
-
-    <RelativeLayout
-        android:id="@+id/rideViewDetails"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:layout_below="@id/rideViewText"
         android:layout_marginHorizontal="25dp"
+        android:scrollbars="none"
         android:visibility="visible"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rideViewText"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="25dp">
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -144,146 +125,43 @@
 
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/rideViewDetails"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingVertical="5dp">
-
-                <TextView
-                    android:id="@+id/originToDestination"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Origin - Destination"
-                    android:textColor="@color/primaryColors"
-                    android:textStyle="bold" />
-
-                <!--Divider-->
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="5dp"
-                    android:background="@color/fadedBlue" />
-                <!--Divider-->
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="11:00 min left"
-
-                    />
-
-            </LinearLayout>
-
-            <!--Divider-->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/fadedBlue" />
-            <!--Divider-->
-
-
-            <!--Ride Details-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
                 android:orientation="vertical">
 
-                <!--firstView-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:id="@+id/locationDesc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pickup Location"
-                        android:textColor="@color/black" />
+                    android:orientation="horizontal"
+                    android:paddingVertical="5dp">
 
                     <TextView
-                        android:id="@+id/dateAndTime"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/originToDestination"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Date , Time"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Amount"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <!--Divider-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/extraFadedBlue" />
-                <!--Divider-->
-
-                <!--secondView-->
-                <LinearLayout
-                    android:id="@+id/driverDetails"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:src="@drawable/person_img" />
-
+                        android:layout_weight="1"
+                        android:text="Origin - Destination"
+                        android:textColor="@color/primaryColors"
+                        android:textStyle="bold" />
 
                     <!--Divider-->
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="5dp"
-                        android:background="@color/extraFadedBlue" />
+                        android:background="@color/fadedBlue" />
                     <!--Divider-->
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/driverNameId"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Driver's Name"
-                            android:textColor="@color/primaryColors"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/carNumberPlate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Number Plate"
-                            android:textColor="@color/black" />
-                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/ic_next" />
+                        android:text="11:00 min left"
+
+                        />
 
                 </LinearLayout>
+
 
                 <!--Divider-->
                 <View
@@ -293,59 +171,288 @@
                 <!--Divider-->
 
 
-            </LinearLayout>
-
-
-            <!--Footer tools-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/extraFadedBlue"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
+                <!--Ride Details-->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ripple"
-                    android:backgroundTint="@color/transparentColor"
-                    android:clickable="true"
-                    android:focusable="true"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <!--firstView-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/locationDesc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pickup Location"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/dateAndTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Date , Time"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Amount"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <!--Divider-->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="5dp"
+                        android:background="@color/extraFadedBlue" />
+                    <!--Divider-->
+
+                    <!--secondView-->
+                    <LinearLayout
+                        android:id="@+id/driverDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ripple"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/person_img" />
+
+
+                        <!--Divider-->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="5dp"
+                            android:background="@color/extraFadedBlue" />
+                        <!--Divider-->
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/driverNameId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Driver's Name"
+                                android:textColor="@color/primaryColors"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/carNumberPlate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Number Plate"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/ic_next" />
+
+                    </LinearLayout>
+
+                    <!--Divider-->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/fadedBlue" />
+                    <!--Divider-->
+
+
+                </LinearLayout>
+
+
+                <!--Footer tools-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/extraFadedBlue"
                     android:gravity="center"
-                    android:padding="3dp"
-                    android:text="Ready?"
-                    android:textColor="@color/primaryColors"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    android:orientation="horizontal">
 
-                <!--Divider-->
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:background="@color/fadedBlue" />
-                <!--Divider-->
+                    <TextView
+                        android:id="@+id/statusActionBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ripple"
+                        android:backgroundTint="@color/transparentColor"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="Ready?"
+                        android:textColor="@color/primaryColors"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:ignore="TouchTargetSizeCheck" />
 
-                <TextView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/ripple"
-                    android:backgroundTint="@color/transparentColor"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="@drawable/ic_close"
-                    android:foregroundTint="@color/primaryColors"
-                    android:padding="3dp" />
+                    <!--Divider-->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:background="@color/fadedBlue" />
+                    <!--Divider-->
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/ripple"
+                        android:backgroundTint="@color/transparentColor"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="@drawable/ic_close"
+                        android:foregroundTint="@color/primaryColors"
+                        android:padding="3dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
+
+            <!--The Grid Starts here-->
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:columnCount="2">
+
+                <LinearLayout
+                    android:id="@+id/rideHistoryBtn"
+                    android:layout_rowWeight="1"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:padding="18dp"
+                        android:src="@drawable/img_time" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Ride History" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/profileBtn"
+                    android:layout_rowWeight="1"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:padding="18dp"
+                        android:src="@drawable/person_img" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Profile" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/RidesId"
+                    android:layout_rowWeight="1"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:padding="18dp"
+                        android:src="@drawable/img_rideupload" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Rides" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentBtn"
+                    android:layout_rowWeight="1"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/white"
+                    android:clickable="true"
+                    android:elevation="3dp"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="120dp"
+                        android:layout_height="100dp"
+                        android:padding="18dp"
+                        android:src="@drawable/img_money" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Paymnets" />
+
+                </LinearLayout>
+
+
+            </GridLayout>
 
         </LinearLayout>
-    </RelativeLayout>
+    </ScrollView>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatBtn"
@@ -361,6 +468,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/rideViewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Current Ride"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parentView"
+        tools:ignore="MissingConstraints" />
 
-</androidx.constraintlayout.motion.widget.MotionLayout>
+</LinearLayout>
 

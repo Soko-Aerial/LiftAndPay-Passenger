@@ -53,9 +53,8 @@
         android:id="@+id/chatRecyler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/topViewId"
         android:layout_above="@id/messagingToolLayoutId"
-      />
+        android:layout_below="@id/topViewId" />
 
     <LinearLayout
         android:id="@+id/messagingToolLayoutId"
