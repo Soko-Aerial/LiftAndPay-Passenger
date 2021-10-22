@@ -365,7 +365,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                     passengerBookingInfo.put("Location Desc", inputEditText.getText().toString());
                                     passengerBookingInfo.put("Status", "Pending Approval");
 
-
                                     DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
                                     DocumentReference bookedByRefToDriver = db.collection("Driver").document(theMainDriverId).collection("Pending Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
 
@@ -421,7 +420,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                                                                     Toast.makeText(getApplicationContext(), "Couldn't add to driver", Toast.LENGTH_LONG).show();
                                                                                 }
                                                                             });
-
 
 
                                                                 } else {
@@ -583,8 +581,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private void getRoute(Point origin, Point destination) {
         NavigationRoute.builder(this)
                 .accessToken(Mapbox.getAccessToken())
-                .origin(destination)
-                .destination(origin)
+                .origin(origin)
+                .destination(destination)
                 .build()
                 .getRoute(new Callback<DirectionsResponse>() {
                     @Override

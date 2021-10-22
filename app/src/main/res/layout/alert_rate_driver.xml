@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Review the driver to help other passengers"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryColors"
+        />
+    <RatingBar
+        android:id="@+id/ratingsId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:progressTint="@color/primaryColors"
+        android:numStars="5"
+        />
+
+    <TextView
+        android:tag="option"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The driver is no serious in life"
+        android:clickable="true"
+        android:focusable="true"
+        android:textAlignment="center"
+        android:background="@drawable/ripple"
+        android:backgroundTint="@color/extraFadedBlue"
+        android:textColor="@color/primaryColors"
+        android:padding="6dp"
+        android:layout_margin="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The driver is no serious in life"
+        android:clickable="true"
+        android:focusable="true"
+        android:textAlignment="center"
+        android:background="@drawable/ripple"
+        android:backgroundTint="@color/extraFadedBlue"
+        android:textColor="@color/primaryColors"
+        android:padding="6dp"
+        android:layout_margin="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The driver is no serious in life"
+        android:clickable="true"
+        android:focusable="true"
+        android:textAlignment="center"
+        android:background="@drawable/ripple"
+        android:backgroundTint="@color/extraFadedBlue"
+        android:textColor="@color/primaryColors"
+        android:padding="6dp"
+        android:layout_margin="5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The driver is no serious in life"
+        android:clickable="true"
+        android:focusable="true"
+        android:textAlignment="center"
+        android:background="@drawable/ripple"
+        android:backgroundTint="@color/extraFadedBlue"
+        android:textColor="@color/primaryColors"
+        android:padding="6dp"
+        android:layout_margin="5dp"
+        />
+
+
+
+    <EditText
+        android:id="@+id/ratingsCommentId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        android:gravity="top"
+        android:textColorHint="@color/fadedBlue"
+        android:textColor="@color/primaryColors"
+        android:textColorHighlight="@color/primaryColors"
+
+        android:hint="comments (optional)"/>
+
+    <TextView
+        android:id="@+id/submitId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="submit"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ripple"
+        android:backgroundTint="@color/primaryColors"
+        android:textColor="@color/white"
+        android:padding="6dp"
+        android:layout_gravity="end"
+        />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

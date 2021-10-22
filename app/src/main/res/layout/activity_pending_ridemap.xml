@@ -1,202 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/routeProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:progressTint="@color/primaryColors"
-        android:layout_margin="15dp"
-        android:layout_centerHorizontal="true"
-       android:indeterminateTint="@color/primaryColors"/>
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        >
+        android:background="@color/extraFadedBlue">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:behavior_hideable="false"
-            app:behavior_peekHeight="65dp"
+            android:layout_height="251dp"
             android:background="@drawable/bottom_sheet_bkg"
             android:orientation="vertical"
-            >
-            <Button
-                android:layout_width="40dp"
-                android:layout_height="2dp"
-                android:background="@color/primaryColors"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="8dp" />
+            android:padding="5dp"
+            app:behavior_hideable="false"
+            app:behavior_peekHeight="260dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/actionBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="4dp"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:layout_margin="8dp"
-                    android:paddingEnd="50dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:visibility="visible"
-                    android:paddingStart="7dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/transparent"
                     android:gravity="center"
-                    android:textColor="@color/primaryColors"
-                    android:foreground="@color/extraFadedBlue"
-                    android:background="@drawable/ripple"
-                    android:text="WAIT FOR RIDE"
-                    />
-
-                <ProgressBar
-                    android:id="@+id/progressbar"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
                     android:padding="4dp"
-                    android:visibility="gone"
+                    android:paddingStart="7dp"
+                    android:paddingEnd="50dp"
+                    android:text="WAIT FOR RIDE"
+                    android:textColor="@color/primaryColors"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:layout_margin="8dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:textColor="@color/primaryColors"
-                    android:foreground="@color/extraFadedBlue"/>
+                    android:visibility="visible" />
 
 
                 <ImageView
+                    android:id="@+id/chatBtn"
                     style="@style/smallIconBtnStyle"
                     android:contentDescription="CHAT"
+                    android:backgroundTint="@color/transparent"
                     android:foreground="@drawable/ic_message"
-                    android:foregroundTint="@color/primaryColors"/>
+                    android:foregroundTint="@color/primaryColors" />
 
                 <ImageView
                     android:id="@+id/callBtn"
                     style="@style/smallIconBtnStyle"
-                    android:foreground="@drawable/btn_call"
                     android:layout_marginEnd="2dp"
-                    android:contentDescription="CALL" />
+                    android:contentDescription="CALL"
+                    android:backgroundTint="@color/transparent"
+                    android:foreground="@drawable/btn_call" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                >
-                <TextView
-                    style="@style/TextLabelForPendingFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="From:"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <TextView
-                    style="@style/TextForPendingFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ablekuma"/>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="3dp"
+                    android:padding="2dp"
+                    android:src="@drawable/carimg1"
+                    app:shapeAppearance="@style/ShapeAppearance.CircularBorder"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="1dp" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/driverNameId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Name Of the Driver"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+
+                    <TextView
+                        android:id="@+id/carNumberPlate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The Number Plate Of the Car"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/extraFadedBlue"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/TextLabelForPendingFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="To:"/>
-
-                <TextView
-                    style="@style/TextForPendingFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lapaz"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/extraFadedBlue"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    style="@style/TextLabelForPendingFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date:"/>
-
-                <TextView
-                    style="@style/TextForPendingFragment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="15th March 1998"/>
-
-
-                <ImageView
-                    style="@style/smallIconBtnStyle"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/btn_send"/>
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/extraFadedBlue"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <TextView
-                style="@style/TextLabelForPendingFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time:"/>
+                android:layout_gravity="end"
+                android:background="@drawable/ripple"
+                android:backgroundTint="@color/red"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="15dp"
+                android:text="Cancel Pickup"
+                android:textColor="@color/white" />
 
-            <TextView
-                style="@style/TextForPendingFragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="15:00pm"/>
-
-            <ImageView
-                style="@style/smallIconBtnStyle"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/btn_send"/>
-        </LinearLayout>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

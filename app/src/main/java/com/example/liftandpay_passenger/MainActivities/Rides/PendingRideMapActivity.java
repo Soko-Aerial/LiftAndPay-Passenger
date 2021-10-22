@@ -4,12 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,23 +24,34 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.liftandpay_passenger.AVR_Activities.Chats.ChatActivity_avr;
 import com.example.liftandpay_passenger.MainActivities.MainActivity;
+import com.example.liftandpay_passenger.MainActivities.MainFragment;
 import com.example.liftandpay_passenger.R;
+import com.example.liftandpay_passenger.fastClass.Ratings;
+import com.example.liftandpay_passenger.fastClass.StringFunction;
 import com.google.android.gms.location.FusedLocationProviderClient;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -71,6 +87,7 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -91,15 +108,20 @@ import org.jetbrains.annotations.NotNull;
 public class PendingRideMapActivity extends FragmentActivity implements OnMapReadyCallback, PermissionsListener {
 
     private TextView actionBtn;
-    private ImageView callBtn;
+    private ImageView callBtn, chatBtn;
     private ProgressBar progressBar;
 
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
     private MapView mapView;
     private MapboxMap mapboxMap;
 
     private final String geojsonSourceLayerId = "geojsonSourceLayerId";
+    private final String destinationSource = "destination-source-id";
+    private ValueAnimator animator;
+
     private final String symbolIconId = "symbolIconId";
-    private final String mapBoxStyleUrl ="mapbox://styles/hubert-brako/cknk4g1t6031l17to153efhbs";
+    private final String mapBoxStyleUrl = "mapbox://styles/hubert-brako/cknk4g1t6031l17to153efhbs";
     private final String carIconId = "car-icon-id";
 
     private LatLng myLoc;
@@ -120,13 +142,16 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
     private String rideId;
+    private String driverId;
+    private String rideStatus, passengerStatus;
+
+    private Vibrator vibrator;
+    private TextToSpeech textToSpeech;
+
+    private TextView driverName, carNumberPlate;
     private String mUid = FirebaseAuth.getInstance().getUid();
 
     private Map<String, Object> passengerLoc = new HashMap<>();
-
-    private MainActivityLocationCallback callback = new MainActivityLocationCallback(this);
-
-
 
 
     @Override
@@ -140,13 +165,27 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
         actionBtn = findViewById(R.id.actionBtn);
         callBtn = findViewById(R.id.callBtn);
-        progressBar = findViewById(R.id.progressbar);
-        routeProgress = findViewById(R.id.routeProgress);
-        routeProgress.setVisibility(View.VISIBLE);
+        chatBtn = findViewById(R.id.chatBtn);
+
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        textToSpeech = new TextToSpeech(PendingRideMapActivity.this,
+                new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        textToSpeech.setLanguage(Locale.UK);
+                    }
+                });
 
         rideId = getIntent().getStringExtra("rideId");
 
+        driverName = findViewById(R.id.driverNameId);
+        driverName.setText(getIntent().getStringExtra("driverName"));
 
+        carNumberPlate = findViewById(R.id.carNumberPlate);
+        carNumberPlate.setText(getIntent().getStringExtra("plate"));
+
+
+        dialogBuilder = new AlertDialog.Builder(PendingRideMapActivity.this);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -157,7 +196,6 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
-
 
 
         this.mapboxMap = mapboxMap;
@@ -173,74 +211,103 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 setUpSource(style);
                 // Set up a new symbol layer for displaying the searched location's feature coordinates
                 setupLayer(style);
-                enableLocationComponent(style);
+
                 addDestinationIconSymbolLayer(style);
-
-                actionBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        actionBtn.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.VISIBLE);
-                        AlertDialog.Builder builder
-                                = new AlertDialog
-                                .Builder(PendingRideMapActivity.this);
-
-                        // Set the message show for the Alert time
-                        builder.setMessage("Waiting for the driver to reach ...");
-                        builder.setCancelable(true);
-                        builder.create().show();
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                builder.setMessage("Making you location visible to driver ...");
-                                builder.setCancelable(true);
-                                builder.create().show();
-                            }
-                        },4000);
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                builder.setMessage("Alerting Driver ...");
-                                builder.setCancelable(true);
-                                builder.create().show();
-                            }
-                        },8000);
-
-                        updateMyLocation();
-                    }
-                });
-
 
 
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!hasPermissions(PendingRideMapActivity.this, PERMISSIONS)){
+                        if (!hasPermissions(PendingRideMapActivity.this, PERMISSIONS)) {
                             ActivityCompat.requestPermissions(PendingRideMapActivity.this, PERMISSIONS, PERMISSION_ALL);
-                        }else {
-                            Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:" + 882177690));
-                            startActivity(callIntent);
+                        } else {
+                            db.collection("Driver")
+                                    .document(new StringFunction(rideId).splitStringWithAndGet(" ", 0))
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                            String phone;
+                                            if (task.getResult().get("Phone") != null)
+                                                phone = String.valueOf(task.getResult().get("Phone"));
+                                            else
+                                                phone = " No Number";
+                                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                            callIntent.setData(Uri.parse("tel:" + phone));
+                                            startActivity(callIntent);
+
+                                        }
+                                    });
+
                         }
                     }
                 });
+
+
+                chatBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(PendingRideMapActivity.this, ChatActivity_avr.class);
+                        startActivity(i);
+                    }
+                });
+
             }
         });
 
 
-
         db.collection("Rides").document(rideId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable DocumentSnapshot value001, @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
 
-                if(Objects.equals(value.getString("driversStatus"), "Started")){
-                   Toast.makeText(PendingRideMapActivity.this,""+value.getDouble("driversLat"),Toast.LENGTH_LONG).show();
+                //Switch among passenger's status
+                value001.getReference().
+                        collection("Booked By").
+                        document(mUid)
+                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                   addMarkerToDestination(value.getDouble("driversLat"),value.getDouble("driversLon"));
 
-                }
+                                if (value.getString("Status").equals("Approved")) {
+                                    switchAmongDriversStatuses(value001);
+                                }
+                                if (value.getString("Status").equals("Declined")) {
+
+                                }
+                                if (value.getString("Status").equals("Driver almost there")) {
+                                    vibrator.vibrate(3000);
+                                    textToSpeech.speak(value.getString("Status"), TextToSpeech.QUEUE_FLUSH, null, value.getString("Status"));
+                                    dialogBuilder.setView(LayoutInflater.from(PendingRideMapActivity.this).inflate(R.layout.dialog_status_dialog, null));
+                                    dialogBuilder.setCancelable(false);
+                                    dialogBuilder.setPositiveButton("Alright", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    dialog = dialogBuilder.show();
+                                }
+                                if (value.getString("Status").equals("Cancelled")) {
+                                    //don't show driver's location
+                                    switchActionBtn("Oww, You cancelled the ride", R.color.orange, true);
+
+                                }
+                                if (value.getString("Status").equals("Picked")) {
+                                    switchAmongDriversStatuses(value001);
+                                    switchActionBtn("You have been picked", R.color.success, false);
+
+                                    //Confirm pickup
+
+                                }
+                                if (value.getString("Status").equals("Dropped")) {
+                                    //Confirm drop off
+                                    switchActionBtn("You have arrived at your destination", R.color.success, true);
+
+                                }
+                            }
+                        });
             }
         });
 
@@ -263,15 +330,15 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                     public void onSuccess(Location location) {
                         myLoc = new LatLng(location.getLatitude(), location.getLongitude());
 
-                        double stLat = getIntent().getDoubleExtra("stLat",0);
-                        double stLon = getIntent().getDoubleExtra("stLon",0);
-                        double endLat = getIntent().getDoubleExtra("endLat",0);
-                        double endLon = getIntent().getDoubleExtra("endLon",0);
+                        double stLat = getIntent().getDoubleExtra("stLat", 0);
+                        double stLon = getIntent().getDoubleExtra("stLon", 0);
+                        double endLat = getIntent().getDoubleExtra("endLat", 0);
+                        double endLon = getIntent().getDoubleExtra("endLon", 0);
 
 //                        actionBtn.setText(stLat +"\n"+ stLon+"\n"+ endLat+"\n"+ endLon);
-                        if(stLat!= 0 && stLon!=0 && endLat!=0 && endLon!=0) {
+                        if (stLat != 0 && stLon != 0 && endLat != 0 && endLon != 0) {
 
-                            LatLng points = new LatLng( stLat, stLon);
+                            LatLng points = new LatLng(stLat, stLon);
                             LatLng pointd = new LatLng(endLat, endLon);
 
 
@@ -284,16 +351,14 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
                             Point destinationPoint = Point.fromLngLat(pointd.getLongitude(), pointd.getLatitude());
                             Point originPoint = Point.fromLngLat(points.getLongitude(), points.getLatitude());
-                            getRoute(originPoint,destinationPoint);
-                        }
-                        else
-                        {
-                            Toast.makeText(getApplicationContext(), "The Cordinates are null, Route could not render",Toast.LENGTH_LONG).show();
+
+                            getRoute(originPoint, destinationPoint);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "The Cordinates are null, Route could not render", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 });
-
 
 
     }
@@ -310,98 +375,24 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         return true;
     }
 
-    private void updateMyLocation() {
-        locationEngine = LocationEngineProvider.getBestLocationEngine(this);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+    private void switchAmongDriversStatuses(DocumentSnapshot value) {
+        //Switch among drivers status
+        if (Objects.equals(value.getString("driversStatus"), "Started")) {
+            Toast.makeText(PendingRideMapActivity.this, "Started", Toast.LENGTH_LONG).show();
+            addMarkerToDestination(value.getDouble("driversLat"), value.getDouble("driversLon"));
         }
 
-        LocationEngineRequest request = new LocationEngineRequest.Builder(5000)
-                .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                .setMaxWaitTime(10000).build();
+        if (Objects.equals(value.getString("driversStatus"), "Cancelled")) {
 
-        locationEngine.requestLocationUpdates(request, callback, getMainLooper());
-        locationEngine.getLastLocation(callback);
-    }
-
-
-    private class MainActivityLocationCallback
-            implements LocationEngineCallback<LocationEngineResult> {
-
-        private final WeakReference<PendingRideMapActivity> activityWeakReference;
-
-        MainActivityLocationCallback(PendingRideMapActivity activity) {
-            this.activityWeakReference = new WeakReference<>(activity);
-        }
-
-        /**
-         * The LocationEngineCallback interface's method which fires when the device's location has changed.
-         *
-         * @param result the LocationEngineResult object which has the last known location within it.
-         */
-        @Override
-        public void onSuccess(LocationEngineResult result) {
-            PendingRideMapActivity activity = activityWeakReference.get();
-
-            if (activity != null) {
-                Location location = result.getLastLocation();
-
-                if (location == null) {
-                    return;
-                }
-
-
-                passengerLoc.put("pALat", result.getLastLocation().getLatitude());
-                passengerLoc.put("pALon", result.getLastLocation().getLongitude());
-// Create a Toast which displays the new location's coordinates
-                db.collection("Rides").document(activity.rideId).collection("Booked By").document(mUid).update(passengerLoc).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-
-                        Toast.makeText(activity, result.getLastLocation().getLatitude() + "" + result.getLastLocation().getLongitude(),
-                                Toast.LENGTH_SHORT).show();
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull @NotNull Exception e) {
-                        Timber.e(e);
-                    }
-                });
-
-// Pass the new location to the Maps SDK's LocationComponent
-                if (activity.mapboxMap != null && result.getLastLocation() != null) {
-                    activity.mapboxMap.getLocationComponent().forceLocationUpdate(result.getLastLocation());
-                }
-            }
-        }
-
-        /**
-         * The LocationEngineCallback interface's method which fires when the device's location can not be captured
-         *
-         * @param exception the exception message
-         */
-        @Override
-        public void onFailure(@NonNull Exception exception) {
-            Log.d("LocationChangeActivity", exception.getLocalizedMessage());
-            PendingRideMapActivity activity = activityWeakReference.get();
-            if (activity != null) {
-                Toast.makeText(activity, exception.getLocalizedMessage(),
-                        Toast.LENGTH_SHORT).show();
-            }
+            switchActionBtn("Sorry driver has cancelled the Ride", R.color.orange, true);
+            //don't read driver's location
         }
     }
+
 
     @SuppressLint("WrongConstant")
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
 // Check if permissions are enabled and if not request
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
@@ -423,10 +414,28 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     }
 
+    private void switchActionBtn(String actionText, int actionColor, Boolean reviewRequired) {
+        actionBtn.setText(actionText);
+        actionBtn.setTextColor(ContextCompat.getColor(PendingRideMapActivity.this, actionColor));
+
+        if (reviewRequired) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Ratings ratings = new Ratings(PendingRideMapActivity.this,
+                            new StringFunction(rideId).splitStringWithAndGet(" ", 0),
+                            passengerStatus,
+                            rideStatus);
+                }
+            }, 5000);
+        }
+
+    }
+
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Toast.makeText(this, "R.string.user_location_permission_explanation" , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "R.string.user_location_permission_explanation", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -454,8 +463,9 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private void addDestinationIconSymbolLayer(@NonNull Style loadedMapStyle) {
         loadedMapStyle.addImage("car-icon-id",
                 BitmapFactory.decodeResource(this.getResources(), R.drawable.img_car));
+
         GeoJsonSource geoJsonSource = new GeoJsonSource("destination-source-id");
-        loadedMapStyle.addSource(geoJsonSource);
+
         SymbolLayer destinationSymbolLayer = new SymbolLayer("destination-symbol-layer-id", "destination-source-id");
         destinationSymbolLayer.withProperties(
                 iconImage("car-icon-id"),
@@ -463,20 +473,58 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 iconIgnorePlacement(true)
         );
 
-
         loadedMapStyle.addLayer(destinationSymbolLayer);
+        loadedMapStyle.addSource(geoJsonSource);
+
     }
 
-    private void addMarkerToDestination(double lat, double lon){
-        GeoJsonSource theMainStyle = mapboxMap.getStyle().getSourceAs("destination-source-id");
+    private void addMarkerToDestination(double lat, double lon) {
 
+        GeoJsonSource theMainStyle = mapboxMap.getStyle().getSourceAs(destinationSource);
         if (theMainStyle != null) {
             theMainStyle.setGeoJson(FeatureCollection.fromFeature(
                     Feature.fromGeometry(Point.fromLngLat(lon, lat))
             ));
+            animateMarker(new LatLng(lat, lon), new LatLng(lat, lon + 0.2));
 
         }
+
     }
+
+
+    private void animateMarker(LatLng currentPosition, LatLng point) {
+
+        animator = ObjectAnimator
+                .ofObject(latLngEvaluator, currentPosition, point)
+                .setDuration(2000);
+        animator.addUpdateListener(animatorUpdateListener);
+        animator.start();
+
+    }
+
+    private static final TypeEvaluator<LatLng> latLngEvaluator = new TypeEvaluator<LatLng>() {
+
+        private final LatLng latLng = new LatLng();
+
+        @Override
+        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
+            latLng.setLatitude(startValue.getLatitude()
+                    + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
+            latLng.setLongitude(startValue.getLongitude()
+                    + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
+            return latLng;
+        }
+    };
+
+    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener =
+            new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    LatLng animatedPosition = (LatLng) valueAnimator.getAnimatedValue();
+                    GeoJsonSource theMainStyle = mapboxMap.getStyle().getSourceAs(destinationSource);
+                    theMainStyle.setGeoJson(Point.fromLngLat(animatedPosition.getLongitude(), animatedPosition.getLatitude()));
+                }
+            };
 
 
     private void getRoute(Point origin, Point destination) {
@@ -494,7 +542,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                             Timber.e("No routes found, make sure you set the right user and access token.");
                             return;
                         } else if (response.body().routes().size() < 1) {
-                            Toast.makeText(PendingRideMapActivity.this,"Couldn't generate route",Toast.LENGTH_LONG).show();
+                            Toast.makeText(PendingRideMapActivity.this, "Couldn't generate route", Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -504,7 +552,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                         if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
-                            navigationMapRoute = new NavigationMapRoute(null,mapView, mapboxMap, R.style.NavigationMapRoute);
+                            navigationMapRoute = new NavigationMapRoute(null, mapView, mapboxMap, R.style.NavigationMapRoute);
                             navigationMapRoute.addRoute(currentRoute);
                         }
                     }
@@ -512,12 +560,11 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                     @Override
                     public void onFailure(Call<DirectionsResponse> call, Throwable t) {
 //                        routeProgress.setVisibility(View.INVISIBLE);
-                        Toast.makeText(PendingRideMapActivity.this,"002:"+t.getMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(PendingRideMapActivity.this, "002:" + t.getMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });
     }
-
 
 
     @Override

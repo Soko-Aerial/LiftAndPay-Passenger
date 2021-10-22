@@ -1,6 +1,7 @@
 package com.example.liftandpay_passenger.MainActivities;
 
 import static android.content.Context.MODE_PRIVATE;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -30,6 +31,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,12 +57,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Source;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -78,7 +84,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import nl.nos.imagin.Imagin;
 import nl.nos.imagin.SingleTapHandler;
@@ -103,7 +111,7 @@ public class MainFragment extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String json = null;
 
-    private   ActivityResultLauncher activityResultLauncher;
+    private ActivityResultLauncher activityResultLauncher;
 
     private TextView locationsDesc, dateAndTime, amount, originToDestination;
     private TextView driverName, carNumberPlate;
@@ -115,9 +123,15 @@ public class MainFragment extends AppCompatActivity {
     String infoNameS, infoLonS, infoLatS;
     String infoNameD, infoLonD, infoLatD;
 
-    private TextView statusActionBtn,rideViewText;
+    private TextView statusActionBtn, rideViewText;
+    private TextView statusId, rideStatus;
 
+    private Vibrator vibrator;
+    private TextToSpeech textToSpeech;
     private SharedPreferences lastRideSharedPrefs;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
 
 
     @Nullable
@@ -125,9 +139,10 @@ public class MainFragment extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
-        Mapbox.getInstance( MainFragment.this, getString(R.string.mapbox_access_token));
+        Mapbox.getInstance(MainFragment.this, getString(R.string.mapbox_access_token));
 
 
+        dialogBuilder = new AlertDialog.Builder(MainFragment.this);
         lastRideSharedPrefs = getSharedPreferences("LAST_BOOKED_RIDE_FILE", MODE_PRIVATE);
 
         floatbtn = findViewById(R.id.floatBtn);
@@ -146,31 +161,39 @@ public class MainFragment extends AppCompatActivity {
         amount = findViewById(R.id.amount);
 
         driverName = findViewById(R.id.driverNameId);
+        carNumberPlate = findViewById(R.id.carNumberPlate);
         statusActionBtn = findViewById(R.id.statusActionBtn);
         rideViewText = findViewById(R.id.rideViewText);
+        statusId = findViewById(R.id.myStatusId);
+        rideStatus = findViewById(R.id.driverStatusId);
 
         historyBtn = findViewById(R.id.rideHistoryBtn);
         paymentBtn = findViewById(R.id.paymentBtn);
         profileBtn = findViewById(R.id.profileBtn);
 
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        textToSpeech = new TextToSpeech(MainFragment.this,
+                new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        textToSpeech.setLanguage(Locale.UK);
+                    }
+                });
 
-        historyBtn.setOnClickListener(view ->{
+        historyBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainFragment.this, RidesFragment.class);
             startActivity(i);
         });
 
-        paymentBtn.setOnClickListener(view ->{
+        paymentBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainFragment.this, PayFragment.class);
             startActivity(i);
         });
 
-        profileBtn.setOnClickListener(view ->{
+        profileBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainFragment.this, ProfileFragment.class);
             startActivity(i);
         });
-
-
-
 
         lowerView.setVisibility(View.GONE);
 
@@ -197,9 +220,9 @@ public class MainFragment extends AppCompatActivity {
                         searchDestination.getText().toString().toUpperCase().trim().equals("")) {
                     Toast.makeText(MainFragment.this, "Can't Search", Toast.LENGTH_LONG).show();
                 } else {
-                    Intent intent = new Intent(MainFragment.this   , SearchedRides.class);
-                    intent.putExtra("stLoc", infoLatS + ","+ infoLonS);
-                    intent.putExtra("endLoc", infoLatD + ","+ infoLonD);
+                    Intent intent = new Intent(MainFragment.this, SearchedRides.class);
+                    intent.putExtra("stLoc", infoLatS + "," + infoLonS);
+                    intent.putExtra("endLoc", infoLatD + "," + infoLonD);
                     startActivity(intent);
                 }
             }
@@ -215,8 +238,6 @@ public class MainFragment extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
 
 
         db.collection("Passenger").document(mAuth.getUid()).collection("Rides").document("Pending Rides").get(Source.SERVER)
@@ -242,107 +263,140 @@ public class MainFragment extends AppCompatActivity {
 
                                     String lastBookedRide = bookedRides.get(bookedRides.size() - 1);
 
-                                    db.collection("Rides").document(lastBookedRide).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            Log.e("BookedRides001", "Completed");
+                                    db.collection("Rides").document(lastBookedRide)
+                                            .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                                            if (task.getResult().exists()) {
-                                                Log.e("BookedRides001", "Exists");
+                                                    Log.e("BookedRides001", "Completed");
 
+                                                    assert value != null;
+                                                    if (value.exists()) {
+                                                        Log.e("BookedRides001", "Exists");
 
-                                                task.getResult().getReference().collection("Booked By").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                        String driverStatus =": "+ value.getString("driversStatus");
 
-                                                        Log.e("BookedRides001", "Is Listening for data");
+                                                        rideStatus.setText(driverStatus);
 
-                                                        lowerView.setVisibility(View.VISIBLE);
-
-                                                        lastRideSharedPrefs.edit().putString("TheLocationDesc", value.getString("Location Desc")).apply();
-                                                        lastRideSharedPrefs.edit().putString("Status", value.getString("Status")).apply();
-                                                        lastRideSharedPrefs.edit().putFloat("ThePickupLon", Float.parseFloat(String.valueOf(value.getDouble("Long")))).apply();
-                                                        lastRideSharedPrefs.edit().putFloat("ThePickupLat", Float.parseFloat(String.valueOf(value.getDouble("Lat")))).apply();
-
-
-                                                        String status = value.getString("Status");
-
-                                                        Log.e("Status",status);
-
-                                                        //Check if Status on database is empty. If it is empty, Print Current Ride.
-
-                                                        assert status != null;
-                                                        if (!status.trim().equals(""))
-                                                        rideViewText.setText(status);
-                                                        else
-                                                        rideViewText.setText("Current Ride");
-
-
-                                                        locationsDesc.setText(value.getString("Location Desc"));
-
-
-                                                        task.getResult().getReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                        value.getReference().collection("Booked By").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                                             @Override
-                                                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                            public void onEvent(@Nullable DocumentSnapshot value1, @Nullable FirebaseFirestoreException error) {
 
-                                                                double stLat =value.getDouble("startLat");
-                                                                double stLon =value.getDouble("startLon");
-                                                                double eLat = value.getDouble("endLat");
-                                                                double eLon = value.getDouble("endLon");
+                                                                Log.e("BookedRides001", "Is Listening for data");
 
-                                                                lastRideSharedPrefs.edit().putString("theDriverId", value.getString("myId")).apply();
-                                                                lastRideSharedPrefs.edit().putString("theDriverPhone", value.getString("phone number")).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theStartLon", Float.parseFloat(String.valueOf(stLon))).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
-                                                                lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
-                                                                lastRideSharedPrefs.edit().putString("theRideCost", value.getString("Ride Cost")).apply();
-                                                                lastRideSharedPrefs.edit().putString("theRideTime", value.getString("Ride Time")).apply();
-                                                                lastRideSharedPrefs.edit().putString("theRideDate", value.getString("Ride Date")).apply();
-                                                                lastRideSharedPrefs.edit().putString("theDriverName", value.getString("driverName")).apply();
-                                                                lastRideSharedPrefs.edit().putString("theStartLocation", value.getString("startLocation")).apply();
-                                                                lastRideSharedPrefs.edit().putString("theEndLocation", value.getString("endLocation")).apply();
+                                                                lowerView.setVisibility(View.VISIBLE);
+
+                                                                lastRideSharedPrefs.edit().putString("TheLocationDesc", value1.getString("Location Desc")).apply();
+                                                                lastRideSharedPrefs.edit().putString("Status", value1.getString("Status")).apply();
+                                                                lastRideSharedPrefs.edit().putFloat("ThePickupLon", Float.parseFloat(String.valueOf(value1.getDouble("Long")))).apply();
+                                                                lastRideSharedPrefs.edit().putFloat("ThePickupLat", Float.parseFloat(String.valueOf(value1.getDouble("Lat")))).apply();
+
+                                                                String status = value1.getString("Status");
+                                                                statusId.setText(status);
+
+                                                                Log.e("Status", status);
+
+                                                                if (status.equals("Driver almost there"))
+                                                                {
+                                                                  vibrator.vibrate(3000);
+                                                                  textToSpeech.speak(status, TextToSpeech.QUEUE_FLUSH, null,status);
+                                                                  dialogBuilder.setView(LayoutInflater.from(MainFragment.this).inflate(R.layout.dialog_status_dialog, null));
+                                                                  dialogBuilder.setCancelable(false);
+                                                                  dialogBuilder.setPositiveButton("Alright", new DialogInterface.OnClickListener() {
+                                                                      @Override
+                                                                      public void onClick(DialogInterface dialog, int which) {
+                                                                          dialog.dismiss();
+                                                                      }
+                                                                  });
+                                                                  dialog = dialogBuilder.show();
 
 
-                                                                String originDestination = value.getString("startLocation") + "-" + value.getString("endLocation");
-                                                                String dateTime = value.getString("Ride Date") + " " + value.getString("Ride Time");
+                                                                  new Handler().postDelayed(new Runnable() {
+                                                                      @Override
+                                                                      public void run() {
 
-                                                                dateAndTime.setText(dateTime);
-                                                                originToDestination.setText(originDestination);
 
-                                                                amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/",0));
-                                                                driverName.setText(value.getString("driverName"));
+                                                                      }
+                                                                  },10000);
+                                                                }
 
-                                                                statusActionBtn.setOnClickListener(Viewv ->{
-                                                                    Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
-                                                                    intent.putExtra("journey",originDestination);
-                                                                    intent.putExtra("dateTime",dateTime);
-                                                                    intent.putExtra("distance",amount.getText().toString());
-                                                                    intent.putExtra("stLat",stLat);
-                                                                    intent.putExtra("stLon",stLon);
-                                                                    intent.putExtra("endLat",eLat);
-                                                                    intent.putExtra("endLon",eLon);
-                                                                    intent.putExtra("rideId",lastBookedRide);
+                                                                //Check if Status on database is empty. If it is empty, Print Current Ride.
+                                                                assert status != null;
+                                                                if (!status.trim().equals(""))
+                                                                    statusId.setText(status);
+                                                                else
+                                                                    statusId.setText("Current Ride");
 
-                                                                    startActivity(intent);
-                                                                });
 
-                                                                driverDetails.setOnClickListener(new View.OnClickListener() {
+                                                                locationsDesc.setText(value1.getString("Location Desc"));
+
+
+                                                                value.getReference().addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                                                     @Override
-                                                                    public void onClick(View v) {
-                                                                        Intent i = new Intent(MainFragment.this, AvailableRides.class);
-                                                                        i.putExtra("Purpose","ForView");
-                                                                        startActivity(i);
+                                                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                                                                        double stLat = value.getDouble("startLat");
+                                                                        double stLon = value.getDouble("startLon");
+                                                                        double eLat = value.getDouble("endLat");
+                                                                        double eLon = value.getDouble("endLon");
+
+                                                                        lastRideSharedPrefs.edit().putString("theDriverId", value.getString("myId")).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theDriverPhone", value.getString("phone number")).apply();
+                                                                        lastRideSharedPrefs.edit().putFloat("theStartLon", Float.parseFloat(String.valueOf(stLon))).apply();
+                                                                        lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
+                                                                        lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
+                                                                        lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theRideCost", value.getString("Ride Cost")).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theRideTime", value.getString("Ride Time")).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theRideDate", value.getString("Ride Date")).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theDriverName", value.getString("driverName")).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theStartLocation", value.getString("startLocation")).apply();
+                                                                        lastRideSharedPrefs.edit().putString("theEndLocation", value.getString("endLocation")).apply();
+
+
+                                                                        String originDestination = value.getString("startLocation") + "-" + value.getString("endLocation");
+                                                                        String dateTime = value.getString("Ride Date") + " " + value.getString("Ride Time");
+
+                                                                        dateAndTime.setText(dateTime);
+                                                                        originToDestination.setText(originDestination);
+
+                                                                        amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/", 0));
+                                                                        driverName.setText(value.getString("driverName"));
+                                                                        carNumberPlate.setText(value.getString("Plate"));
+
+                                                                        statusActionBtn.setOnClickListener(Viewv -> {
+                                                                            Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
+                                                                            intent.putExtra("journey", originDestination);
+                                                                            intent.putExtra("dateTime", dateTime);
+                                                                            intent.putExtra("distance", amount.getText().toString());
+                                                                            intent.putExtra("stLat", stLat);
+                                                                            intent.putExtra("stLon", stLon);
+                                                                            intent.putExtra("endLat", eLat);
+                                                                            intent.putExtra("endLon", eLon);
+                                                                            intent.putExtra("rideId", lastBookedRide);
+                                                                            intent.putExtra("driverName",driverName.getText().toString());
+                                                                            intent.putExtra("plate",carNumberPlate.getText().toString());
+
+
+                                                                            startActivity(intent);
+                                                                        });
+
+                                                                        driverDetails.setOnClickListener(new View.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(View v) {
+                                                                                Intent i = new Intent(MainFragment.this, AvailableRides.class);
+                                                                                i.putExtra("Purpose", "ForView");
+                                                                                startActivity(i);
+                                                                            }
+                                                                        });
                                                                     }
                                                                 });
+
                                                             }
                                                         });
-
                                                     }
-                                                });
-                                            }
-                                        }
-                                    });
+                                                }
+                                            });
                                 } else {
                                     Log.e("BookedRides", "Is empty");
                                 }
@@ -394,13 +448,12 @@ public class MainFragment extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.e("onActivity001", "started");
-        if (resultCode == Activity.RESULT_OK && requestCode == 100 ) {
+        if (resultCode == Activity.RESULT_OK && requestCode == 100) {
 
             Log.e("onActivity001", "Result is ok");
 
@@ -421,7 +474,7 @@ public class MainFragment extends AppCompatActivity {
                 Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
                 infoNameD = data.getExtras().getString("theLocationName");
                 infoLonD = String.valueOf(data.getExtras().getDouble("theLon", 0.0));
-                infoLatD  = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
+                infoLatD = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
 
                 Log.i("onActivity001", "Lon :" + infoLonD);
                 Log.i("onActivity001", "Lat :" + infoLatD);
@@ -431,7 +484,7 @@ public class MainFragment extends AppCompatActivity {
         }
 
 
-        if (resultCode == Activity.RESULT_OK && requestCode == 110 ) {
+        if (resultCode == Activity.RESULT_OK && requestCode == 110) {
 
             Log.e("onActivity001", "Result is ok");
 
@@ -450,9 +503,9 @@ public class MainFragment extends AppCompatActivity {
                 searchOrigin.setText(data.getExtras().getString("theLocationName"));
 
                 Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
-                 infoNameS = data.getExtras().getString("theLocationName");
-                 infoLonS = String.valueOf(data.getExtras().getDouble("theLon", 0.0));
-                 infoLatS = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
+                infoNameS = data.getExtras().getString("theLocationName");
+                infoLonS = String.valueOf(data.getExtras().getDouble("theLon", 0.0));
+                infoLatS = String.valueOf(data.getExtras().getDouble("theLat", 0.0));
 
                 Log.i("onActivity001", "Lon :" + infoLonS);
                 Log.i("onActivity001", "Lat :" + infoLatS);
