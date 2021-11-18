@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.google.type.LatLng;
+import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -59,14 +63,14 @@ public class SearchedRides extends AppCompatActivity {
         String stLocs = bundle.getString("stLoc");
         String endLocs = bundle.getString("endLoc");
 
-        Log.e("Locs001",stLocs);
-        Log.e("Locs002",endLocs);
+        Log.e("Locs001", stLocs);
+        Log.e("Locs002", endLocs);
 
 
         availableRidesText = findViewById(R.id.availableRides);
-        backBtn =  findViewById(R.id.availableBckBtn);
+        backBtn = findViewById(R.id.availableBckBtn);
 
-        backBtn.setOnClickListener( view->{
+        backBtn.setOnClickListener(view -> {
             finish();
         });
 
@@ -80,83 +84,89 @@ public class SearchedRides extends AppCompatActivity {
 
                         carholder.clear();
 
-                        if(task.isSuccessful())
-                        {
+                        Log.i("Search", "Completed");
+
+                        if (task.isSuccessful()) {
+                            Log.i("Search", "Successful");
                             Snackbar.make(recyclerView, "Successful", Snackbar.LENGTH_SHORT).show();
 
-                            for(QueryDocumentSnapshot snapshots : task.getResult()){
+                            for (QueryDocumentSnapshot snapshots : task.getResult()) {
+
+
                                 Snackbar.make(recyclerView, "Fetching ...", Snackbar.LENGTH_SHORT).show();
-                              String name =  Objects.requireNonNull(snapshots.getData().getOrDefault("driverName","NO NAME")).toString();
-                              String endLoc =  Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation","null")).toString();
-                              String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation","null")).toString();
-                              String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost","null")).toString();
-                              String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date","null")).toString();
-                              String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time","null")).toString();
-                              double startLat = (double) snapshots.getData().getOrDefault("startLat",null);
-                              double startLon = (double) snapshots.getData().getOrDefault("startLon",null);
-                              double endLon = (double) snapshots.getData().getOrDefault("endLon",null);
-                              double endLat = (double) snapshots.getData().getOrDefault("endLat",null);
-                              int numberOfSeats = Integer.parseInt(snapshots.getData().get("Number Of Occupants").toString());
+                                String name = Objects.requireNonNull(snapshots.getData().getOrDefault("driverName", "NO NAME")).toString();
+                                String endLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation", "null")).toString();
+                                String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation", "null")).toString();
+                                String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost", "null")).toString();
+                                String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date", "null")).toString();
+                                String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time", "null")).toString();
+                                double startLat = (double) snapshots.getData().getOrDefault("startLat", null);
+                                double startLon = (double) snapshots.getData().getOrDefault("startLon", null);
+                                double endLon = (double) snapshots.getData().getOrDefault("endLon", null);
+                                double endLat = (double) snapshots.getData().getOrDefault("endLat", null);
+                                int numberOfSeats = Integer.parseInt(snapshots.getData().get("Number Of Occupants").toString());
 
 
-                                Log.e("Name",stLoc+" ->"+endLoc+"");
+                                Log.e("Name", stLoc + " ->" + endLoc + "");
 
-                                double sLat = Double.parseDouble(new StringFunction(stLocs).splitStringWithAndGet(",",0));
-                              Log.e("sLat",sLat+"");
+                                double sLat = Double.parseDouble(new StringFunction(stLocs).splitStringWithAndGet(",", 0));
+                                Log.e("sLat", sLat + "");
 
-                                double sLon = Double.parseDouble(new StringFunction(stLocs).splitStringWithAndGet(",",1));
-                                Log.e("sLon",sLon+"");
+                                double sLon = Double.parseDouble(new StringFunction(stLocs).splitStringWithAndGet(",", 1));
+                                Log.e("sLon", sLon + "");
 
-                                double eLat = Double.parseDouble(new StringFunction(endLocs).splitStringWithAndGet(",",0));
-                                Log.e("eLon",eLat+"");
+                                double eLat = Double.parseDouble(new StringFunction(endLocs).splitStringWithAndGet(",", 0));
+                                Log.e("eLon", eLat + "");
 
-                                double eLon = Double.parseDouble(new StringFunction(endLocs).splitStringWithAndGet(",",1));
-                                Log.e("eLat",eLon+"");
+                                double eLon = Double.parseDouble(new StringFunction(endLocs).splitStringWithAndGet(",", 1));
+                                Log.e("eLat", eLon + "");
 
-                                double startingDistance = distanceBtnCoordinates(startLat,startLon,sLat,sLon);
-                                Log.e("startingDistance",startingDistance+"");
+                                double startingDistance = distanceBtnCoordinates(startLat, startLon, sLat, sLon);
+                                Log.e("startingDistance", startingDistance + "");
 
-                                double endingDistance =  distanceBtnCoordinates(endLat,endLon,eLat,eLon);
-                                Log.e("endingDistance",endingDistance+"");
+                                double endingDistance = distanceBtnCoordinates(endLat, endLon, eLat, eLon);
+                                Log.e("endingDistance", endingDistance + "");
 
 
-                                if (startingDistance<=4 && endingDistance<=4){
-                                   carBookingModel carBookingModel =
-                                           new carBookingModel(
-                                                   name,
-                                                   numberOfSeats,
-                                                   stLoc,
-                                                   endLoc,
-                                                   rideCost,
-                                                   rideDate,
-                                                   rideTime,
-                                                   snapshots.getId().toString(),
-                                                   startLat,startLon,
-                                                   endLat,endLon);
-                                   carholder.add(carBookingModel);
-                               }
+                                if (startingDistance <= 4 && endingDistance <= 4) {
+                                    carBookingModel carBookingModel =
+                                            new carBookingModel(
+                                                    name,
+                                                    numberOfSeats,
+                                                    stLoc,
+                                                    endLoc,
+                                                    rideCost,
+                                                    rideDate,
+                                                    rideTime,
+                                                    snapshots.getId(),
+                                                    startLat, startLon,
+                                                    endLat, endLon
+                                            );
+
+                                    carholder.add(carBookingModel);
+                                }
 
 
                             }
-                            recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this,LinearLayoutManager.VERTICAL,false));
+                            recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this, LinearLayoutManager.VERTICAL, false));
                             recyclerView.setAdapter(new carBookAdapter(carholder, SearchedRides.this));
 
                             Snackbar.make(recyclerView, "Completed", Snackbar.LENGTH_SHORT).show();
 
-                        }
-                        else{
+                        } else {
+                            Log.i("Search", "Failed");
                             Snackbar.make(recyclerView, "Not Successful", Snackbar.LENGTH_SHORT).show();
                         }
 
-                       task.addOnFailureListener(new OnFailureListener() {
-                           @Override
-                           public void onFailure(@NonNull Exception e) {
-                               Toast.makeText(SearchedRides.this, "Failing to connect to internet connection"
-                                       , Toast.LENGTH_LONG).show();
+                        task.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(SearchedRides.this, "Failing to connect to internet connection"
+                                        , Toast.LENGTH_LONG).show();
 
-                               Log.e("Searched Rides",e.getMessage());
-                           }
-                       });
+                                Log.e("Searched Rides", e.getMessage());
+                            }
+                        });
 
 
                     }

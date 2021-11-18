@@ -8,7 +8,7 @@ android {
         lift {
         }
     }
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
@@ -70,5 +70,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.nos-digital:imagin:1.2.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
+
+    implementation "androidx.work:work-runtime:2.7.0"
+
 
 }

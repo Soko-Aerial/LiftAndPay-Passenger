@@ -5,6 +5,7 @@ import timber.log.Timber;
 
 public class carBookingModel {
 
+
     private String name;
     private int numberOfSeats;
     private String startLocation;

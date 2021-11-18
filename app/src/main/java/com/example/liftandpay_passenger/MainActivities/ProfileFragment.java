@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.liftandpay_passenger.R;
+import com.google.android.material.imageview.ShapeableImageView;
 
 public class ProfileFragment extends AppCompatActivity {
 
+    private ShapeableImageView profileImage;
     @Nullable
     @Override
     public void onCreate(Bundle savedInstanceState) {

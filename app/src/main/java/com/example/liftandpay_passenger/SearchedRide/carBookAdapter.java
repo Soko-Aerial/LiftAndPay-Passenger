@@ -3,9 +3,11 @@ package com.example.liftandpay_passenger.SearchedRide;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,9 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.squareup.picasso.Picasso;
 
 
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHolder> {
@@ -25,6 +34,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     Context carBookContext;
     public LatLng startLatLng;
     public LatLng endLatLng;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     public carBookAdapter(ArrayList<carBookingModel> carHolder, Context carBookContext){
         this.carHolder = carHolder;
@@ -39,8 +49,12 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         return new myViewHolder(view);
     }
 
+
+
     @Override
-    public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull myViewHolder holder, int positions) {
+
+        int position = positions;
 
         holder.name.setText(carHolder.get(position).getName());
         holder.amount.setText(carHolder.get(position).getCostPerKilometer().toString());
@@ -55,9 +69,21 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         holder.endLat = carHolder.get(position).getEndLat();
         holder.endLon = carHolder.get(position).getEndLon();
         holder.driverName = carHolder.get(position).getName();
-        holder.driverId = new StringFunction(holder.rideDriverId).removeLastNumberOfCharacter(2);
+        holder.driverId = new StringFunction(holder.rideDriverId).splitStringWithAndGet(" ",0);//removeLastNumberOfCharacter(2);
 
 
+        storage.getReference().child("Driver").child(holder.driverId).child("profile.png").getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult().toString()).into(holder.driverImage);
+                        }
+
+                    }
+                }
+        );
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +122,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder {
+        ImageView driverImage;
         LinearLayout itemLayout;
         TextView name;
         TextView amount;
@@ -122,7 +149,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
             date = itemView.findViewById(R.id.dateModelId);
             time = itemView.findViewById(R.id.timeModelId);
             name = itemView.findViewById(R.id.driverNameId);
-
+            driverImage = itemView.findViewById(R.id.driverImage);
             itemLayout = itemView.findViewById(R.id.rideItemId);
 
         }

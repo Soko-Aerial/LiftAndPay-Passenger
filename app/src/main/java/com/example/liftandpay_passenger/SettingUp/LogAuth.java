@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.MainActivities.MainActivity;
+import com.example.liftandpay_passenger.MainActivities.MainFragment;
 import com.example.liftandpay_passenger.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,20 +53,6 @@ public class LogAuth extends AppCompatActivity {
         pBar = findViewById(R.id.verifyProgressId);
         infoText = findViewById(R.id.infoText);
 
-            /*    mAuth.signInWithEmailAndPassword("passenger@gmail.com", "123456")
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(LogAuth.this,"Successful",Toast.LENGTH_LONG).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(LogAuth.this,"Failed",Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });*/
-
 
         btnToSignUp003.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,11 +87,11 @@ public class LogAuth extends AppCompatActivity {
                 .setTextColor(Color.WHITE)
                 .setBackgroundTint(getResources().getColor(R.color.mapbox_plugins_green)).show();
 
-                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+              /*  mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
-                        {
+                        {*/
                             HashMap<String,String> map = new HashMap<>();
                             map.put("Name", mAuth.getUid());
                             map.put("Email","Not Set");
@@ -124,9 +111,9 @@ public class LogAuth extends AppCompatActivity {
                                 }
                             });
 
-                        }
+                    /*    }
                     }
-                });
+                });*/
                 pBar.setVisibility(View.GONE);
                 btnToSignUp003.setVisibility(View.VISIBLE);
 
@@ -144,7 +131,7 @@ public class LogAuth extends AppCompatActivity {
             public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
                 Toast.makeText(LogAuth.this,"Code is sent",Toast.LENGTH_LONG).show();
-                infoText.setText("Code sent");
+                infoText.setText("Waiting for code");
 
             }
         };
@@ -157,9 +144,9 @@ public class LogAuth extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser!=null)
         {
-            Intent intent  = new Intent(LogAuth.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            Intent intent  = new Intent(LogAuth.this, MainFragment.class);
+        //    startActivity(intent);
+           // finish();
         }
     }
 
@@ -169,9 +156,9 @@ public class LogAuth extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser!=null)
         {
-            Intent intent  = new Intent(LogAuth.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            Intent intent  = new Intent(LogAuth.this, MainFragment.class);
+         //   startActivity(intent);
+         //   finish();
         }
     }
 }

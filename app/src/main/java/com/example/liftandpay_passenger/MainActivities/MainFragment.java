@@ -16,8 +16,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
 import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
+import com.example.liftandpay_passenger.MenuListActivity;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
+import com.example.liftandpay_passenger.SettingUp.LogAuth;
 import com.example.liftandpay_passenger.SettingUp.SignUp003;
 import com.example.liftandpay_passenger.fastClass.LongiLati;
 
@@ -45,10 +47,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.fastClass.StringFunction;
+import com.example.liftandpay_passenger.ridePrefs.RidePreference;
 import com.example.liftandpay_passenger.search.SearchActivity;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.Continuation;
@@ -88,6 +92,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
+import kotlinx.coroutines.internal.MainDispatcherFactory;
 import nl.nos.imagin.Imagin;
 import nl.nos.imagin.SingleTapHandler;
 
@@ -133,6 +138,11 @@ public class MainFragment extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
+    private ImageView driverImage;
+
+    private TextView profileSettings;
+    private Spinner settings;
+
 
     @Nullable
     @Override
@@ -145,6 +155,9 @@ public class MainFragment extends AppCompatActivity {
         dialogBuilder = new AlertDialog.Builder(MainFragment.this);
         lastRideSharedPrefs = getSharedPreferences("LAST_BOOKED_RIDE_FILE", MODE_PRIVATE);
 
+        profileSettings = findViewById(R.id.profileSettings);
+
+        driverImage = findViewById(R.id.driverImageId);
         floatbtn = findViewById(R.id.floatBtn);
         rideSearchbtn = findViewById(R.id.ridSearchBtn);
         searchOrigin = findViewById(R.id.originSearchId);
@@ -153,6 +166,7 @@ public class MainFragment extends AppCompatActivity {
         lowerView = findViewById(R.id.rideViewDetails);
         parentView = findViewById(R.id.parentView);
 
+        settings = findViewById(R.id.settings);
         driverDetails = findViewById(R.id.driverDetails);
 
         locationsDesc = findViewById(R.id.locationDesc);
@@ -171,6 +185,10 @@ public class MainFragment extends AppCompatActivity {
         paymentBtn = findViewById(R.id.paymentBtn);
         profileBtn = findViewById(R.id.profileBtn);
 
+        ArrayAdapter<CharSequence> profileSeq = ArrayAdapter.createFromResource(this,R.array.profile_settings,R.layout.single_input_model);
+        profileSeq.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         textToSpeech = new TextToSpeech(MainFragment.this,
                 new TextToSpeech.OnInitListener() {
@@ -179,6 +197,18 @@ public class MainFragment extends AppCompatActivity {
                         textToSpeech.setLanguage(Locale.UK);
                     }
                 });
+
+        profileSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainFragment.this, RidePreference.class);
+
+//                Intent i = new Intent(MainFragment.this, MenuListActivity.class);
+                startActivity(i);
+               // mAuth.signOut();
+
+            }
+        });
 
         historyBtn.setOnClickListener(view -> {
             Intent i = new Intent(MainFragment.this, RidesFragment.class);
@@ -335,60 +365,100 @@ public class MainFragment extends AppCompatActivity {
                                                                     @Override
                                                                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                                                                        double stLat = value.getDouble("startLat");
-                                                                        double stLon = value.getDouble("startLon");
-                                                                        double eLat = value.getDouble("endLat");
-                                                                        double eLon = value.getDouble("endLon");
 
-                                                                        lastRideSharedPrefs.edit().putString("theDriverId", value.getString("myId")).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theDriverPhone", value.getString("phone number")).apply();
-                                                                        lastRideSharedPrefs.edit().putFloat("theStartLon", Float.parseFloat(String.valueOf(stLon))).apply();
-                                                                        lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
-                                                                        lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
-                                                                        lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theRideCost", value.getString("Ride Cost")).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theRideTime", value.getString("Ride Time")).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theRideDate", value.getString("Ride Date")).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theDriverName", value.getString("driverName")).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theStartLocation", value.getString("startLocation")).apply();
-                                                                        lastRideSharedPrefs.edit().putString("theEndLocation", value.getString("endLocation")).apply();
+                                                                        assert value != null;
+                                                                        if(value.exists()){
 
+                                                                            double stLat = value.getDouble("startLat");
+                                                                            double stLon = value.getDouble("startLon");
+                                                                            double eLat = value.getDouble("endLat");
+                                                                            double eLon = value.getDouble("endLon");
 
-                                                                        String originDestination = value.getString("startLocation") + "-" + value.getString("endLocation");
-                                                                        String dateTime = value.getString("Ride Date") + " " + value.getString("Ride Time");
-
-                                                                        dateAndTime.setText(dateTime);
-                                                                        originToDestination.setText(originDestination);
-
-                                                                        amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/", 0));
-                                                                        driverName.setText(value.getString("driverName"));
-                                                                        carNumberPlate.setText(value.getString("Plate"));
-
-                                                                        statusActionBtn.setOnClickListener(Viewv -> {
-                                                                            Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
-                                                                            intent.putExtra("journey", originDestination);
-                                                                            intent.putExtra("dateTime", dateTime);
-                                                                            intent.putExtra("distance", amount.getText().toString());
-                                                                            intent.putExtra("stLat", stLat);
-                                                                            intent.putExtra("stLon", stLon);
-                                                                            intent.putExtra("endLat", eLat);
-                                                                            intent.putExtra("endLon", eLon);
-                                                                            intent.putExtra("rideId", lastBookedRide);
-                                                                            intent.putExtra("driverName",driverName.getText().toString());
-                                                                            intent.putExtra("plate",carNumberPlate.getText().toString());
+                                                                            lastRideSharedPrefs.edit().putString("TheMainDriverId", value.getString("myId"));
+                                                                            lastRideSharedPrefs.edit().putString("theDriverId", new StringFunction(lastBookedRide).splitStringWithAndGet(" ", 0)).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theDriverPhone", value.getString("phone number")).apply();
+                                                                            lastRideSharedPrefs.edit().putFloat("theStartLon", Float.parseFloat(String.valueOf(stLon))).apply();
+                                                                            lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
+                                                                            lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
+                                                                            lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideCost", value.getString("Ride Cost")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideTime", value.getString("Ride Time")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideDate", value.getString("Ride Date")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theDriverName", value.getString("driverName")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theStartLocation", value.getString("startLocation")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theEndLocation", value.getString("endLocation")).apply();
 
 
-                                                                            startActivity(intent);
-                                                                        });
+                                                                            String originDestination = value.getString("startLocation") + "-" + value.getString("endLocation");
+                                                                            String dateTime = value.getString("Ride Date") + " " + value.getString("Ride Time");
 
-                                                                        driverDetails.setOnClickListener(new View.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(View v) {
-                                                                                Intent i = new Intent(MainFragment.this, AvailableRides.class);
-                                                                                i.putExtra("Purpose", "ForView");
-                                                                                startActivity(i);
-                                                                            }
-                                                                        });
+                                                                            dateAndTime.setText(dateTime);
+                                                                            originToDestination.setText(originDestination);
+
+                                                                            amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/", 0));
+                                                                            driverName.setText(value.getString("driverName"));
+                                                                            carNumberPlate.setText(value.getString("Numberplate"));
+
+                                                                            statusActionBtn.setOnClickListener(Viewv -> {
+                                                                                Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
+                                                                                intent.putExtra("theDriverId",value.getString("myId") );
+                                                                                intent.putExtra("journey", originDestination);
+                                                                                intent.putExtra("dateTime", dateTime);
+                                                                                intent.putExtra("distance", amount.getText().toString());
+                                                                                intent.putExtra("stLat", stLat);
+                                                                                intent.putExtra("stLon", stLon);
+                                                                                intent.putExtra("endLat", eLat);
+                                                                                intent.putExtra("endLon", eLon);
+                                                                                intent.putExtra("rideId", lastBookedRide);
+                                                                                intent.putExtra("driverName", driverName.getText().toString());
+                                                                                intent.putExtra("plate", carNumberPlate.getText().toString());
+
+                                                                                Log.i("TheDriverID",intent.getStringExtra("theDriverId"));
+
+                                                                                startActivity(intent);
+                                                                            });
+
+                                                                            driverDetails.setOnClickListener(new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View v) {
+                                                                                    Intent i = new Intent(MainFragment.this, AvailableRides.class);
+                                                                                    i.putExtra("Purpose", "ForView");
+                                                                                    i.putExtra("theDriverId",value.getString("myId") );
+                                                                                    i.putExtra("theDriverId",value.getString("myId") );
+                                                                                    i.putExtra("theJourney", value.getString("startLocation") + "-" + value.getString("endLocation"));
+                                                                                    i.putExtra("theTime", dateTime);
+                                                                                    i.putExtra("theDistance", amount.getText().toString());
+                                                                                    i.putExtra("startLat", stLat);
+                                                                                    i.putExtra("startLon", stLon);
+                                                                                    i.putExtra("endLat", eLat);
+                                                                                    i.putExtra("endLon", eLon);
+                                                                                    i.putExtra("theRideDriverId", lastBookedRide);
+                                                                                    i.putExtra("theDriverName", driverName.getText().toString());
+                                                                                    i.putExtra("plate", carNumberPlate.getText().toString());
+
+                                                                                    startActivity(i);
+                                                                                }
+
+
+
+
+
+                                                                            });
+
+                                                                            storage.getReference().child("Driver").child(value.getString("myId")).child("profile.png").getDownloadUrl().addOnCompleteListener(
+                                                                                    new OnCompleteListener<Uri>() {
+                                                                                        @Override
+                                                                                        public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                                                                                            if (task.isSuccessful()) {
+                                                                                                Picasso.get().load(task.getResult().toString()).into(driverImage);
+                                                                                            }
+
+                                                                                        }
+                                                                                    }
+                                                                            );
+
+                                                                        }
                                                                     }
                                                                 });
 
@@ -410,6 +480,8 @@ public class MainFragment extends AppCompatActivity {
                         }
                     }
                 });
+
+
 
 
     }

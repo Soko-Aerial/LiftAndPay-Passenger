@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".AVR_Activities.AvailableRides"
-    >
+    tools:context=".AVR_Activities.AvailableRides">
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/driverProfileHeader"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:padding="5dp"
+        android:background="@color/fadedBlue"
         android:orientation="horizontal"
-        android:background="@color/fadedBlue">
+        android:padding="5dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_back"
             android:layout_gravity="center"
+            android:src="@drawable/btn_back"
             app:tint="@color/primaryColors" />
 
         <ImageView
+            android:id="@+id/driverProfileImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/person_img"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/person_img" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <TextView
-                android:id="@+id/journeyId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tesano - Madina"
-                android:textStyle="bold"
-                android:textSize="16sp"/>
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/nameId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hubert Brako Amponsah"/>
+                android:text="Hubert Brako Amponsah"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/journeyId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start to Destination" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/messageBtn"
@@ -68,34 +68,35 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ScrollView
+        android:id="@+id/parentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/driverProfileHeader"
         android:layout_above="@id/driverProfileFooter"
-        android:scrollbars="none"
+        android:layout_below="@id/driverProfileHeader"
         android:background="@color/white"
-        android:id="@+id/parentView"
-        >
+        android:scrollbars="none">
+
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:orientation="vertical"
-            >
+            android:padding="8dp">
 
             <!--About the driver-->
             <TextView
+                android:id="@+id/driverAbout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="About the driver:"
                 android:textColor="@color/primaryColors"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/aboutId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I am a discipline driver. I a work at Ghana armed forces. Time is very key, so it you know you will waste my time please don't book this ride."/>
+                android:text="I am a discipline driver. I a work at Ghana armed forces. Time is very key, so it you know you will waste my time please don't book this ride." />
 
 
             <TextView
@@ -104,37 +105,39 @@
                 android:layout_marginTop="15dp"
                 android:text="Ratings:"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <!--The ratings-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/img_star_partiallyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img_star_partiallyfilled" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text=" (3.4/4)"/>
+                    android:text=" (3.4/4)" />
 
             </LinearLayout>
 
@@ -147,7 +150,7 @@
                 android:text="About car:"
                 android:textColor="@color/primaryColors"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -158,14 +161,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Number plate: "
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/numberPlateId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="AS 558-465-19"/>
+                    android:text="not set" />
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -175,13 +180,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Licence: "
-                    android:textStyle="bold"/>
+                    android:text="Car Model"
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/carModelId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="125OFKK 78HS"/>
+                    android:text="not set" />
 
             </LinearLayout>
 
@@ -192,60 +198,33 @@
                 android:layout_marginTop="15dp"
                 android:text="Image:"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                >
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@color/extraFadedBlue"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/image001"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/carimage"/>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/fadedBlue"/>
-                    <ImageView
-                        android:id="@+id/image002"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/carimg1"/>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/fadedBlue"/>
-
-                    <ImageView
-                        android:id="@+id/image003"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/carimg1"/>
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/fadedBlue"/>
-                    <ImageView
-                        android:id="@+id/image004"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/carimage"/>
+                android:textStyle="bold" />
 
 
-                </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@color/extraFadedBlue"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/image001"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/fadedBlue" />
+
+                <ImageView
+                    android:id="@+id/image002"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp" />
 
 
-            </HorizontalScrollView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
 
             <TextView
@@ -255,7 +234,7 @@
                 android:text="Review:"
                 android:textColor="@color/primaryColors"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -265,7 +244,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/person_img"/>
+                    android:src="@drawable/person_img" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -277,13 +256,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Anonymous"/>
+                        android:text="Anonymous"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="he is a very good driver"/>
+                        android:text="he is a very good driver" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -291,12 +270,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="3/4"/>
+                    android:text="3/4" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -309,7 +289,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/person_img"/>
+                    android:src="@drawable/person_img" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -321,13 +301,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Anonymous"/>
+                        android:text="Anonymous"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="he is a very good driver"/>
+                        android:text="he is a very good driver" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -335,12 +315,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="3/4"/>
+                    android:text="3/4" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -352,7 +333,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/person_img"/>
+                    android:src="@drawable/person_img" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -364,13 +345,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Anonymous"/>
+                        android:text="Anonymous"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="he is a very good driver"/>
+                        android:text="he is a very good driver" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -378,12 +359,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="3/4"/>
+                    android:text="3/4" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -395,7 +377,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/person_img"/>
+                    android:src="@drawable/person_img" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -407,13 +389,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Anonymous"/>
+                        android:text="Anonymous"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="he is a very good driver"/>
+                        android:text="he is a very good driver" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -421,12 +403,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="3/4"/>
+                    android:text="3/4" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -438,7 +421,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/person_img"/>
+                    android:src="@drawable/person_img" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -450,13 +433,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Anonymous"/>
+                        android:text="Anonymous"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="he is a very good driver"/>
+                        android:text="he is a very good driver" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -464,14 +447,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="3/4"/>
+                    android:text="3/4" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -480,7 +465,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/person_img"/>
+                    android:src="@drawable/person_img" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="wrap_content"
@@ -492,13 +477,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:text="Anonymous"/>
+                        android:text="Anonymous"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="he is a very good driver"/>
+                        android:text="he is a very good driver" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -506,12 +491,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/img_star_fullyfilled"/>
+                    android:src="@drawable/img_star_fullyfilled" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="3/4"/>
+                    android:text="3/4" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

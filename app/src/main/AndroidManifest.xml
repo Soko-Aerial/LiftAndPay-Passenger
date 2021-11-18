@@ -27,7 +27,10 @@
         android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger">
-        <activity android:name=".ImageViewActivity"></activity>
+        <activity
+            android:name=".ridePrefs.RidePreference"
+            android:exported="true" />
+        <activity android:name=".ImageViewActivity" />
         <activity
             android:name=".SplashScreen"
             android:theme="@style/Theme.Transparent">
@@ -41,19 +44,20 @@
             android:name=".MainActivities.MainActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".AVR_Activities.AvailableRides" />
+        <activity android:name=".MenuListActivity" />
         <activity android:name=".SettingUp.SignUp003" />
         <activity android:name=".SettingUp.LogAuth" />
         <activity android:name=".search.SearchActivity" />
-        <activity android:name=".MainActivities.MainFragment"/>
+        <activity android:name=".MainActivities.MainFragment" />
         <activity android:name=".SettingUp.SignUp001" />
         <activity android:name=".AVR_Activities.Chats.ChatActivity_avr" />
         <activity android:name=".AVR_Activities.PickUpLocationActivity" />
         <activity android:name=".SearchedRide.SearchedRides" />
         <activity android:name=".AddCardDetails" />
         <activity android:name=".MainActivities.Rides.PendingRideMapActivity" />
-        <activity android:name=".MainActivities.ProfileFragment"/>
+        <activity android:name=".MainActivities.ProfileFragment" />
         <activity android:name=".MainActivities.RidesFragment" />
-        <activity android:name=".MainActivities.PayFragment"/>
+        <activity android:name=".MainActivities.PayFragment" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

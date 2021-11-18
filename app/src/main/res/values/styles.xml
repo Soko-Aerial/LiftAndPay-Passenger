@@ -8,4 +8,35 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+
+    <style name="ProfileMenuLayout_Style">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">@drawable/ripple</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="ProfileMenuText_Style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/primaryColors</item>
+        <item name="android:layout_gravity">center_vertical</item>
+
+    </style>
+
+
+
+    <style name="ProfileMenuImage_Style">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+
+    </style>
+
 </resources>

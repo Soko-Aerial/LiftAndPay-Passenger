@@ -27,6 +27,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import timber.log.Timber;
 
@@ -73,6 +75,8 @@ public class SignUp003 extends AppCompatActivity {
                 byte[] data = baos.toByteArray();
 
                 UploadTask uploadTask = imageRef.putBytes(data);
+                 String d = Arrays.toString(data);
+                 data = d.getBytes(StandardCharsets.UTF_8) ;
 
 
                 uploadTask.addOnFailureListener(new OnFailureListener() {

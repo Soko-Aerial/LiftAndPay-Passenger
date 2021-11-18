@@ -1,8 +1,12 @@
 package com.example.liftandpay_passenger.AVR_Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.ForeignKey;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +20,11 @@ import android.widget.TextView;
 import com.example.liftandpay_passenger.AVR_Activities.Chats.ChatActivity_avr;
 import com.example.liftandpay_passenger.ImageViewActivity;
 import com.example.liftandpay_passenger.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,11 +46,16 @@ public class AvailableRides extends AppCompatActivity {
     private String distance;
     private String journey;
 
-    private ImageView image001,image002, image003, image004;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private ImageView image001,image002,driverProfileImage;
 
     private TextView journeyText, nameText;
 
     private LinearLayout driverDetailsFooter;
+
+    private TextView driverAbout, carAbout ,carModel;
 
 
 
@@ -58,10 +72,13 @@ public class AvailableRides extends AppCompatActivity {
         nameText = findViewById(R.id.nameId);
         image001 = findViewById(R.id.image001);
         image002 = findViewById(R.id.image002);
-        image003 = findViewById(R.id.image003);
-        image004 = findViewById(R.id.image004);
+        driverProfileImage = findViewById(R.id.driverProfileImage);
 
-        //from carBookAdapter.java
+        driverAbout = findViewById(R.id.aboutId);
+        carAbout = findViewById(R.id.numberPlateId);
+        carModel = findViewById(R.id.carModelId);
+
+//        from carBookAdapter.java or @MainFragment.java
         purpose = getIntent().getStringExtra("Purpose");
         mainDriverId = getIntent().getStringExtra("theDriverId");
         startLat = getIntent().getDoubleExtra("startLat",0.0);
@@ -72,7 +89,8 @@ public class AvailableRides extends AppCompatActivity {
         startTime =getIntent().getStringExtra("theTime");
         journey = getIntent().getStringExtra("theJourney");
         distance =getIntent().getStringExtra("theDistance");
-        name = getIntent().getStringExtra("theName" );
+        name = getIntent().getStringExtra("theDriverName" );
+
 
         journeyText.setText(journey);
         nameText.setText(name);
@@ -89,23 +107,101 @@ public class AvailableRides extends AppCompatActivity {
             }
         });
 
+        Log.i("TheDriverId",mainDriverId);
+
+
+        storage.getReference().child("Driver").child(mainDriverId).child("profile.png").getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult().toString()).into(driverProfileImage);
+                        }
+
+                    }
+                }
+        );
+
+        storage.getReference().child("Driver").child(mainDriverId).child("otherImage.png").getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult().toString()).into(image002);
+                        }
+
+                    }
+                }
+        );
+
+        storage.getReference().child("Driver").child(mainDriverId).child("main.png").getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult().toString()).into(image001);
+                        }
+
+                    }
+                }
+        );
+
+        db.collection("Driver").document(mainDriverId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                if (task.isSuccessful()){
+
+                    if (task.getResult().contains("About")){
+
+                        driverAbout.setText(task.getResult().getString("About"));
+
+                    }
+
+                    if (task.getResult().contains("Numberplate"))
+                    {
+                        carAbout.setText(task.getResult().getString("Numberplate"));
+                    }
+
+
+                    if (task.getResult().contains("Car Model"))
+                    {
+                        carModel.setText(task.getResult().getString("Car Model"));
+                    }
+                }
+
+            }
+        });
+
 
         image001.setOnClickListener(view->{
             Intent intent = new Intent(AvailableRides.this, ImageViewActivity.class);
+            image001.buildDrawingCache();
+            Bitmap image= image001.getDrawingCache();
+
+            Bundle extras = new Bundle();
+            extras.putParcelable("imagebitmap", image);
+            intent.putExtras(extras);
             startActivity(intent);
         });
+
+
+
         image002.setOnClickListener(view->{
             Intent intent = new Intent(AvailableRides.this, ImageViewActivity.class);
+            image002.buildDrawingCache();
+            Bitmap image= image002.getDrawingCache();
+
+            Bundle extras = new Bundle();
+            extras.putParcelable("imagebitmap", image);
+            intent.putExtras(extras);
             startActivity(intent);
+
         });
-        image003.setOnClickListener(view->{
-            Intent intent = new Intent(AvailableRides.this, ImageViewActivity.class);
-            startActivity(intent);
-        });
-        image004.setOnClickListener(view->{
-            Intent intent = new Intent(AvailableRides.this, ImageViewActivity.class);
-            startActivity(intent);
-        });
+
 
         bookRide.setOnClickListener(new View.OnClickListener() {
             @Override

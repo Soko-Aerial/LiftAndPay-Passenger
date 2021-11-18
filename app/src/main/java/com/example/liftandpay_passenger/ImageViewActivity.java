@@ -2,6 +2,7 @@ package com.example.liftandpay_passenger;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,7 +27,11 @@ public class ImageViewActivity extends AppCompatActivity {
         RelativeLayout parentView = findViewById(R.id.parentView);
         ImageView imageView = findViewById(R.id.fullImageControl);
 
-        String text = getIntent().getStringExtra("image-view-control");
+
+        Bundle extras = getIntent().getExtras();
+        Bitmap bmp = (Bitmap) extras.getParcelable("imagebitmap");
+
+        imageView.setImageBitmap(bmp );
 
         zoomImage(parentView,imageView);
 
