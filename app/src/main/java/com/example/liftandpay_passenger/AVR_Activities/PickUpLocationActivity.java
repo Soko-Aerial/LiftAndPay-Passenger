@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,7 @@ import com.example.liftandpay_passenger.MainActivities.RidesFragment;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.overpass.model;
 import com.example.liftandpay_passenger.overpass.modelface;
+import com.example.liftandpay_passenger.search.SearchActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -131,7 +133,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private Map<String, Object> passengerBookingInfo;
 
     //Text view declaration
-    private TextView startTimeText, distanceText, journeyText;
+//    private TextView startTimeText, distanceText, journeyText;
 
     private TextView mapTitleID;
 
@@ -149,6 +151,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private Call<model> call;
     int i, z;
 
+    private TextView pickupSearchBox;
     private String myName;
     private ArrayList<String> bookedRides = new ArrayList<>();
 
@@ -162,14 +165,17 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         selectLocationButton = findViewById(R.id.mapButtonId);
         selectLocationButton.setText("Pickup From This Location");
 
-        startTimeText = findViewById(R.id.startTimeId);
-        distanceText = findViewById(R.id.distanceId);
-        journeyText = findViewById(R.id.journeyId);
 
-        startTimeText.setText(getIntent().getStringExtra("startTime"));
-        distanceText.setText(getIntent().getStringExtra("distance"));
-        journeyText.setText(getIntent().getStringExtra("journey"));
+        pickupSearchBox = findViewById(R.id.searchPickupId);
 
+
+        pickupSearchBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(PickUpLocationActivity.this, SearchActivity.class);
+                startActivityIfNeeded(i, 200);
+            }
+        });
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://overpass-api.de/")
@@ -623,6 +629,44 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
 
     // Add the mapView lifecycle to the activity's lifecycle methods
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.e("onActivity001", "started");
+
+
+        Log.e("onActivity001", "Result is ok");
+
+        if (data != null) {
+            Log.e("onActivity001", "Data not null");
+
+            if (data.hasExtra(new SearchActivity().theNameID))
+                Log.e("onActivity001", "has Name");
+            if (data.hasExtra(new SearchActivity().theLatID))
+                Log.e("onActivity001", "has Latitude");
+            if (data.hasExtra(new SearchActivity().theLonID))
+                Log.e("onActivity001", "has Longitude");
+            String datas = data.getExtras().getString("theLocationName") + " " + data.getExtras().getDouble("theLat", 0.0) + " " + data.getExtras().getDouble("theLon", 0.0);
+            Log.e("onActivity001-Data", datas);
+
+
+            pickupSearchBox.setText(data.getExtras().getString("theLocationName"));
+
+            Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
+            String infoNameD = data.getExtras().getString("theLocationName");
+            double infoLonD = (data.getExtras().getDouble("theLon", 0.0));
+            double infoLatD = (data.getExtras().getDouble("theLat", 0.0));
+            passengerPickUpLocMarker(Point.fromLngLat(infoLonD, infoLatD));
+
+
+        }
+
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();

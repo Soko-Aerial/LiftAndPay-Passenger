@@ -11,10 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:queryHint="Search location here"
+        app:iconifiedByDefault="false"
+        android:focusedByDefault="true"
         android:searchHintIcon="@drawable/btn_back"
         android:closeIcon="@drawable/btn_back"
         android:searchIcon="@drawable/img_circle"
-        android:commitIcon="@drawable/btn_back"/>
+        android:commitIcon="@drawable/btn_back"
+        tools:targetApi="o" />
 
     <!--Divider-->
     <View

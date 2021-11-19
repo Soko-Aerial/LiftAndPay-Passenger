@@ -1,36 +1,22 @@
 package com.example.liftandpay_passenger.MainActivities;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.fragment.app.Fragment;
 
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
 import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
-import com.example.liftandpay_passenger.MenuListActivity;
+import com.example.liftandpay_passenger.menu.SettingsActivity;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
-import com.example.liftandpay_passenger.SettingUp.LogAuth;
 import com.example.liftandpay_passenger.SettingUp.SignUp003;
-import com.example.liftandpay_passenger.fastClass.LongiLati;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,63 +24,33 @@ import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.fastClass.StringFunction;
 import com.example.liftandpay_passenger.ridePrefs.RidePreference;
 import com.example.liftandpay_passenger.search.SearchActivity;
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Source;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.Executor;
-
-import kotlinx.coroutines.internal.MainDispatcherFactory;
-import nl.nos.imagin.Imagin;
-import nl.nos.imagin.SingleTapHandler;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
@@ -141,7 +97,8 @@ public class MainFragment extends AppCompatActivity {
     private ImageView driverImage;
 
     private TextView profileSettings;
-    private Spinner settings;
+    private TextView setPref;
+
 
 
     @Nullable
@@ -157,6 +114,7 @@ public class MainFragment extends AppCompatActivity {
 
         profileSettings = findViewById(R.id.profileSettings);
 
+        setPref = findViewById(R.id.setPref);
         driverImage = findViewById(R.id.driverImageId);
         floatbtn = findViewById(R.id.floatBtn);
         rideSearchbtn = findViewById(R.id.ridSearchBtn);
@@ -166,7 +124,6 @@ public class MainFragment extends AppCompatActivity {
         lowerView = findViewById(R.id.rideViewDetails);
         parentView = findViewById(R.id.parentView);
 
-        settings = findViewById(R.id.settings);
         driverDetails = findViewById(R.id.driverDetails);
 
         locationsDesc = findViewById(R.id.locationDesc);
@@ -185,6 +142,7 @@ public class MainFragment extends AppCompatActivity {
         paymentBtn = findViewById(R.id.paymentBtn);
         profileBtn = findViewById(R.id.profileBtn);
 
+
         ArrayAdapter<CharSequence> profileSeq = ArrayAdapter.createFromResource(this,R.array.profile_settings,R.layout.single_input_model);
         profileSeq.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
@@ -201,11 +159,20 @@ public class MainFragment extends AppCompatActivity {
         profileSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(MainFragment.this, SettingsActivity.class);
+                startActivity(i);
+               // mAuth.signOut();
+            }
+        });
+
+        setPref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent i = new Intent(MainFragment.this, RidePreference.class);
 
 //                Intent i = new Intent(MainFragment.this, MenuListActivity.class);
                 startActivity(i);
-               // mAuth.signOut();
+                // mAuth.signOut();
 
             }
         });
@@ -397,7 +364,7 @@ public class MainFragment extends AppCompatActivity {
 
                                                                             amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/", 0));
                                                                             driverName.setText(value.getString("driverName"));
-                                                                            carNumberPlate.setText(value.getString("Numberplate"));
+                                                                            carNumberPlate.setText(value.getString("plate"));
 
                                                                             statusActionBtn.setOnClickListener(Viewv -> {
                                                                                 Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
