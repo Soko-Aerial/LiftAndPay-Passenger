@@ -112,6 +112,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private Layer droppedMarkerLayer;
     private Style myStyle;
 
+    private Point pickUpLocationPoint;
 
     //location variables
     private LatLng myLoc;
@@ -304,7 +305,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                             }
                         }
 
-                        passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+                        pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
 
                     } else {
 
@@ -553,7 +554,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     }
 
 
-    private void passengerPickUpLocMarker(Point point) {
+    private Point passengerPickUpLocMarker(Point point) {
         if (mapboxMap.getStyle() != null) {
             GeoJsonSource sanciangkoFlood1 = mapboxMap.getStyle().getSourceAs("destination-source-id");
             if (sanciangkoFlood1 != null) {
@@ -563,6 +564,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
             }
         }
+
+        return point;
     }
 
 
@@ -659,7 +662,9 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
             String infoNameD = data.getExtras().getString("theLocationName");
             double infoLonD = (data.getExtras().getDouble("theLon", 0.0));
             double infoLatD = (data.getExtras().getDouble("theLat", 0.0));
-            passengerPickUpLocMarker(Point.fromLngLat(infoLonD, infoLatD));
+
+            hoveringMarker.setVisibility(View.INVISIBLE);
+            pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(infoLonD, infoLatD));
 
 
         }

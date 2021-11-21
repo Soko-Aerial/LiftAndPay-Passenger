@@ -96,7 +96,7 @@
                 android:id="@+id/aboutId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="I am a discipline driver. I a work at Ghana armed forces. Time is very key, so it you know you will waste my time please don't book this ride." />
+                android:text="not set" />
 
 
             <TextView
@@ -180,7 +180,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Car Model"
+                    android:text="Car Model: "
                     android:textStyle="bold" />
 
                 <TextView
@@ -211,17 +211,21 @@
                 <ImageView
                     android:id="@+id/image001"
                     android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_height="150dp"
+                     />
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/fadedBlue" />
+                    android:background="@color/fadedBlue"
+                    />
 
                 <ImageView
                     android:id="@+id/image002"
                     android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_height="150dp"
+
+                    />
 
 
             </androidx.appcompat.widget.LinearLayoutCompat>

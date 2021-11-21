@@ -2,15 +2,71 @@
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <!--start-->
     <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/parentView"
+            android:layout_width="match_parent"
+            android:elevation="8dp"
+            />
+        <Constraint android:id="@+id/scrollViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="6dp"
+            app:layout_constraintTop_toBottomOf="@id/parentView"
+            >
+
+            <CustomAttribute
+                app:attributeName="paddingHorizontal"
+                app:customDimension="25dp"/>
+
+            <CustomAttribute
+                app:attributeName="backgroundColor"
+                app:customColorDrawableValue="@color/white"/>
+        </Constraint>
         <Constraint android:id="@+id/topViewId" />
     </ConstraintSet>
 
+
+    <!--End-->
     <ConstraintSet android:id="@+id/end">
-        <Constraint android:id="@id/topViewId" />
+        <!--parentView-->
+        <Constraint android:id="@id/parentView"
+            android:layout_width="match_parent"
+            android:alpha="0"
+            android:elevation="0dp"
+            />
+
+        <!--scrollView-->
+        <Constraint android:id="@id/scrollViewId"
+            android:layout_width="match_parent"
+            android:elevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topViewId"
+            >
+            <CustomAttribute
+                app:attributeName="paddingHorizontal"
+                app:customDimension="25dp"/>
+
+            <CustomAttribute
+                app:attributeName="backgroundColor"
+                app:customColorDrawableValue="@color/white"/>
+
+        </Constraint>
     </ConstraintSet>
 
+
+
+    <!--Transition-->
     <Transition
         app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@+id/start" />
+        app:constraintSetStart="@+id/start"
+        app:duration="1000"
+        >
+
+        <OnSwipe
+            app:targetId="@id/scrollViewId"
+            app:dragDirection="dragUp"
+       />
+    </Transition>
 </MotionScene>

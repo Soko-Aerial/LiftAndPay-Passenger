@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical">
+
+    android:orientation="vertical"
+    app:layoutDescription="@xml/fragment_main_scene">
 
     <RelativeLayout
         android:id="@+id/topViewId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="@color/primaryColors">
 
 
@@ -53,10 +57,7 @@
         android:paddingHorizontal="25dp"
         android:paddingVertical="15dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/rideViewText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topViewId">
+       app:layout_constraintTop_toBottomOf="@id/topViewId">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -161,21 +162,22 @@
                 tools:ignore="MissingConstraints" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
     </LinearLayout>
 
 
-    <ScrollView
+    <!--ScrollView-->
+    <LinearLayout
+        android:id="@+id/scrollViewId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
+        android:paddingHorizontal="25dp"
         android:scrollbars="none"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/rideViewText"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="25dp">
+        android:orientation="vertical"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/parentView"
+       >
+
 
 
         <LinearLayout
@@ -183,6 +185,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/rideViewText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Current Ride"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -440,7 +453,6 @@
 
                 <LinearLayout
                     android:id="@+id/rideHistoryBtn"
-                    android:layout_rowWeight="1"
                     android:layout_margin="15dp"
                     android:background="@drawable/ripple"
                     android:backgroundTint="@color/white"
@@ -467,7 +479,6 @@
 
                 <LinearLayout
                     android:id="@+id/profileBtn"
-                    android:layout_rowWeight="1"
                     android:layout_margin="15dp"
                     android:background="@drawable/ripple"
                     android:backgroundTint="@color/white"
@@ -493,7 +504,6 @@
 
                 <LinearLayout
                     android:id="@+id/RidesId"
-                    android:layout_rowWeight="1"
                     android:layout_margin="15dp"
                     android:background="@drawable/ripple"
                     android:backgroundTint="@color/white"
@@ -519,7 +529,6 @@
 
                 <LinearLayout
                     android:id="@+id/paymentBtn"
-                    android:layout_rowWeight="1"
                     android:layout_margin="15dp"
                     android:background="@drawable/ripple"
                     android:backgroundTint="@color/white"
@@ -547,7 +556,7 @@
             </GridLayout>
 
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -564,21 +573,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/rideViewText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Current Ride"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
 
-        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
 
