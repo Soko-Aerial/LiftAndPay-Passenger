@@ -12,12 +12,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-feature android:name="android.hardware.location.network" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.wifi" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -33,7 +35,8 @@
         <activity android:name=".ImageViewActivity" />
         <activity
             android:name=".SplashScreen"
-            android:theme="@style/Theme.Transparent">
+            android:theme="@style/Theme.Transparent"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,11 +48,11 @@
             android:screenOrientation="portrait" />
         <activity android:name=".AVR_Activities.AvailableRides" />
         <activity android:name=".menu.SettingsActivity" />
-        <activity android:name=".SettingUp.SignUp003" />
-        <activity android:name=".SettingUp.LogAuth" />
+        <activity android:name=".ProfileSetup.SignUp003" />
+        <activity android:name=".ProfileSetup.LogAuth" />
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".MainActivities.MainFragment" />
-        <activity android:name=".SettingUp.SignUp001" />
+        <activity android:name=".ProfileSetup.SignUp001" />
         <activity android:name=".AVR_Activities.Chats.ChatActivity_avr" />
         <activity android:name=".AVR_Activities.PickUpLocationActivity" />
         <activity android:name=".SearchedRide.SearchedRides" />

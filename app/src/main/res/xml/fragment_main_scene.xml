@@ -5,10 +5,15 @@
 
     <!--start-->
     <ConstraintSet android:id="@+id/start">
+
+        <!--ParentView-->
         <Constraint android:id="@+id/parentView"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:elevation="8dp"
             />
+
+        <!--ScrollView-->
         <Constraint android:id="@+id/scrollViewId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,6 +29,8 @@
                 app:attributeName="backgroundColor"
                 app:customColorDrawableValue="@color/white"/>
         </Constraint>
+
+        <!--TopView-->
         <Constraint android:id="@+id/topViewId" />
     </ConstraintSet>
 
@@ -33,6 +40,7 @@
         <!--parentView-->
         <Constraint android:id="@id/parentView"
             android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:alpha="0"
             android:elevation="0dp"
             />
@@ -61,12 +69,14 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:duration="1000"
+        app:duration="500"
         >
 
         <OnSwipe
             app:targetId="@id/scrollViewId"
             app:dragDirection="dragUp"
+            app:moveWhenScrollAtTop="true"
        />
+
     </Transition>
 </MotionScene>

@@ -11,4 +11,5 @@ public interface nominatim_modelface {
     String subUrl = "search";
     @GET(subUrl)
     Call<ArrayList<nominatim_model>> getData(@Query("q") String q, @Query("countrycodes") String country , @Query("limit") int limit , @Query("format") String format);
+
 }

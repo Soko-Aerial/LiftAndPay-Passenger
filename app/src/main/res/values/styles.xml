@@ -9,7 +9,15 @@
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
 
+    <style name="FirebaseUITheme" parent="FirebaseUI">
+        <item name="colorPrimary">@color/primaryColors</item>
+        <item name="colorPrimaryVariant">@color/primaryColors</item>
+        <item name="colorAccent">@color/fadedBlue</item>
+        <item name="android:colorBackground">@color/white</item>
 
+        <!-- On API 21+ you can use android:statusBarColor -->
+        <item name="colorPrimaryDark">@color/primaryColors</item>
+    </style>
     <style name="ProfileMenuLayout_Style">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>

@@ -1,15 +1,13 @@
-package com.example.liftandpay_passenger.SettingUp;
+package com.example.liftandpay_passenger.ProfileSetup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,14 +17,11 @@ import com.example.liftandpay_passenger.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -51,10 +46,10 @@ public class SignUp003 extends AppCompatActivity {
         profileImg = findViewById(R.id.profileImgId);
         signUp002 = findViewById(R.id.signUp002);
 
+
         StorageReference imageRef = storage.getReference().child("Passenger").child(mUid).child("profile.png");
         profileImg.setDrawingCacheEnabled(true);
         profileImg.buildDrawingCache();
-
 
 
         photoLinear.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +102,7 @@ public class SignUp003 extends AppCompatActivity {
 
         // pass the constant to compare it
         // with the returned requestCode
-        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+        startActivityIfNeeded(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
     }
 
     // this function is triggered when user

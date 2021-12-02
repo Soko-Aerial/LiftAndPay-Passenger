@@ -1,10 +1,10 @@
 package com.example.liftandpay_passenger.MainActivities;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
@@ -14,15 +14,19 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
-import com.example.liftandpay_passenger.SettingUp.LogAuth;
-import com.example.liftandpay_passenger.SplashScreen;
+import com.example.liftandpay_passenger.ProfileSetup.SignUp001;
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.HashMap;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
@@ -30,7 +34,8 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
     private AnimatedBottomBar animatedBottomBar;
     private FragmentManager fragmentManager;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
 
@@ -38,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent intent  = new Intent(MainActivity.this, MainFragment.class);
-        startActivity(intent);
-        finish();
-
     }
 
     @Override
@@ -52,11 +52,59 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser==null)
         {
-            Intent intent  = new Intent(MainActivity.this, LogAuth.class);
+            startSignIn();
+
+     /*       Intent intent  = new Intent(MainActivity.this, LogAuth.class);
+            startActivity(intent);
+            finish();*/
+        }
+        else
+        {
+
+            Intent intent  = new Intent(MainActivity.this, MainFragment.class);
             startActivity(intent);
             finish();
         }
     }
+
+    private ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            (result) -> {
+
+                HashMap<String,String> map = new HashMap<>();
+                map.put("Name",result.getIdpResponse().getPhoneNumber());
+                map.put("Email","Not Set");
+                DocumentReference dRef = db.collection("Passenger").document(mAuth.getUid().toString());
+                dRef.set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent  = new Intent(MainActivity.this, SignUp001.class);
+                        startActivity(intent);
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this,"Details not set",Toast.LENGTH_LONG).show();
+                                mAuth.signOut();
+                            }
+                        });
+
+            });
+
+
+    private void startSignIn() {
+        Intent signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(Arrays.asList(
+                        new AuthUI.IdpConfig.PhoneBuilder().build()
+                     ))
+                .setTheme(R.style.FirebaseUITheme)
+                .build();
+
+        signInLauncher.launch(signInIntent);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,

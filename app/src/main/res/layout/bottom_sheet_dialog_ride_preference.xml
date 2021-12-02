@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="@color/extraFadedBlue"
+    android:layout_margin="3dp"
+    android:orientation="vertical">
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="3dp"
+    android:gravity="center"
+    android:textColor="@color/primaryColors"
+    android:background="@drawable/type_msg_box"
+    android:text="Set Ride Preference"/>
+
+        <!--From and To-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="2dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/movingfrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/ripple"
+                android:layout_margin="5dp"
+                android:padding="8dp"
+                android:backgroundTint="@color/transparentColor"
+                android:text="Moving from"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue"/>
+
+            <TextView
+                android:id="@+id/goingto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:backgroundTint="@color/transparentColor"
+                android:background="@drawable/ripple"
+                android:layout_margin="5dp"
+                android:padding="8dp"
+                android:text="Going To"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/transparentColor"
+                    android:text="Date to setoff"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_margin="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/fadedBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/transparentColor"
+                    android:text="Time to set off"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:background="@color/fadedBlue"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:gravity="end"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/cancelId"
+        android:layout_margin="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:text="Cancel"
+        android:textColor="@color/primaryColors"/>
+
+    <Button
+        android:id="@+id/saveId"
+        android:layout_margin="3dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:text="save"
+        android:textColor="@color/primaryColors"/>
+
+
+
+
+</LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="2dp"
+        android:background="@color/fadedBlue"/>
+
+
+
+
+</LinearLayout>

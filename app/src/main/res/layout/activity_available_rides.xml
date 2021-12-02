@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/driverProfileHeader"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@color/fadedBlue"
         android:orientation="horizontal"
         android:padding="5dp">
@@ -31,8 +31,9 @@
             android:src="@drawable/person_img" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -67,12 +68,15 @@
             app:tint="@color/primaryColors" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+
     <ScrollView
         android:id="@+id/parentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/driverProfileFooter"
         android:layout_below="@id/driverProfileHeader"
+        android:layout_marginTop="33dp"
+        android:layout_marginBottom="-34dp"
         android:background="@color/white"
         android:scrollbars="none">
 
@@ -211,14 +215,12 @@
                 <ImageView
                     android:id="@+id/image001"
                     android:layout_width="150dp"
-                    android:layout_height="150dp"
-                     />
+                    android:layout_height="150dp" />
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:background="@color/fadedBlue"
-                    />
+                    android:background="@color/fadedBlue" />
 
                 <ImageView
                     android:id="@+id/image002"
@@ -507,7 +509,6 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
-
 
     <LinearLayout
         android:id="@+id/driverProfileFooter"

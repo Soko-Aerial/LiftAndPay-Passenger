@@ -8,10 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
 import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
-import com.example.liftandpay_passenger.menu.SettingsActivity;
+import com.example.liftandpay_passenger.ProfileSetup.SignUp001;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
-import com.example.liftandpay_passenger.SettingUp.SignUp003;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -34,6 +33,7 @@ import android.widget.Toast;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
 import com.example.liftandpay_passenger.ridePrefs.RidePreference;
 import com.example.liftandpay_passenger.search.SearchActivity;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -109,6 +109,8 @@ public class MainFragment extends AppCompatActivity {
         Mapbox.getInstance(MainFragment.this, getString(R.string.mapbox_access_token));
 
 
+        checkUsersDetails();
+
         dialogBuilder = new AlertDialog.Builder(MainFragment.this);
         lastRideSharedPrefs = getSharedPreferences("LAST_BOOKED_RIDE_FILE", MODE_PRIVATE);
 
@@ -159,7 +161,7 @@ public class MainFragment extends AppCompatActivity {
         profileSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainFragment.this, SettingsActivity.class);
+                Intent i = new Intent(MainFragment.this, SignUp001.class);
                 startActivity(i);
                // mAuth.signOut();
             }
@@ -188,7 +190,7 @@ public class MainFragment extends AppCompatActivity {
         });
 
         profileBtn.setOnClickListener(view -> {
-            Intent i = new Intent(MainFragment.this, ProfileFragment.class);
+            Intent i = new Intent(MainFragment.this, SignUp001.class);
             startActivity(i);
         });
 
@@ -230,11 +232,23 @@ public class MainFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                    AuthUI.getInstance()
+                            .signOut(MainFragment.this)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    // user is now signed out
+                                    startActivity(new Intent(MainFragment.this, MainActivity.class));
+                                    finish();
+                                }
+                            });
+
 //                mAuth.signOut();
-                Intent intent = new Intent(MainFragment.this, SignUp003.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(MainFragment.this, SignUp003.class);
+                startActivity(intent);*/
             }
         });
+
+
 
 
         db.collection("Passenger").document(mAuth.getUid()).collection("Rides").document("Pending Rides").get(Source.SERVER)
@@ -259,6 +273,7 @@ public class MainFragment extends AppCompatActivity {
                                     Log.e("BookedRides", "Is not empty");
 
                                     String lastBookedRide = bookedRides.get(bookedRides.size() - 1);
+
 
                                     db.collection("Rides").document(lastBookedRide)
                                             .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -367,6 +382,7 @@ public class MainFragment extends AppCompatActivity {
                                                                             carNumberPlate.setText(value.getString("plate"));
 
                                                                             statusActionBtn.setOnClickListener(Viewv -> {
+
                                                                                 Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
                                                                                 intent.putExtra("theDriverId",value.getString("myId") );
                                                                                 intent.putExtra("journey", originDestination);
@@ -457,6 +473,7 @@ public class MainFragment extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        checkUsersDetails();
 
     }
 
@@ -485,6 +502,7 @@ public class MainFragment extends AppCompatActivity {
         super.onDestroy();
         lastRideSharedPrefs.edit().clear().apply();
     }
+
 
 
     @Override
@@ -553,4 +571,20 @@ public class MainFragment extends AppCompatActivity {
 
         }
     }
+
+    private void checkUsersDetails(){
+        db.collection("Passenger").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if (!value.contains("Name") || !value.contains("Email")){
+                    Intent i = new Intent(MainFragment.this, SignUp001.class );
+                    startActivity(i);
+                }
+
+            }
+        });
+    }
+
+
 }
