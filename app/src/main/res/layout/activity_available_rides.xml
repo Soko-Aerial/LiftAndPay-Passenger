@@ -83,7 +83,8 @@
         android:layout_height="match_parent"
         android:layout_above="@id/driverProfileFooter"
         android:layout_below="@id/driverProfileHeader"
-        android:background="@drawable/bkg_main"
+        android:background="@color/extraFadedBlue"
+
         android:scrollbars="none">
 
         <androidx.appcompat.widget.LinearLayoutCompat

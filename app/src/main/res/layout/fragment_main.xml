@@ -130,6 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="2dp"
+                android:visibility="invisible"
                 android:background="@drawable/ripple"
                 android:backgroundTint="@color/fadedSuccess"
                 android:drawableEnd="@drawable/btn_set_pref"
