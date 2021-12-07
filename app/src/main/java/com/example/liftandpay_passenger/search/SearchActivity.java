@@ -52,7 +52,6 @@ public class SearchActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         SearchAdapter searchAdapter;
 
-
         searchView.setIconified(false);
         searchView.requestFocus();
 

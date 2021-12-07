@@ -37,6 +37,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -81,6 +82,8 @@ public class MainFragment extends AppCompatActivity {
 
     private LinearLayout historyBtn, profileBtn, paymentBtn;
 
+    private TextView cancelBtn;
+
     String infoNameS, infoLonS, infoLatS;
     String infoNameD, infoLonD, infoLatD;
 
@@ -94,8 +97,7 @@ public class MainFragment extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
-    private ImageView driverImage;
-
+    private ShapeableImageView driverImage;
     private TextView profileSettings;
     private TextView setPref;
 
@@ -127,6 +129,8 @@ public class MainFragment extends AppCompatActivity {
         parentView = findViewById(R.id.parentView);
 
         driverDetails = findViewById(R.id.driverDetails);
+
+        cancelBtn = findViewById(R.id.cancelBtnId);
 
         locationsDesc = findViewById(R.id.locationDesc);
         dateAndTime = findViewById(R.id.dateAndTime);
@@ -170,11 +174,15 @@ public class MainFragment extends AppCompatActivity {
         setPref.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainFragment.this, RidePreference.class);
+//                Intent i = new Intent(MainFragment.this, RidePreference.class);
 
 //                Intent i = new Intent(MainFragment.this, MenuListActivity.class);
-                startActivity(i);
-                // mAuth.signOut();
+//                startActivity(i);
+//                mAuth.signOut();
+
+                Uri uri = Uri.parse("https://liftnpay.gameitupgh.com/public/getform");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
 
             }
         });
@@ -185,8 +193,6 @@ public class MainFragment extends AppCompatActivity {
         });
 
         paymentBtn.setOnClickListener(view -> {
-            Intent i = new Intent(MainFragment.this, PayFragment.class);
-            startActivity(i);
         });
 
         profileBtn.setOnClickListener(view -> {
@@ -195,6 +201,9 @@ public class MainFragment extends AppCompatActivity {
         });
 
         lowerView.setVisibility(View.GONE);
+        statusId.setVisibility(View.INVISIBLE);
+        rideStatus.setVisibility(View.INVISIBLE);
+        rideViewText.setVisibility(View.INVISIBLE);
 
         searchOrigin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,6 +306,9 @@ public class MainFragment extends AppCompatActivity {
                                                                 Log.e("BookedRides001", "Is Listening for data");
 
                                                                 lowerView.setVisibility(View.VISIBLE);
+                                                                statusId.setVisibility(View.VISIBLE);
+                                                                rideStatus.setVisibility(View.VISIBLE);
+                                                                rideViewText.setVisibility(View.VISIBLE);
 
                                                                 lastRideSharedPrefs.edit().putString("TheLocationDesc", value1.getString("Location Desc")).apply();
                                                                 lastRideSharedPrefs.edit().putString("Status", value1.getString("Status")).apply();
@@ -399,6 +411,36 @@ public class MainFragment extends AppCompatActivity {
                                                                                 Log.i("TheDriverID",intent.getStringExtra("theDriverId"));
 
                                                                                 startActivity(intent);
+                                                                            });
+
+
+                                                                            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(View view) {
+
+                                                                                    AlertDialog.Builder builder
+                                                                                            = new AlertDialog
+                                                                                            .Builder(MainFragment.this);
+
+                                                                                    // Set the message show for the Alert time
+                                                                                    builder.setMessage("Do you want to cancel this ride?");
+                                                                                    builder.setTitle("Cancel");
+                                                                                    builder.setCancelable(true);
+                                                                                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                                                        @Override
+                                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                                            dialog.dismiss();
+                                                                                        }
+                                                                                    }).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                                                        @Override
+                                                                                        public void onClick(DialogInterface dialog, int which) {
+//                                                                                            deleteTheRide(lastAvailableRideId);
+                                                                                            dialog.dismiss();
+                                                                                        }
+                                                                                    });
+                                                                                    builder.create().show();
+
+                                                                                }
                                                                             });
 
                                                                             driverDetails.setOnClickListener(new View.OnClickListener() {

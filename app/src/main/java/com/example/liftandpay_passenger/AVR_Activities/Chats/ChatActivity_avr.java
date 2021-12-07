@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +61,7 @@ public class ChatActivity_avr extends AppCompatActivity {
     MessageModel messageModel;
 
     private TextView driverName;
-    private ImageView driverImage;
+    private ShapeableImageView driverImage;
     private HashMap<String, Object> driverDetail = new HashMap<>();
     private HashMap<String, Object> chat = new HashMap<>();
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -91,6 +94,21 @@ public class ChatActivity_avr extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatRecyler);
         recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity_avr.this, LinearLayoutManager.VERTICAL, true));
         messageModels = new ArrayList<>();
+
+
+
+        storage.getReference().child("Driver").child(driverId).child("profile.png").getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult().toString()).into(driverImage);
+                        }
+
+                    }
+                }
+        );
 
 
         db.collection("Driver").document(driverId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

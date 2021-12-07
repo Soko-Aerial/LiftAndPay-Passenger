@@ -29,6 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import kotlinx.coroutines.internal.ConcurrentKt;
 import nl.nos.imagin.Imagin;
 import nl.nos.imagin.SingleTapHandler;
 
@@ -45,6 +46,7 @@ public class AvailableRides extends AppCompatActivity {
     private String startTime;
     private String distance;
     private String journey;
+    private TextView backBtn;
 
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -68,6 +70,7 @@ public class AvailableRides extends AppCompatActivity {
         chatDriver = findViewById(R.id.messageBtn);
         journeyText =  findViewById(R.id.journeyId);
         driverDetailsFooter = findViewById(R.id.driverProfileFooter);
+        backBtn = findViewById(R.id.back_buttonId);
 
         nameText = findViewById(R.id.nameId);
         image001 = findViewById(R.id.image001);
@@ -90,6 +93,14 @@ public class AvailableRides extends AppCompatActivity {
         journey = getIntent().getStringExtra("theJourney");
         distance =getIntent().getStringExtra("theDistance");
         name = getIntent().getStringExtra("theDriverName" );
+
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
         journeyText.setText(journey);

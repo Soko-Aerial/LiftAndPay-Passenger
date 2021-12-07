@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_bkg"
     tools:context=".AVR_Activities.Chats.ChatActivity_avr">
 
     <RelativeLayout
@@ -15,18 +16,18 @@
         android:forceHasOverlappingRendering="true"
         >
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/driverImageId"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="6dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="6dp"
+            app:shapeAppearance="@style/ShapeAppearance.CircularBorder"
             android:layout_marginBottom="6dp"
-            android:background="@drawable/ic_currency"
-            android:foreground="@drawable/person_img"
-            android:padding="5dp" />
+
+            android:src="@drawable/person_img" />
 
 
         <TextView

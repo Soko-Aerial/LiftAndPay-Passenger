@@ -76,6 +76,7 @@ public class SearchedRides extends AppCompatActivity {
 
 
         db.collection("Rides")
+                .whereNotEqualTo("driversStatus","Cancelled")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -92,8 +93,8 @@ public class SearchedRides extends AppCompatActivity {
 
                             for (QueryDocumentSnapshot snapshots : task.getResult()) {
 
+                                Snackbar.make(recyclerView, "Fetching ...", 5000).show();
 
-                                Snackbar.make(recyclerView, "Fetching ...", Snackbar.LENGTH_SHORT).show();
                                 String name = Objects.requireNonNull(snapshots.getData().getOrDefault("driverName", "NO NAME")).toString();
                                 String endLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation", "null")).toString();
                                 String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation", "null")).toString();

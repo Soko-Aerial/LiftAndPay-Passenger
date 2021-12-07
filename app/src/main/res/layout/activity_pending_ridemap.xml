@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="251dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bottom_sheet_bkg"
             android:orientation="vertical"
             android:padding="5dp"
@@ -45,42 +45,36 @@
                     android:padding="4dp"
                     android:paddingStart="7dp"
                     android:paddingEnd="50dp"
-                    android:text="WAIT FOR RIDE"
+                    android:text="Lift and Pay"
                     android:textColor="@color/primaryColors"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:visibility="visible" />
 
 
-                <ImageView
-                    android:id="@+id/chatBtn"
-                    style="@style/smallIconBtnStyle"
-                    android:contentDescription="CHAT"
-                    android:backgroundTint="@color/transparent"
-                    android:foreground="@drawable/ic_message"
-                    android:foregroundTint="@color/primaryColors" />
 
-                <ImageView
-                    android:id="@+id/callBtn"
-                    style="@style/smallIconBtnStyle"
-                    android:layout_marginEnd="2dp"
-                    android:contentDescription="CALL"
-                    android:backgroundTint="@color/transparent"
-                    android:foreground="@drawable/btn_call" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/fadedBlue"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/driverImageId"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_margin="3dp"
                     android:padding="2dp"
-                    android:src="@drawable/img_car1"
+
                     app:shapeAppearance="@style/ShapeAppearance.CircularBorder"
                     app:strokeColor="@color/black"
                     app:strokeWidth="1dp" />
@@ -90,6 +84,14 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Driver"
+                        android:textColor="@color/primaryColors"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/driverNameId"
@@ -111,17 +113,58 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:background="@drawable/ripple"
-                android:backgroundTint="@color/red"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="15dp"
-                android:text="Cancel Pickup"
-                android:textColor="@color/white" />
+                android:layout_marginVertical="5dp">
+
+                <TextView
+                    android:layout_width="35dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ripple"
+                    android:backgroundTint="@color/transparentColor"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/ic_close"
+                    android:foregroundTint="@color/red"
+                    android:textColor="@color/white" />
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+
+                <ImageView
+                    android:id="@+id/chatBtn"
+                    style="@style/smallIconBtnStyle"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="CHAT"
+                    android:foreground="@drawable/ic_message"
+                    android:foregroundTint="@color/primaryColors" />
+
+
+                <ImageView
+                    android:id="@+id/callBtn"
+                    style="@style/smallIconBtnStyle"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="2dp"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="CALL"
+                    android:foreground="@drawable/btn_call" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

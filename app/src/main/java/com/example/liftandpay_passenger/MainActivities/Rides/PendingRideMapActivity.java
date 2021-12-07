@@ -46,12 +46,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineProvider;
@@ -83,6 +85,7 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -115,6 +118,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private AlertDialog dialog;
     private MapView mapView;
     private MapboxMap mapboxMap;
+    private ShapeableImageView profileImg;
 
     private final String geojsonSourceLayerId = "geojsonSourceLayerId";
     private final String destinationSource = "destination-source-id";
@@ -137,6 +141,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     int PERMISSION_ALL = 1;
     String[] PERMISSIONS = {Manifest.permission.CALL_PHONE};
+    String[] LOCATIONPERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
 
     private DirectionsRoute currentRoute;
     private static final String TAG = "DirectionsActivity";
@@ -150,6 +155,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     private TextView driverName, carNumberPlate;
     private String mUid = FirebaseAuth.getInstance().getUid();
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private Map<String, Object> passengerLoc = new HashMap<>();
 
@@ -166,6 +172,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         actionBtn = findViewById(R.id.actionBtn);
         callBtn = findViewById(R.id.callBtn);
         chatBtn = findViewById(R.id.chatBtn);
+        profileImg = findViewById(R.id.driverImageId);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         textToSpeech = new TextToSpeech(PendingRideMapActivity.this,
@@ -177,6 +184,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 });
 
         rideId = getIntent().getStringExtra("rideId");
+        driverId = getIntent().getStringExtra("theDriverId");
 
         driverName = findViewById(R.id.driverNameId);
         driverName.setText(getIntent().getStringExtra("driverName"));
@@ -184,6 +192,13 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         carNumberPlate = findViewById(R.id.carNumberPlate);
         carNumberPlate.setText(getIntent().getStringExtra("plate"));
 
+        if (!hasPermissions(PendingRideMapActivity.this, LOCATIONPERMISSIONS)) {
+            ActivityCompat.requestPermissions(PendingRideMapActivity.this, LOCATIONPERMISSIONS, PERMISSION_ALL);
+//            Toast.makeText(PendingRideMapActivity.this,"Location permission not enabled", Toast.LENGTH_LONG).show();
+            finish();
+        }else {
+
+        }
 
         dialogBuilder = new AlertDialog.Builder(PendingRideMapActivity.this);
 
@@ -244,6 +259,18 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                     }
                 });
 
+                storage.getReference().child("Driver").child(driverId).child("profile.png").getDownloadUrl().addOnCompleteListener(
+                        new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                                if (task.isSuccessful()) {
+                                    Picasso.get().load(task.getResult().toString()).into(profileImg);
+                                }
+
+                            }
+                        }
+                );
 
                 chatBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -255,6 +282,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
             }
         });
+
 
 
         db.collection("Rides").document(rideId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -328,6 +356,9 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 .addOnSuccessListener(PendingRideMapActivity.this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
+
+                        Log.i("Fire","Location");
+
                         myLoc = new LatLng(location.getLatitude(), location.getLongitude());
 
                         double stLat = getIntent().getDoubleExtra("stLat", 0);
@@ -573,13 +604,14 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         switch (requestCode) {
             case 1: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                } else {
+                    if (ContextCompat.checkSelfPermission(PendingRideMapActivity.this,
+                            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    }
                 }
                 return;
             }
         }
     }
-
 
     // Add the mapView lifecycle to the activity's lifecycle methods
     @Override

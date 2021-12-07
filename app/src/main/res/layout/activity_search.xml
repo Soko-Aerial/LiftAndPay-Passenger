@@ -58,14 +58,14 @@
             android:indeterminateTint="@color/primaryColors"
             />
 
-
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/licenseText"
         android:layout_alignParentBottom="true"
         android:textAlignment="center"
-        android:text="openstreetMap , nominatim.com"/>
+        android:text="(c)openstreetmap , nominatim.com"/>
 
 </RelativeLayout>

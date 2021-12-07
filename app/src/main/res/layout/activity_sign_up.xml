@@ -11,7 +11,7 @@ tools:context=".ProfileSetup.SignUp001">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:background="@drawable/bkg_main"
+        android:background="@color/fadedSuccess"
         android:rotation="180" />
 
     <LinearLayout
@@ -29,26 +29,27 @@ tools:context=".ProfileSetup.SignUp001">
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="20dp"
+            app:strokeColor="@color/primaryColors"
+            app:strokeWidth="1dp"
             android:background="@drawable/ripple"
             android:backgroundTint="@color/fadedBlue"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="end"
-                android:layout_margin="10dp"
-                android:src="@drawable/imc_camera" />
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profileImgId"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@color/extraFadedBlue"
                 android:contentDescription="SelectedImg"
-                android:src="@drawable/person_img" />
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple"
+                android:foregroundTint="@color/transparentColor"
+                android:src="@drawable/person_img"
+                app:shapeAppearance="@style/ShapeAppearance.CircularBorder" />
         </LinearLayout>
 
         <TextView
