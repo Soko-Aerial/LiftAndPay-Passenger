@@ -516,7 +516,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
             theMainStyle.setGeoJson(FeatureCollection.fromFeature(
                     Feature.fromGeometry(Point.fromLngLat(lon, lat))
             ));
-            animateMarker(new LatLng(lat, lon), new LatLng(lat, lon + 0.2));
+            animateMarker(new LatLng(lat, lon), new LatLng(lat, lon));
 
         }
 

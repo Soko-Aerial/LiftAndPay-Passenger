@@ -14,7 +14,6 @@
         <!-- Customize your theme here. -->
     </style>
 
-
     <style name="ProfileCardViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -27,14 +26,14 @@
     </style>
 
     <style name="Theme.Transparent" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowBackground">@color/primaryColors</item>
         <item name="android:windowContentOverlay">@color/primaryColors</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimEnabled">true</item>
     </style>
 
     <style name="ProfileCardText">
@@ -43,7 +42,6 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
 
     <style name="ProfileCardRelativeLayout">
         <item name="android:layout_width">match_parent</item>
@@ -56,7 +54,6 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">8dp</item>
-
     </style>
 
     <style name="PaymentMethodCardViewStyle.RelativeLayout">
@@ -102,7 +99,6 @@
         <item name="background">@color/primaryColors</item>
     </style>
 
-
     <style name="TextLabelForPendingFragment">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -143,11 +139,9 @@
         <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
 
-
     <style name="ShapeAppearance.CircularBorder" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
+        <item name="cornerSize">55%</item>
     </style>
-
 
 </resources>
