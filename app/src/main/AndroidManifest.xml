@@ -48,7 +48,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".AVR_Activities.AvailableRides" />
         <activity android:name=".menu.SettingsActivity" />
-        <activity android:name=".ProfileSetup.SignUp003" />
         <activity android:name=".ProfileSetup.LogAuth" />
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".MainActivities.MainFragment" />

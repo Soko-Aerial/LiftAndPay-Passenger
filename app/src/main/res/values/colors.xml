@@ -7,8 +7,10 @@
     <color name="primaryColors">#4688F1</color>
     <color name="mainBackgroundColor">#F2F2F2</color>
     <color name="transparentColor">#00FFFFFF</color>
-    <color name="fadedBlue">#333D56F5</color>
-    <color name="extraFadedBlue">#0F3D56F5</color>
+<!--    <color name="fadedBlue">#333D56F5</color>-->
+    <color name="fadedBlue">#BED7FF</color>
+    <color name="extraFadedBlue">#E4EDFC</color>
+<!--    <color name="extraFadedBlue">#0F3D56F5</color>-->
     <color name="hintColor">#653D56F5</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="success">#56C85B</color>

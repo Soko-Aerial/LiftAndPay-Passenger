@@ -10,13 +10,14 @@
         android:id="@+id/searchbarId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Search location here"
-        app:iconifiedByDefault="false"
-        android:focusedByDefault="true"
-        android:searchHintIcon="@drawable/btn_back"
         android:closeIcon="@drawable/btn_back"
-        android:searchIcon="@drawable/img_circle"
         android:commitIcon="@drawable/btn_back"
+        android:focusedByDefault="true"
+        app:queryHint="Search here"
+        android:queryHint="Search location here"
+        android:searchHintIcon="@drawable/btn_back"
+        android:searchIcon="@drawable/img_circle"
+        app:iconifiedByDefault="false"
         tools:targetApi="o" />
 
     <!--Divider-->
@@ -31,8 +32,9 @@
         android:id="@+id/recyclerViewId"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/licenseText"
         android:layout_below="@id/searchbarId"
-        android:layout_above="@id/licenseText"/>
+        android:background="@drawable/bkg_main" />
 
     <LinearLayout
         android:layout_above="@id/licenseText"
