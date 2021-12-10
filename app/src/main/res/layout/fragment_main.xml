@@ -47,9 +47,9 @@
         android:id="@+id/parentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
         android:background="@drawable/curvy_bkg"
         android:elevation="8dp"
-        android:layout_margin="-3dp"
         android:orientation="vertical"
         android:paddingHorizontal="25dp"
         android:paddingVertical="15dp"
@@ -327,6 +327,7 @@
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/driverImageId"
+                            android:layout_margin="3dp"
                             android:layout_width="70dp"
                             app:strokeWidth="2dp"
                             app:strokeColor="@color/fadedBlue"
@@ -404,13 +405,13 @@
                         android:layout_margin="3dp"
                         android:layout_weight="1"
                         android:background="@drawable/ripple"
-                        android:backgroundTint="@color/fadedSuccess"
+                        android:backgroundTint="@color/fadedBlue"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
                         android:padding="3dp"
                         android:text="Ready?"
-                        android:textColor="@color/success"
+                        android:textColor="@color/primaryColors"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         tools:ignore="TouchTargetSizeCheck" />
@@ -447,6 +448,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
+                android:padding="3dp"
+                android:gravity="center"
                 android:columnCount="2">
 
 
@@ -468,7 +471,7 @@
 
 
                     <ImageView
-                        android:layout_width="135dp"
+                        android:layout_width="120dp"
                         android:layout_height="100dp"
                         android:padding="18dp"
                         android:src="@drawable/img_time" />
@@ -498,7 +501,7 @@
                     android:padding="5dp">
 
                     <ImageView
-                        android:layout_width="135dp"
+                        android:layout_width="120dp"
                         android:layout_height="100dp"
                         android:padding="18dp"
                         android:src="@drawable/person_img" />

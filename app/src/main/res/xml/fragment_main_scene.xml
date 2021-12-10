@@ -10,6 +10,8 @@
         <Constraint android:id="@+id/parentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="0dp"
             android:elevation="8dp"
             />
@@ -42,7 +44,6 @@
         <Constraint android:id="@id/parentView"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="-40dp"
             android:alpha="0"
             android:elevation="0dp"
             />
@@ -64,6 +65,11 @@
                 app:customColorDrawableValue="@color/white"/>
 
         </Constraint>
+        <Constraint
+            android:id="@+id/topViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
     <!--Transition-->
