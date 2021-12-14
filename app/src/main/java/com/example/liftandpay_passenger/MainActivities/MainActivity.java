@@ -6,8 +6,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.ProfileSetup.SignUp001;
+import com.example.liftandpay_passenger.fastClass.BroadCastMessageNotificationWorker;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,11 +32,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import nl.joery.animatedbottombar.AnimatedBottomBar;
+
 
 
 public class MainActivity extends AppCompatActivity {
-    private AnimatedBottomBar animatedBottomBar;
+
     private FragmentManager fragmentManager;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -43,8 +47,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
+        startNotificationWorker(this);
+
+    }
+    static void startNotificationWorker(Context context) {
+        OneTimeWorkRequest broadcastNotificationWorker = new OneTimeWorkRequest.Builder(BroadCastMessageNotificationWorker.class).build();
+        WorkManager.getInstance(context).enqueue(broadcastNotificationWorker);
+
+    }
     @Override
     protected void onStart(){
         super.onStart();

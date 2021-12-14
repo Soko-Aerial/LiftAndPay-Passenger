@@ -29,9 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-import kotlinx.coroutines.internal.ConcurrentKt;
-import nl.nos.imagin.Imagin;
-import nl.nos.imagin.SingleTapHandler;
+
 
 public class AvailableRides extends AppCompatActivity {
 

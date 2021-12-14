@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LiftAndPay Development</string>
+    <string name="app_name">LiftAndPay</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mapbox_access_token">pk.eyJ1IjoiaHViZXJ0LWJyYWtvIiwiYSI6ImNrbmM2cnNrdzFqOGEydnRheGFuaXNnbWwifQ.TMIkZbdoWTUR8m2CP11vFw</string>

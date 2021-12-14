@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import nl.nos.imagin.Imagin;
 import nl.nos.imagin.SingleTapHandler;
 
+
 public class ImageViewActivity extends AppCompatActivity {
 
     @Override

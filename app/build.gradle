@@ -42,11 +42,11 @@ android {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-firestore'
-    implementation 'com.google.firebase:firebase-auth'
+//    implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
     implementation 'com.google.firebase:firebase-storage'
 
-    implementation 'nl.joery.animatedbottombar:library:1.0.9'
+
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     /*MAP BOX DEPENDENCIES*/
@@ -71,7 +71,7 @@ dependencies {
     //Libraries for image controls
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.nos-digital:imagin:1.2.1'
-    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+//    implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
     implementation "androidx.work:work-runtime:2.7.0"
 

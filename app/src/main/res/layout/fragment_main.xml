@@ -37,6 +37,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
+            android:visibility="invisible"
             android:background="@drawable/btn_settings"
             android:backgroundTint="@color/white" />
 
@@ -50,11 +51,13 @@
         android:layout_marginHorizontal="15dp"
         android:background="@drawable/curvy_bkg"
         android:elevation="8dp"
+        android:layout_marginTop="-5dp"
         android:orientation="vertical"
         android:paddingHorizontal="25dp"
         android:paddingVertical="15dp"
         android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/topViewId">
+        app:layout_constraintTop_toBottomOf="@id/topViewId"
+        tools:layout_editor_absoluteX="15dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -463,6 +466,7 @@
                     android:layout_marginTop="15dp"
                     android:background="@drawable/type_msg_box"
                     android:clickable="true"
+                    android:layout_gravity="start"
                     android:elevation="3dp"
                     android:focusable="true"
                     android:orientation="vertical"
@@ -491,7 +495,7 @@
                     android:foreground="@drawable/ripple"
                     android:foregroundTint="@color/transparent"
                     android:background="@drawable/type_msg_box"
-                    android:layout_gravity="end"
+                    android:layout_gravity="center"
                     android:clickable="true"
                     android:elevation="3dp"
                     android:focusable="true"

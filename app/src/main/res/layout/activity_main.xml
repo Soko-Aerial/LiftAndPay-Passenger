@@ -8,27 +8,6 @@
     tools:context=".MainActivities.MainActivity"
     android:background="#F2F2F2">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/animatedBottomBar"
-        android:id="@+id/container"
-       />
-        <!-- Main content -->
-        <nl.joery.animatedbottombar.AnimatedBottomBar
-            android:id="@+id/animatedBottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            app:abb_iconSize="60sp"
-            app:abb_indicatorColor="@color/primaryColors"
-            app:abb_selectedTabType="text"
-            app:abb_tabAnimationSelected="slide"
-            app:abb_tabColor="#454545"
-            app:abb_tabColorSelected="#3f51b5"
-            app:abb_tabs="@menu/bottom_navigation_menu"
-            />
 
 
 </RelativeLayout>
