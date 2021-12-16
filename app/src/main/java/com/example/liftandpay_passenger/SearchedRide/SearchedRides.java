@@ -98,9 +98,9 @@ public class SearchedRides extends AppCompatActivity {
                                 String name = Objects.requireNonNull(snapshots.getData().getOrDefault("driverName", "NO NAME")).toString();
                                 String endLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("endLocation", "null")).toString();
                                 String stLoc = Objects.requireNonNull(snapshots.getData().getOrDefault("startLocation", "null")).toString();
-                                String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Cost", "null")).toString();
-                                String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Date", "null")).toString();
-                                String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("Ride Time", "null")).toString();
+                                String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("rideCost", "null")).toString();
+                                String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("rideDate", "null")).toString();
+                                String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("rideTime", "null")).toString();
                                 double startLat = (double) snapshots.getData().getOrDefault("startLat", null);
                                 double startLon = (double) snapshots.getData().getOrDefault("startLon", null);
                                 double endLon = (double) snapshots.getData().getOrDefault("endLon", null);

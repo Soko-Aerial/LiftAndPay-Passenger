@@ -6,8 +6,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,10 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.MainActivities.MainActivity;
-import com.example.liftandpay_passenger.MainActivities.RidesFragment;
 import com.example.liftandpay_passenger.R;
-import com.example.liftandpay_passenger.overpass.model;
-import com.example.liftandpay_passenger.overpass.modelface;
 import com.example.liftandpay_passenger.search.SearchActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -78,8 +73,6 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
 import static com.example.liftandpay_passenger.fastClass.DistanceCalc.distanceBtnCoordinates;
@@ -147,10 +140,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
     private Point originPoint, destinationPoint;
     //Overpass Retrofit Variable declaration
-    private Retrofit retrofit;
-    private modelface modelface;
-    private Call<model> call;
-    int i, z;
 
     private TextView pickupSearchBox;
     private String myName;
@@ -178,14 +167,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
             }
         });
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://overpass-api.de/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        modelface = retrofit.create(modelface.class);
-
-        call = modelface.getData();
 
         mapTitleID = findViewById(R.id.mapTitleId);
         mapView = findViewById(R.id.mapView);

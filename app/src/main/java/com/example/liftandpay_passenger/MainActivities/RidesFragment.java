@@ -70,10 +70,10 @@ public class RidesFragment extends AppCompatActivity {
                                        if (documentSnapshot1.getId().equals(mUId))
                                        {
                                            String rideId = documentSnapshot.getId();
-                                           String rideDistance = documentSnapshot.getString("Ride Distance");
-                                           String rideCost = documentSnapshot.getString("Ride Cost");
+                                           String rideDistance = documentSnapshot.getString("rideDistance");
+                                           String rideCost = documentSnapshot.getString("rideCost");
                                            String status = documentSnapshot1.getString("Status");
-                                           String dateTime = documentSnapshot.getString("Ride Date") + " " + documentSnapshot.getString("Ride Time");
+                                           String dateTime = documentSnapshot.getString("rideDate") + " " + documentSnapshot.getString("rideTime");
                                            String journey = documentSnapshot.getString("startLocation") + " - " + documentSnapshot.getString("endLocation");
                                            double startLat = documentSnapshot.getDouble("startLat");
                                            double endtLat = documentSnapshot.getDouble("endLat");

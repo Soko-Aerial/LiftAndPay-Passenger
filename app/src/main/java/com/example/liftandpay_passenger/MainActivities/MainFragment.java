@@ -174,15 +174,15 @@ public class MainFragment extends AppCompatActivity {
         setPref.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent(MainFragment.this, RidePreference.class);
+                Intent i = new Intent(MainFragment.this, RidePreference.class);
 
 //                Intent i = new Intent(MainFragment.this, MenuListActivity.class);
-//                startActivity(i);
+                startActivity(i);
 //                mAuth.signOut();
 
-                Uri uri = Uri.parse("https://liftnpay.gameitupgh.com/public/getform");
+                /*Uri uri = Uri.parse("https://liftnpay.gameitupgh.com/public/getform");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+                startActivity(intent);*/
 
             }
         });
@@ -375,21 +375,21 @@ public class MainFragment extends AppCompatActivity {
                                                                             lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
                                                                             lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
                                                                             lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
-                                                                            lastRideSharedPrefs.edit().putString("theRideCost", value.getString("Ride Cost")).apply();
-                                                                            lastRideSharedPrefs.edit().putString("theRideTime", value.getString("Ride Time")).apply();
-                                                                            lastRideSharedPrefs.edit().putString("theRideDate", value.getString("Ride Date")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideCost", value.getString("rideCost")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideTime", value.getString("rideTime")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideDate", value.getString("rideDate")).apply();
                                                                             lastRideSharedPrefs.edit().putString("theDriverName", value.getString("driverName")).apply();
                                                                             lastRideSharedPrefs.edit().putString("theStartLocation", value.getString("startLocation")).apply();
                                                                             lastRideSharedPrefs.edit().putString("theEndLocation", value.getString("endLocation")).apply();
 
 
                                                                             String originDestination = value.getString("startLocation") + "-" + value.getString("endLocation");
-                                                                            String dateTime = value.getString("Ride Date") + " " + value.getString("Ride Time");
+                                                                            String dateTime = value.getString("rideDate") + " " + value.getString("rideTime");
 
                                                                             dateAndTime.setText(dateTime);
                                                                             originToDestination.setText(originDestination);
 
-                                                                            amount.setText(new StringFunction(value.getString("Ride Cost")).splitStringWithAndGet("/", 0));
+                                                                            amount.setText(new StringFunction(value.getString("rideCost")).splitStringWithAndGet("/", 0));
                                                                             driverName.setText(value.getString("driverName"));
                                                                             carNumberPlate.setText(value.getString("plate"));
 
