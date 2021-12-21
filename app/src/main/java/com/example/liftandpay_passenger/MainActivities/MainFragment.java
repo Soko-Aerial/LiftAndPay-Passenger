@@ -5,14 +5,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.liftandpay_passenger.AVR_Activities.AvailableRides;
 import com.example.liftandpay_passenger.MainActivities.Rides.PendingRideMapActivity;
-import com.example.liftandpay_passenger.ProfileSetup.SignUp001;
+import com.example.liftandpay_passenger.ProfileSetup.ProfileSettings;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.SearchedRide.SearchedRides;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,11 +29,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.liftandpay_passenger.fastClass.PassengersPreferedRideNotificationWorker;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
 import com.example.liftandpay_passenger.ridePrefs.RidePreference;
 import com.example.liftandpay_passenger.search.SearchActivity;
@@ -52,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
@@ -97,9 +102,11 @@ public class MainFragment extends AppCompatActivity {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
-    private ShapeableImageView driverImage;
+    private ShapeableImageView driverImage, myImage;
     private TextView profileSettings;
     private TextView setPref;
+
+    private LottieAnimationView clockAnimate;
 
 
 
@@ -118,8 +125,12 @@ public class MainFragment extends AppCompatActivity {
 
         profileSettings = findViewById(R.id.profileSettings);
 
+        myImage = findViewById(R.id.myImage);
+
+        clockAnimate = findViewById(R.id.reverseClock);
         setPref = findViewById(R.id.setPref);
         driverImage = findViewById(R.id.driverImageId);
+        myImage = findViewById(R.id.myImage);
         floatbtn = findViewById(R.id.floatBtn);
         rideSearchbtn = findViewById(R.id.ridSearchBtn);
         searchOrigin = findViewById(R.id.originSearchId);
@@ -149,9 +160,14 @@ public class MainFragment extends AppCompatActivity {
         profileBtn = findViewById(R.id.profileBtn);
 
 
+
+
         ArrayAdapter<CharSequence> profileSeq = ArrayAdapter.createFromResource(this,R.array.profile_settings,R.layout.single_input_model);
         profileSeq.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
+        clockAnimate =findViewById(R.id.reverseClock);
+        clockAnimate.animate().setDuration(4000).setStartDelay(4000);
+//        clockAnimate.reverseAnimationSpeed();
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         textToSpeech = new TextToSpeech(MainFragment.this,
@@ -165,9 +181,17 @@ public class MainFragment extends AppCompatActivity {
         profileSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainFragment.this, SignUp001.class);
+                Intent i = new Intent(MainFragment.this, ProfileSettings.class);
                 startActivity(i);
                // mAuth.signOut();
+            }
+        });
+
+        myImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainFragment.this, ProfileSettings.class);
+                startActivity(i);
             }
         });
 
@@ -196,7 +220,7 @@ public class MainFragment extends AppCompatActivity {
         });
 
         profileBtn.setOnClickListener(view -> {
-            Intent i = new Intent(MainFragment.this, SignUp001.class);
+            Intent i = new Intent(MainFragment.this, ProfileSettings.class);
             startActivity(i);
         });
 
@@ -258,6 +282,18 @@ public class MainFragment extends AppCompatActivity {
         });
 
 
+        storage.getReference().child("Passenger").child(Objects.requireNonNull(mAuth.getUid())).child("profile.png").getDownloadUrl().addOnCompleteListener(
+                new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Uri> task) {
+
+                        if (task.isSuccessful()) {
+                            Picasso.get().load(task.getResult().toString()).into(myImage);
+                        }
+
+                    }
+                }
+        );
 
 
         db.collection("Passenger").document(mAuth.getUid()).collection("Rides").document("Pending Rides").get(Source.SERVER)
@@ -507,6 +543,7 @@ public class MainFragment extends AppCompatActivity {
                 });
 
 
+        startNotificationWorker(MainFragment.this);
 
 
     }
@@ -612,6 +649,7 @@ public class MainFragment extends AppCompatActivity {
 
 
         }
+
     }
 
     private void checkUsersDetails(){
@@ -620,12 +658,17 @@ public class MainFragment extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
                 if (!value.contains("Name") || !value.contains("Email")){
-                    Intent i = new Intent(MainFragment.this, SignUp001.class );
+                    Intent i = new Intent(MainFragment.this, ProfileSettings.class );
                     startActivity(i);
                 }
 
             }
         });
+    }
+
+    static void startNotificationWorker(Context context) {
+        OneTimeWorkRequest passengerRideNotificationWorker = new OneTimeWorkRequest.Builder(PassengersPreferedRideNotificationWorker.class).build();
+        WorkManager.getInstance(context).enqueue(passengerRideNotificationWorker);
     }
 
 

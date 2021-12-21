@@ -14,7 +14,8 @@
     <color name="hintColor">#653D56F5</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="success">#56C85B</color>
-    <color name="fadedSuccess">#1A03C343</color>
+    <color name="fadedSuccess">#D2FDE1</color>
+    <color name="extraFadedSuccess">#F1FFF6</color>
     <color name="mtrl_textinput_default_box_stroke_color">#4688F1</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
@@ -22,6 +23,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0000</color>
     <color name="failure">#EAB6B6</color>
+    <color name="fadedFailure">#ECD7D7</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>

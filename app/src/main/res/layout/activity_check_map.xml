@@ -6,73 +6,94 @@
     android:layout_height="match_parent"
     tools:context=".AVR_Activities.PickUpLocationActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/useLocationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/map_default_map_marker"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chooseL"
+        android:layout_margin="4dp"
+        app:backgroundTint="@color/success"
+        app:tint="@color/primaryColors"
+
+        />
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <Button
-            android:id="@+id/mapButtonId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/primaryColors"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="Book Ride"
-            android:textColor="@color/white" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/mapTitleId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/primaryColors"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="Choose a pickup Location"
-                android:textColor="@color/white" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:background="@drawable/searchbar_bkg"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/ic_radar_active_icn" />
-
-                <TextView
-                    android:id="@+id/searchPickupId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/ripple"
-                    android:backgroundTint="#D3D9FD"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="10dp"
-                    android:text="Search the location here" />
-
-            </LinearLayout>
-
-
-
-        </LinearLayout>
 
 
     </com.mapbox.mapboxsdk.maps.MapView>
 
+
+    <Button
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/mapButtonId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/primaryColors"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Book Ride"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/mapButtonId"
+        android:layout_margin="5dp"
+        android:background="@drawable/searchbar_bkg"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_radar_active_icn" />
+
+        <TextView
+            android:id="@+id/searchPickupId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@drawable/ripple"
+            android:backgroundTint="#D3D9FD"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:text="Search the location here" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/chooseL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/mapTitleId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColors"
+
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Choose a pickup Location"
+            android:textColor="@color/white" />
+
+
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

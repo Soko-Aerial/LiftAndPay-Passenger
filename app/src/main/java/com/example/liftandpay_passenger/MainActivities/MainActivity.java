@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
-import com.example.liftandpay_passenger.ProfileSetup.SignUp001;
+import com.example.liftandpay_passenger.ProfileSetup.ProfileSettings;
 import com.example.liftandpay_passenger.fastClass.BroadCastMessageNotificationWorker;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 dRef.set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent  = new Intent(MainActivity.this, SignUp001.class);
+                        Intent intent  = new Intent(MainActivity.this, ProfileSettings.class);
                         startActivity(intent);
                     }
                 })

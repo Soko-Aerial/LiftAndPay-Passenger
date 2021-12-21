@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
+        android:backgroundTint="@color/fadedBlue"
         android:clickable="true"
         android:focusable="true"
         android:padding="5dp"

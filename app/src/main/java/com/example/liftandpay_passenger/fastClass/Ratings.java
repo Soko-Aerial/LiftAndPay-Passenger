@@ -37,21 +37,13 @@ public class Ratings extends AlertDialog.Builder {
 
         AlertDialog.Builder ratingDialog = new AlertDialog.Builder(context);
 
-        View v = LayoutInflater.from(context).inflate(R.layout.alert_rate_driver,null);
+        View v = LayoutInflater.from(context).inflate(R.layout.fragment_cancellation_prompt,null);
 
         ratingBar = v.findViewById(R.id.ratingsId);
         commentText = v.findViewById(R.id.ratingsCommentId);
 
-      option = v.findViewWithTag("option");
 
 
-      option.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              commentString = commentString +"\n" + option.getText().toString();
-              Toast.makeText(context,commentString, Toast.LENGTH_LONG).show();
-          }
-      });
 
         v.findViewById(R.id.submitId).setOnClickListener(V->{
 

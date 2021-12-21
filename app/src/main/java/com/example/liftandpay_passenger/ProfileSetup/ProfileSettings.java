@@ -44,7 +44,7 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 
-public class SignUp001 extends AppCompatActivity {
+public class ProfileSettings extends AppCompatActivity {
 
     private EditText usernameEdit, emailEdit;
     private TextView btnToSignUp002;
@@ -103,7 +103,7 @@ public class SignUp001 extends AppCompatActivity {
                 pBar.setVisibility(View.VISIBLE);
                 if (usernameEdit.getText().toString().equals("") || emailEdit.getText().toString().equals("")) {
                     pBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(SignUp001.this, "Empty fields found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProfileSettings.this, "Empty fields found", Toast.LENGTH_LONG).show();
 //                    infoText.setText("Cannot process empty fields");
 //                    infoText.setTextColor(R.color.red);
                 } else {
@@ -118,7 +118,7 @@ public class SignUp001 extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             pBar.setVisibility(View.INVISIBLE);
-                            Snackbar.make(SignUp001.this, pBar, "Profile Updated", 5000)
+                            Snackbar.make(ProfileSettings.this, pBar, "Profile Updated", 5000)
                                     .setTextColor(Color.WHITE)
                                     .setBackgroundTint(getResources().getColor(R.color.mapbox_plugins_green)).show();
 

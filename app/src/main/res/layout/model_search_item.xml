@@ -5,6 +5,7 @@
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/ripple"
+    android:backgroundTint="@color/extraFadedBlue"
     android:orientation="vertical">
 
     <TextView

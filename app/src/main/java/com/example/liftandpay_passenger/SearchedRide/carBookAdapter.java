@@ -26,7 +26,6 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHolder> {
@@ -44,7 +43,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_car_item_card,parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.model_searched_ride_item,parent, false);
 
         return new myViewHolder(view);
     }

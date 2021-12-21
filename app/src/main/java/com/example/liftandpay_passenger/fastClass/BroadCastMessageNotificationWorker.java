@@ -59,7 +59,7 @@ public class BroadCastMessageNotificationWorker extends Worker {
 
                 assert value != null;
 
-                buildNotification(value.getString("title"), value.getString("message"), 0);
+                buildNotification(value.getString("title"), value.getString("message"), 5);
 
 
             }
@@ -75,7 +75,7 @@ public class BroadCastMessageNotificationWorker extends Worker {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getApplicationContext().getString(R.string.channel_name);
             String description = "Hello" + chanDesc;
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("liftandpayId", name, importance);
             channel.setDescription(description);
             channel.enableVibration(true);

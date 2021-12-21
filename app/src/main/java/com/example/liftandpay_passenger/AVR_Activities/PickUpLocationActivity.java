@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,6 +91,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private SharedPreferences sharedPreferences;
     private SharedPreferences sharedPreferencesAVR;
 
+    private double infoLonD, infoLatD;
     //mapbox variables
     private MapView mapView;
     private MapboxMap mapboxMap;
@@ -144,6 +146,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private TextView pickupSearchBox;
     private String myName;
     private ArrayList<String> bookedRides = new ArrayList<>();
+    private FloatingActionButton useLocationFltBtn;
 
 
     @Override
@@ -155,6 +158,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         selectLocationButton = findViewById(R.id.mapButtonId);
         selectLocationButton.setText("Pickup From This Location");
 
+        useLocationFltBtn = findViewById(R.id.useLocationBtn);
 
         pickupSearchBox = findViewById(R.id.searchPickupId);
 
@@ -267,27 +271,37 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 hoveringMarker.setLayoutParams(params);
                 mapView.addView(hoveringMarker);
 
+                   useLocationFltBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+
+                            // Show the SymbolLayer icon to represent the selected map location
+                            if (style.getLayer("DROPPED_MARKER_LAYER_ID") != null) {
+                                GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
+                                if (source != null) {
+                                    source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+                                }
+                                droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
+                                if (droppedMarkerLayer != null) {
+                                    droppedMarkerLayer.setProperties(visibility(VISIBLE));
+                                }
+                            }
+
+                            pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+                        }
+                    });
+
+                   /*SetLocation click*/
                 selectLocationButton.setOnClickListener(view -> {
-                    if (hoveringMarker.getVisibility() == View.VISIBLE) {
-                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+                 /*   if (hoveringMarker.getVisibility() == View.VISIBLE) {
                         hoveringMarker.setImageResource(R.drawable.markerselected);
                         selectLocationButton.setBackgroundColor(
                                 ContextCompat.getColor(PickUpLocationActivity.this, R.color.black));
                         selectLocationButton.setText("Generating location ...");
 
-                        // Show the SymbolLayer icon to represent the selected map location
-                        if (style.getLayer("DROPPED_MARKER_LAYER_ID") != null) {
-                            GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
-                            if (source != null) {
-                                source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
-                            }
-                            droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
-                            if (droppedMarkerLayer != null) {
-                                droppedMarkerLayer.setProperties(visibility(VISIBLE));
-                            }
-                        }
 
-                        pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+
 
                     } else {
 
@@ -302,7 +316,9 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                         if (droppedMarkerLayer != null) {
                             droppedMarkerLayer.setProperties(visibility(Property.NONE));
                         }
-                    }
+                    }*/
+
+
 
                     // Open a dialog box to accept pickup location description
                     AlertDialog dlg = new AlertDialog.Builder(PickUpLocationActivity.this)
@@ -347,8 +363,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                     myName = documentSnapshot.getString("Name");
 
                                     Toast.makeText(PickUpLocationActivity.this, myName, Toast.LENGTH_LONG).show();
-                                    passengerBookingInfo.put("Lat", mapTargetLatLng.getLatitude());
-                                    passengerBookingInfo.put("Long", mapTargetLatLng.getLongitude());
+                                    passengerBookingInfo.put("Lat", infoLatD);
+                                    passengerBookingInfo.put("Long",infoLonD);
                                     passengerBookingInfo.put("Name", myName);
                                     passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
                                     passengerBookingInfo.put("Location Desc", inputEditText.getText().toString());
@@ -642,8 +658,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
             Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
             String infoNameD = data.getExtras().getString("theLocationName");
-            double infoLonD = (data.getExtras().getDouble("theLon", 0.0));
-            double infoLatD = (data.getExtras().getDouble("theLat", 0.0));
+            infoLonD = (data.getExtras().getDouble("theLon", 0.0));
+            infoLatD = (data.getExtras().getDouble("theLat", 0.0));
 
             hoveringMarker.setVisibility(View.INVISIBLE);
             pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(infoLonD, infoLatD));

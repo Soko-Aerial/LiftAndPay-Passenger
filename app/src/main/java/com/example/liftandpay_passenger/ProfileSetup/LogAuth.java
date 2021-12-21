@@ -97,7 +97,7 @@ public class LogAuth extends AppCompatActivity {
                             dRef.set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    Intent intent  = new Intent(LogAuth.this, SignUp001.class);
+                                    Intent intent  = new Intent(LogAuth.this, ProfileSettings.class);
                                     startActivity(intent);
                                 }
                             })

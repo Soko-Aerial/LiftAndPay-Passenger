@@ -56,7 +56,7 @@
         <activity android:name=".ProfileSetup.LogAuth" />
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".MainActivities.MainFragment" />
-        <activity android:name=".ProfileSetup.SignUp001" />
+        <activity android:name=".ProfileSetup.ProfileSettings" />
         <activity android:name=".AVR_Activities.Chats.ChatActivity_avr" />
         <activity android:name=".AVR_Activities.PickUpLocationActivity" />
         <activity android:name=".SearchedRide.SearchedRides" />

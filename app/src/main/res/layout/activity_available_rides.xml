@@ -71,7 +71,7 @@
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:background="@drawable/ripple"
-            android:backgroundTint="@color/extraFadedBlue"
+            android:backgroundTint="@color/transparent"
             android:src="@drawable/ic_message"
             app:tint="@color/primaryColors" />
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -103,11 +103,23 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue" />
+
             <TextView
                 android:id="@+id/aboutId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="not set" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue" />
 
 
             <TextView
@@ -118,6 +130,12 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue"/>
+
             <!--The ratings-->
 
 
@@ -127,12 +145,6 @@
                 android:orientation="horizontal">
 
 
-                <RatingBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:numStars="1"
-                    android:rating="0" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,6 +153,11 @@
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue"/>
 
             <!--About the car-->
             <TextView
@@ -151,6 +168,12 @@
                 android:textColor="@color/primaryColors"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -170,6 +193,12 @@
                     android:text="not set" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue" />
 
 
             <LinearLayout
@@ -191,6 +220,13 @@
 
             </LinearLayout>
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="1dp"
+                android:background="@color/fadedBlue" />
+
             <!-- Image -->
             <TextView
                 android:layout_width="wrap_content"
@@ -211,17 +247,19 @@
                 <ImageView
                     android:id="@+id/image001"
                     android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_height="150dp"
+                    android:background="@color/md_grey_700" />
 
                 <View
                     android:layout_width="5dp"
                     android:layout_height="match_parent"
-                    android:background="@color/fadedBlue" />
+                    android:background="@color/transparent" />
 
                 <ImageView
                     android:id="@+id/image002"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
+                    android:background="@color/md_grey_700"
 
                     />
 

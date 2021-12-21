@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,44 +31,46 @@ public class pendingRidesAdapter extends RecyclerView.Adapter<pendingRidesAdapte
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_row_design,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.model_pending_ride,parent,false);
         return new myViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.journey.setText(dataholder.get(position).getJourney());
-        holder.dateTime.setText(dataholder.get(position).getDateTime());
-        holder.distance.setText(dataholder.get(position).getDistance());
-        holder.price.setText(dataholder.get(position).getPrice());
-        holder.status.setText(dataholder.get(position).getStatus());
+        holder.journey.setText(dataholder.get(holder.getAdapterPosition()).getJourney());
+        holder.dateTime.setText(dataholder.get(holder.getAdapterPosition()).getDateTime());
+        holder.distance.setText(dataholder.get(holder.getAdapterPosition()).getDistance());
+        holder.price.setText(dataholder.get(holder.getAdapterPosition()).getPrice());
+        holder.status.setText(dataholder.get(holder.getAdapterPosition()).getStatus());
 
         holder.theCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, PendingRideMapActivity.class);
-                intent.putExtra("journey",dataholder.get(position).getJourney());
-                intent.putExtra("dateTime",dataholder.get(position).getDateTime());
-                intent.putExtra("distance",dataholder.get(position).getDistance());
-                intent.putExtra("stLat",dataholder.get(position).getStartLat());
-                intent.putExtra("stLon",dataholder.get(position).getStartLon());
-                intent.putExtra("endLat",dataholder.get(position).getEndLat());
-                intent.putExtra("endLon", dataholder.get(position).getEndLon());
-                intent.putExtra("rideId",dataholder.get(position).getRideId());
+               /* Intent intent = new Intent(context, PendingRideMapActivity.class);
+                intent.putExtra("journey",dataholder.get(holder.getAdapterPosition()).getJourney());
+                intent.putExtra("dateTime",dataholder.get(holder.getAdapterPosition()).getDateTime());
+                intent.putExtra("distance",dataholder.get(holder.getAdapterPosition()).getDistance());
+                intent.putExtra("stLat",dataholder.get(holder.getAdapterPosition()).getStartLat());
+                intent.putExtra("stLon",dataholder.get(holder.getAdapterPosition()).getStartLon());
+                intent.putExtra("endLat",dataholder.get(holder.getAdapterPosition()).getEndLat());
+                intent.putExtra("endLon", dataholder.get(holder.getAdapterPosition()).getEndLon());
+                intent.putExtra("rideId",dataholder.get(holder.getAdapterPosition()).getRideId());
 
-                context.startActivity(intent);
+                context.startActivity(intent);*/
             }
         });
 
         String status = holder.status.getText().toString();
 
         if (status.equals("Approved")){
-            holder.journey.setBackgroundColor(ContextCompat.getColor(context, R.color.success));
-            holder.price.setTextColor(ContextCompat.getColor(context, R.color.success));
+            holder.infoLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.extraFadedSuccess));
+            holder.journey.setBackgroundColor(ContextCompat.getColor(context, R.color.fadedSuccess));
+            holder.status.setTextColor(ContextCompat.getColor(context, R.color.success));
         }
         if (status.equals("Declined")){
+            holder.infoLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.extraFadedSuccess));
             holder.journey.setBackgroundColor(ContextCompat.getColor(context, R.color.failure));
-            holder.price.setTextColor(ContextCompat.getColor(context, R.color.failure));
+            holder.status.setTextColor(ContextCompat.getColor(context, R.color.red));
 
         }
     }
@@ -80,6 +83,7 @@ public class pendingRidesAdapter extends RecyclerView.Adapter<pendingRidesAdapte
     static class myViewHolder extends RecyclerView.ViewHolder{
         TextView journey, dateTime,distance,price,status;
         MaterialCardView theCardView;
+        LinearLayout infoLayout;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +93,7 @@ public class pendingRidesAdapter extends RecyclerView.Adapter<pendingRidesAdapte
             price = itemView.findViewById(R.id.price);
             status = itemView.findViewById(R.id.statusId);
             theCardView =  itemView.findViewById(R.id.pendingCardView);
+            infoLayout = itemView.findViewById(R.id.infoLayout);
         }
     }
 }
