@@ -45,11 +45,11 @@ public class ImageViewActivity extends AppCompatActivity {
                 .enableSingleTap(new SingleTapHandler.OnSingleTapListener() {
                     @Override
                     public void onSingleTap(@NotNull MotionEvent motionEvent) {
-                        Log.e("Tapped Message:","Hello Tapped");
+
                     }
                 })
                 .enablePinchToZoom()
-                .enableScroll(true,true,20,null);
+                .enableScroll(false,false,20,null);
 
     }
 }

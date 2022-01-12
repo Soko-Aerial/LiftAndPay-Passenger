@@ -38,6 +38,7 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -49,7 +50,7 @@ public class SearchedRides extends AppCompatActivity {
     ArrayList<carBookingModel> carholder;
     ArrayList<carBookingModel> filteredTrip = new ArrayList<>();
 
-    private ImageButton timeFlt, dateFlt, seatFlt , fltBtn;
+    private ImageButton timeFlt, dateFlt, seatFlt, fltBtn;
 
     private DatePicker datePicker;
     private TimePicker timePicker;
@@ -198,58 +199,87 @@ public class SearchedRides extends AppCompatActivity {
                         /*//Activate Filter Actions*/
                         // TimeFilter
                         timeFlt.setOnClickListener(View -> {
-                            switchFilterAction(toTIMEFILTER);
+                            if (timePicker.getVisibility() == android.view.View.GONE)
+                                switchFilterAction(toTIMEFILTER);
+                            else
+                                switchFilterAction("toDefault");
                         });
 
                         //DateFilter
                         dateFlt.setOnClickListener(View -> {
-                            switchFilterAction(toDATEFILTER);
+                            if (datePicker.getVisibility() == android.view.View.GONE)
+                                switchFilterAction(toDATEFILTER);
+                            else
+                                switchFilterAction("toDefault");
                         });
 
                         //SeatFilter
                         seatFlt.setOnClickListener(View -> {
-                            switchFilterAction(toSEATFILTER);
+                            if (seatPicker.getVisibility() == android.view.View.GONE)
+                                switchFilterAction(toSEATFILTER);
+                            else
+                                switchFilterAction("toDefault");
                         });
 
                     }
                 });
 
 
-
         //When the filter button is clicked
         fltBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
 
                 //check fo the filterValue to perform action
 
                 //filterValue 100 means date, 200 means time, 300 means seats
-                if(filterValue == 100){
+                if (filterValue == 100) {
+
+                    SimpleDateFormat chosenDate = new SimpleDateFormat("EEE, d MMM yyyy");
+                    long datePickerLong = (datePicker.getYear())+ (datePicker.getMonth())+ (datePicker.getDayOfMonth());
+                    String date = datePicker.getDayOfMonth() + "-" + (datePicker.getMonth()+1) + "-" + datePicker.getYear();
+                    chosenDate.format(date);
+                    Log.i("Date", chosenDate.format(date));
+
 
                 }
-                if (filterValue == 200){
+                if (filterValue == 200) {
+                    SimpleDateFormat format = new SimpleDateFormat("hh:mm:aa");
 
-                }
-                if(filterValue == 300){
+                    long timePickerLong = (timePicker.getHour() * 3600000) + (timePicker.getMinute() * 60000);
+                    String timeFormat = format.format(timePickerLong);
+                    Log.i("Time", timeFormat);
+
                     filteredTrip.clear();
 
                     for (carBookingModel newTrip : carholder) {
 
-                        if (Integer.valueOf(newTrip.getNumberOfSeats()).equals(Integer.valueOf(seatPicker.getText().toString()))) {
-                            filteredTrip.add(newTrip);
-                        }
+                            if (timeFormat.equals(newTrip.getTime())) {
+                                filteredTrip.add(newTrip);
+                            }
 
                     }
                     recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this, LinearLayoutManager.VERTICAL, false));
                     recyclerView.setAdapter(new carBookAdapter(filteredTrip, SearchedRides.this));
 
                 }
+                if (filterValue == 300) {
+                    filteredTrip.clear();
+
+                    for (carBookingModel newTrip : carholder) {
+
+                        if (!seatPicker.getText().toString().isEmpty()) {
+                            if (Integer.valueOf(newTrip.getNumberOfSeats()).equals(Integer.valueOf(seatPicker.getText().toString()))) {
+                                filteredTrip.add(newTrip);
+                            }
+                        }
+                    }
+                    recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this, LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(new carBookAdapter(filteredTrip, SearchedRides.this));
+                }
             }
         });
-
-
-
-
 
 
     }
@@ -258,8 +288,6 @@ public class SearchedRides extends AppCompatActivity {
     String toTIMEFILTER = "TIME";
     String toDATEFILTER = "DATE";
     String toSEATFILTER = "SEATS";
-
-
 
 
     /**

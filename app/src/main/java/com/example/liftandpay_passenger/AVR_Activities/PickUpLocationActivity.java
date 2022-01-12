@@ -102,10 +102,12 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     private SharedPreferences sharedPreferencesAVR;
 
     private double infoLonD, infoLatD;
+    private String infoNameD="";
+
     //mapbox variables
     private MapView mapView;
     private MapboxMap mapboxMap;
-    Button selectLocationButton;
+    private Button selectLocationButton;
 
     //layers
     private final String geojsonSourceLayerId = "geojsonSourceLayerId";
@@ -180,7 +182,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 startActivityIfNeeded(i, 200);
             }
         });
-
 
 
         mapTitleID = findViewById(R.id.mapTitleId);
@@ -284,216 +285,204 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 hoveringMarker.setLayoutParams(params);
                 mapView.addView(hoveringMarker);
 
-                   useLocationFltBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+                useLocationFltBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
 
-                            // Show the SymbolLayer icon to represent the selected map location
-                            if (style.getLayer("DROPPED_MARKER_LAYER_ID") != null) {
-                                GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
-                                if (source != null) {
-                                    source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
-                                }
-                                droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
-                                if (droppedMarkerLayer != null) {
-                                    droppedMarkerLayer.setProperties(visibility(VISIBLE));
-                                }
+                        // Show the SymbolLayer icon to represent the selected map location
+                        if (style.getLayer("DROPPED_MARKER_LAYER_ID") != null) {
+                            GeoJsonSource source = style.getSourceAs("dropped-marker-source-id");
+                            if (source != null) {
+                                source.setGeoJson(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
                             }
-
-
-
-                            pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
-
-                            infoLatD = pickUpLocationPoint.latitude();
-                            infoLonD = pickUpLocationPoint.longitude();
+                            droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
+                            if (droppedMarkerLayer != null) {
+                                droppedMarkerLayer.setProperties(visibility(VISIBLE));
+                            }
                         }
-                    });
 
-                   /*SetLocation click*/
+
+                        pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+
+                        infoLatD = pickUpLocationPoint.latitude();
+                        infoLonD = pickUpLocationPoint.longitude();
+                    }
+                });
+
+                /*SetLocation click*/
                 selectLocationButton.setOnClickListener(view -> {
-                 /*   if (hoveringMarker.getVisibility() == View.VISIBLE) {
-                        hoveringMarker.setImageResource(R.drawable.markerselected);
-                        selectLocationButton.setBackgroundColor(
-                                ContextCompat.getColor(PickUpLocationActivity.this, R.color.black));
-                        selectLocationButton.setText("Generating location ...");
+
+                    //Check if longitude and latitude are not equal to 0
+
+                    if (infoLatD == 0 && infoLonD == 0) {
+                        final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+                        pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+                        infoLatD = pickUpLocationPoint.latitude();
+                        infoLonD = pickUpLocationPoint.longitude();
+                    }
+
+                    Log.i("Pickup Latitude", infoLatD+"");
+                    Log.i("Pickup Longitude", infoLonD+"");
 
 
+                        // Open a dialog box to accept pickup location description
+                        AlertDialog dlg = new AlertDialog.Builder(PickUpLocationActivity.this)
+                                .setView(R.layout.single_input_model)
+                                .setTitle("Describe your pickup location")
+                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        // Switch the button appearance back to select a location.
+                                        selectLocationButton.setBackgroundColor(
+                                                ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
+                                        selectLocationButton.setText("Pickup from this location");
 
+                                        hoveringMarker.setImageResource(R.drawable.markerselecting);
 
-                    } else {
-
-                        // Switch the button appearance back to select a location.
-                        selectLocationButton.setBackgroundColor(
-                                ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
-                        selectLocationButton.setText("Pickup from this location");
-
-                        hoveringMarker.setImageResource(R.drawable.markerselecting);
-
-                        droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
-                        if (droppedMarkerLayer != null) {
-                            droppedMarkerLayer.setProperties(visibility(Property.NONE));
-                        }
-                    }*/
-
-
-
-                    // Open a dialog box to accept pickup location description
-                    AlertDialog dlg = new AlertDialog.Builder(PickUpLocationActivity.this)
-                            .setView(R.layout.single_input_model)
-                            .setTitle("Describe your pickup location")
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    // Switch the button appearance back to select a location.
-                                    selectLocationButton.setBackgroundColor(
-                                            ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
-                                    selectLocationButton.setText("Pickup from this location");
-
-                                    hoveringMarker.setImageResource(R.drawable.markerselecting);
-
-                                    droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
-                                    if (droppedMarkerLayer != null) {
-                                        droppedMarkerLayer.setProperties(visibility(Property.NONE));
-                                    }
-                                }
-                            })
-                            .create();
-
-
-                    dlg.setButton(DialogInterface.BUTTON_POSITIVE, "Book", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            inputEditText = (TextInputEditText) dlg.findViewById(R.id.inputViewId);
-
-                            Toast.makeText(PickUpLocationActivity.this, inputEditText.getText().toString(), Toast.LENGTH_LONG).show();
-
-                            //When Booking is completed
-                            String theRideDriverId = sharedPreferencesAVR.getString("TheRideDriverId", "Null");
-                            String theMainDriverId = sharedPreferencesAVR.getString("TheMainDriverId", "Null");
-                            passengerBookingInfo = new HashMap<>();
-                            final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
-
-                            db.collection("Passenger").document(thePassengersId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    //Fetch the name of the passenger and update the database. This will be retrieved by the driver at the requested passenger.
-                                    myName = documentSnapshot.getString("Name");
-
-                                    Toast.makeText(PickUpLocationActivity.this, myName, Toast.LENGTH_LONG).show();
-                                    passengerBookingInfo.put("Lat", infoLatD);
-                                    passengerBookingInfo.put("Long",infoLonD);
-                                    passengerBookingInfo.put("Name", myName);
-                                    passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
-                                    passengerBookingInfo.put("Location Desc", inputEditText.getText().toString());
-                                    passengerBookingInfo.put("Status", "Pending Approval");
-
-                                    DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
-                                    DocumentReference bookedByRefToDriver = db.collection("Driver").document(theMainDriverId).collection("Pending Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
-
-                                    DocumentReference myBookedRides = db.collection("Passenger").document(thePassengersId).collection("Rides").document("Pending Rides");
-                                    bookedByRef.set(passengerBookingInfo)
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-
-                                                    //Get documents for all my pending rides
-                                                    myBookedRides.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
-
-                                                            //Check if task was successful
-                                                            if (task.isSuccessful()) {
-                                                                Log.e("bookTask001", "Success");
-
-                                                                //Check if I have ever booked a ride before
-                                                                if (task.getResult().contains("BookedRides")) {
-                                                                    Log.e("bookTask001", "Contains Booked Rides -True");
-
-                                                                    //if yes, then get all my booked rides Id
-                                                                    bookedRides = new ArrayList<>((Collection<? extends String>) task.getResult().get("BookedRides"));
-
-                                                                    //add my current ride Id to it
-                                                                    bookedRides.add(theRideDriverId);
-
-                                                                    //Then update the all my booked rides with respect to the one I just booked
-                                                                    task.getResult().getReference().update("BookedRides", bookedRides).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull @NotNull Task<Void> task002) {
-                                                                            Log.e("Task002", "Completed");
-
-                                                                            if (task002.isSuccessful()) {
-                                                                                indicateBookedSuccess();
-                                                                            }
-
-                                                                        }
-                                                                    })
-                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                @Override
-                                                                                public void onSuccess(Void unused) {
-                                                                                    MainActivity mainActivity = new MainActivity();
-                                                                                    Intent intent = new Intent(getApplicationContext(), mainActivity.getClass());
-                                                                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                                                    startActivity(intent);
-                                                                                }
-                                                                            })
-                                                                            .addOnFailureListener(new OnFailureListener() {
-                                                                                @Override
-                                                                                public void onFailure(@NonNull Exception e) {
-                                                                                    Toast.makeText(getApplicationContext(), "Couldn't add to driver", Toast.LENGTH_LONG).show();
-                                                                                }
-                                                                            });
-
-
-                                                                } else {
-                                                                    Log.e("bookTask001", "Contains Booked Rides -False");
-                                                                    Map<String, Object> pendingRideData = new HashMap<>();
-                                                                    bookedRides.add(theRideDriverId);
-                                                                    pendingRideData.put("BookedRides", bookedRides);
-
-                                                                    task.getResult().getReference().set(pendingRideData).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                                                                        @Override
-                                                                        public void onComplete(@NonNull @NotNull Task<Void> task) {
-
-                                                                            if (task.isSuccessful()) {
-                                                                                indicateBookedSuccess();
-                                                                            }
-                                                                        }
-                                                                    });
-                                                                }
-                                                            } else {
-                                                                Log.e("bookTask001", "Failed");
-                                                            }
-
-
-                                                        }
-                                                    });
-
-
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getApplicationContext(), "Couldn't add to Rides", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-                                }
-                            })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull @NotNull Exception e) {
-                                            Toast.makeText(PickUpLocationActivity.this, "Profile not complete: Set Your Name", Toast.LENGTH_LONG).show();
-                                            finish();
+                                        droppedMarkerLayer = style.getLayer("DROPPED_MARKER_LAYER_ID");
+                                        if (droppedMarkerLayer != null) {
+                                            droppedMarkerLayer.setProperties(visibility(Property.NONE));
                                         }
-                                    });
+                                    }
+                                })
+                                .create();
 
 
-                        }
-                    });
+                        dlg.setButton(DialogInterface.BUTTON_POSITIVE, "Book", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                inputEditText = (TextInputEditText) dlg.findViewById(R.id.inputViewId);
 
-                    dlg.show();
+                                Toast.makeText(PickUpLocationActivity.this, inputEditText.getText().toString(), Toast.LENGTH_LONG).show();
+
+                                //When Booking is completed
+                                String theRideDriverId = sharedPreferencesAVR.getString("TheRideDriverId", "Null");
+                                String theMainDriverId = sharedPreferencesAVR.getString("TheMainDriverId", "Null");
+                                passengerBookingInfo = new HashMap<>();
+                                final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
+
+                                db.collection("Passenger").document(thePassengersId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        //Fetch the name of the passenger and update the database. This will be retrieved by the driver at the requested passenger.
+                                        myName = documentSnapshot.getString("Name");
+
+                                        Toast.makeText(PickUpLocationActivity.this, myName, Toast.LENGTH_LONG).show();
+                                        passengerBookingInfo.put("Lat", infoLatD);
+                                        passengerBookingInfo.put("Long", infoLonD);
+                                        passengerBookingInfo.put("Name", myName);
+                                        passengerBookingInfo.put("Email", Objects.requireNonNull(mAuth.getCurrentUser()).getEmail());
+                                        passengerBookingInfo.put("Location Desc", inputEditText.getText().toString());
+                                        passengerBookingInfo.put("Status", "Pending Approval");
+
+                                        DocumentReference bookedByRef = db.collection("Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
+                                        DocumentReference bookedByRefToDriver = db.collection("Driver").document(theMainDriverId).collection("Pending Rides").document(theRideDriverId).collection("Booked By").document(thePassengersId);
+
+                                        DocumentReference myBookedRides = db.collection("Passenger").document(thePassengersId).collection("Rides").document("Pending Rides");
+                                        bookedByRef.set(passengerBookingInfo)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                                        //Get documents for all my pending rides
+                                                        myBookedRides.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
+
+                                                                //Check if task was successful
+                                                                if (task.isSuccessful()) {
+                                                                    Log.e("bookTask001", "Success");
+
+                                                                    //Check if I have ever booked a ride before
+                                                                    if (task.getResult().contains("BookedRides")) {
+                                                                        Log.e("bookTask001", "Contains Booked Rides -True");
+
+                                                                        //if yes, then get all my booked rides Id
+                                                                        bookedRides = new ArrayList<>((Collection<? extends String>) task.getResult().get("BookedRides"));
+
+                                                                        //add my current ride Id to it
+                                                                        bookedRides.add(theRideDriverId);
+
+                                                                        //Then update the all my booked rides with respect to the one I just booked
+                                                                        task.getResult().getReference().update("BookedRides", bookedRides).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull @NotNull Task<Void> task002) {
+                                                                                Log.e("Task002", "Completed");
+
+                                                                                if (task002.isSuccessful()) {
+                                                                                    indicateBookedSuccess();
+                                                                                }
+
+                                                                            }
+                                                                        })
+                                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(Void unused) {
+                                                                                        MainActivity mainActivity = new MainActivity();
+                                                                                        Intent intent = new Intent(getApplicationContext(), mainActivity.getClass());
+                                                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                                        startActivity(intent);
+                                                                                    }
+                                                                                })
+                                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                                    @Override
+                                                                                    public void onFailure(@NonNull Exception e) {
+                                                                                        Toast.makeText(getApplicationContext(), "Couldn't add to driver", Toast.LENGTH_LONG).show();
+                                                                                    }
+                                                                                });
+
+
+                                                                    } else {
+                                                                        Log.e("bookTask001", "Contains Booked Rides -False");
+                                                                        Map<String, Object> pendingRideData = new HashMap<>();
+                                                                        bookedRides.add(theRideDriverId);
+                                                                        pendingRideData.put("BookedRides", bookedRides);
+
+                                                                        task.getResult().getReference().set(pendingRideData).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                                                                            @Override
+                                                                            public void onComplete(@NonNull @NotNull Task<Void> task) {
+
+                                                                                if (task.isSuccessful()) {
+                                                                                    indicateBookedSuccess();
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                } else {
+                                                                    Log.e("bookTask001", "Failed");
+                                                                }
+
+
+                                                            }
+                                                        });
+
+
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(getApplicationContext(), "Couldn't add to Rides", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                    }
+                                })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull @NotNull Exception e) {
+                                                Toast.makeText(PickUpLocationActivity.this, "Profile not complete: Set Your Name", Toast.LENGTH_LONG).show();
+                                                finish();
+                                            }
+                                        });
+
+
+                            }
+                        });
+
+                        dlg.show();
+
 
 
                 });
@@ -654,7 +643,6 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 // Set the component's camera mode
 
 
-
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);
@@ -696,7 +684,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
             pickupSearchBox.setText(data.getExtras().getString("theLocationName"));
 
             Log.e("Result", data.getExtras().getString(new SearchActivity().theNameID));
-            String infoNameD = data.getExtras().getString("theLocationName");
+            infoNameD = data.getExtras().getString("theLocationName");
             infoLonD = (data.getExtras().getDouble("theLon", 0.0));
             infoLatD = (data.getExtras().getDouble("theLat", 0.0));
 
@@ -707,12 +695,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
         }
 
 
-
     }
-
-
-
-
 
 
     @Override

@@ -59,8 +59,8 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         holder.amount.setText(carHolder.get(position).getCostPerKilometer().toString());
         holder.startLocation.setText(carHolder.get(position).getStartLocation());
         holder.endLocation.setText(carHolder.get(position).getEndLocation());
-        holder.date.setText(carHolder.get(position).getDateId());
-        holder.time.setText(carHolder.get(position).getTimeId());
+        holder.date.setText(carHolder.get(position).getDate());
+        holder.time.setText(carHolder.get(position).getTime());
         holder.rideDriverId = carHolder.get(position).getDriverId();
         holder.numberOfSeats.setText("0/"+carHolder.get(position).getNumberOfSeats()+"seats");
         holder.stLat = carHolder.get(position).getStLat();
@@ -101,7 +101,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
                 intent.putExtra("endLon",holder.endLon);
                 intent.putExtra("startLat",holder.stLat);
                 intent.putExtra("startLon",holder.stLon);
-                intent.putExtra("theTime", carHolder.get(position).getTimeId());
+                intent.putExtra("theTime", carHolder.get(position).getTime());
                 intent.putExtra("theDistance",carHolder.get(position).getCostPerKilometer());
                 intent.putExtra("theJourney",carHolder.get(position).getStartLocation()+" - "+carHolder.get(position).getEndLocation());
                 intent.putExtra("Purpose","For Booking");

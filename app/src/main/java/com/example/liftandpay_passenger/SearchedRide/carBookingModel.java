@@ -11,8 +11,8 @@ public class carBookingModel {
     private String startLocation;
     private String endLocation;
     private String costPerKilometer;
-    private String dateId;
-    private String timeId;
+    private String date;
+    private String time;
     private String driverId;
     private double stLat;
     private double stLon;
@@ -24,8 +24,8 @@ public class carBookingModel {
                            String startLocation,
                            String endLocation,
                            String costPerKilometer,
-                           String dateId,
-                           String timeId,
+                           String date,
+                           String time,
                            String driverId,
                            double stLat,
                            double stLon,
@@ -36,8 +36,8 @@ public class carBookingModel {
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.costPerKilometer = costPerKilometer;
-        this.dateId = dateId;
-        this.timeId = timeId;
+        this.date = date;
+        this.time = time;
         this.driverId = driverId;
         this.stLat = stLat;
         this.stLon = stLon;
@@ -102,20 +102,20 @@ public class carBookingModel {
         this.costPerKilometer = costPerKilometer;
     }
 
-    public String getDateId() {
-        return dateId;
+    public String getDate() {
+        return date;
     }
 
     public void setDateId(String dateId) {
-        this.dateId = dateId;
+        this.date = date;
     }
 
-    public String getTimeId() {
-        return timeId;
+    public String getTime() {
+        return time;
     }
 
-    public void setTimeId(String timeId) {
-        this.timeId = timeId;
+    public void setTimeId(String time) {
+        this.time = time;
     }
 
     public int getNumberOfSeats() {
