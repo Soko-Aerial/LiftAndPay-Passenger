@@ -38,8 +38,10 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class SearchedRides extends AppCompatActivity {
@@ -236,11 +238,33 @@ public class SearchedRides extends AppCompatActivity {
                 //filterValue 100 means date, 200 means time, 300 means seats
                 if (filterValue == 100) {
 
+
                     SimpleDateFormat chosenDate = new SimpleDateFormat("EEE, d MMM yyyy");
+                    SimpleDateFormat d = new SimpleDateFormat("dd-MM-yyyy");
                     long datePickerLong = (datePicker.getYear())+ (datePicker.getMonth())+ (datePicker.getDayOfMonth());
-                    String date = datePicker.getDayOfMonth() + "-" + (datePicker.getMonth()+1) + "-" + datePicker.getYear();
-                    chosenDate.format(date);
-                    Log.i("Date", chosenDate.format(date));
+                    String date =  datePicker.getDayOfMonth() + "-" + (datePicker.getMonth()+1) + "-" + datePicker.getYear();
+                    try {
+                        Date dates = d.parse(date);
+                        String dateFormat =chosenDate.format(dates);
+                        Log.i("Date", chosenDate.format(dates));
+
+
+                        filteredTrip.clear();
+
+                        for (carBookingModel newTrip : carholder) {
+
+                            if (dateFormat.equals(newTrip.getDate())) {
+                                filteredTrip.add(newTrip);
+                            }
+
+                        }
+                        recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this, LinearLayoutManager.VERTICAL, false));
+                        recyclerView.setAdapter(new carBookAdapter(filteredTrip, SearchedRides.this));
+                    } catch (ParseException parseException) {
+                        parseException.printStackTrace();
+                    }
+
+
 
 
                 }
