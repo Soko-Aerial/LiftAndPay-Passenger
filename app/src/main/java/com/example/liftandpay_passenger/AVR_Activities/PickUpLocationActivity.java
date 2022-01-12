@@ -6,11 +6,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,6 +39,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.mapbox.android.core.location.LocationEngineCallback;
+import com.mapbox.android.core.location.LocationEngineResult;
+import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
@@ -48,6 +53,10 @@ import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.LocationComponentOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -64,6 +73,7 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -85,7 +95,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
-public class PickUpLocationActivity extends FragmentActivity implements OnMapReadyCallback {
+public class PickUpLocationActivity extends FragmentActivity implements OnMapReadyCallback, PermissionsListener {
 
     //Shared prefferences
     private SharedPreferences sharedPreferences;
@@ -183,6 +193,7 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
+
         sharedPreferences = getApplicationContext().getSharedPreferences("RIDEFILE", MODE_PRIVATE);
         sharedPreferencesAVR = getApplicationContext().getSharedPreferences("AVRDialogFile", MODE_PRIVATE);
         sharedPreferences.edit().putString("TheOrderId", "hELLO").apply();
@@ -260,6 +271,8 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 //Route between the two points
                 getRoute(originPoint, destinationPoint);
 
+                enableLocationComponent(style);
+
 
                 hoveringMarker = new ImageView(PickUpLocationActivity.this);
                 hoveringMarker.setImageResource(R.drawable.markerselecting);
@@ -288,7 +301,12 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                                 }
                             }
 
+
+
                             pickUpLocationPoint = passengerPickUpLocMarker(Point.fromLngLat(mapTargetLatLng.getLongitude(), mapTargetLatLng.getLatitude()));
+
+                            infoLatD = pickUpLocationPoint.latitude();
+                            infoLonD = pickUpLocationPoint.longitude();
                         }
                     });
 
@@ -621,7 +639,28 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
                 });
     }
 
+    @SuppressLint("WrongConstant")
+    @SuppressWarnings({"MissingPermission"})
+    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+// Check if permissions are enabled and if not request
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+// Activate the MapboxMap LocationComponent to show user location
+// Adding in LocationComponentOptions is also an optional parameter
 
+            locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(PickUpLocationActivity.this, loadedMapStyle).build());
+            locationComponent.setLocationComponentEnabled(true);
+            locationComponent.setRenderMode(RenderMode.NORMAL);
+
+// Set the component's camera mode
+
+
+
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
+        }
+
+    }
 
     /* selectLocationButton.setBackgroundColor(
              ContextCompat.getColor(PickUpLocationActivity.this, R.color.primaryColors));
@@ -667,7 +706,13 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
         }
 
+
+
     }
+
+
+
+
 
 
     @Override
@@ -718,6 +763,16 @@ public class PickUpLocationActivity extends FragmentActivity implements OnMapRea
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
 
     }
 }

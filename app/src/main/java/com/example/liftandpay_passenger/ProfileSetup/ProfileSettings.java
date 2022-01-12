@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -54,9 +55,10 @@ public class ProfileSettings extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public final int SELECT_PICTURE = 111;
-    private ImageView profileImg;
+    private ShapeableImageView profileImg;
     private FirebaseStorage storage =  FirebaseStorage.getInstance();
     private String mUid = FirebaseAuth.getInstance().getUid();
+
 
 
     @Override
@@ -67,7 +69,7 @@ public class ProfileSettings extends AppCompatActivity {
 
         fillInfo();
 
-        LinearLayout photoLinear =findViewById(R.id.photoUploadId);
+
         profileImg = findViewById(R.id.profileImgId);
 
         btnToSignUp002 = findViewById(R.id.btnTosignUp002);
@@ -86,7 +88,7 @@ public class ProfileSettings extends AppCompatActivity {
         profileImg.buildDrawingCache();
 
 
-        photoLinear.setOnClickListener(new View.OnClickListener() {
+        profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imageChooser();
@@ -120,7 +122,7 @@ public class ProfileSettings extends AppCompatActivity {
                             pBar.setVisibility(View.INVISIBLE);
                             Snackbar.make(ProfileSettings.this, pBar, "Profile Updated", 5000)
                                     .setTextColor(Color.WHITE)
-                                    .setBackgroundTint(getResources().getColor(R.color.mapbox_plugins_green)).show();
+                                    .setBackgroundTint(getResources().getColor(R.color.success)).show();
 
 
                             /*Upload Image*/

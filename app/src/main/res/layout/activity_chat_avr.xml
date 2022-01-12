@@ -26,7 +26,6 @@
             android:layout_marginEnd="6dp"
             app:shapeAppearance="@style/ShapeAppearance.CircularBorder"
             android:layout_marginBottom="6dp"
-
             android:src="@drawable/person_img" />
 
 

@@ -44,7 +44,7 @@
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_add_card_details.xml" value="0.264" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_available_rides.xml" value="0.4" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_chat_avr.xml" value="0.22760416666666666" />
-        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_check_map.xml" value="0.264" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_check_map.xml" value="0.2" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_image_view.xml" value="0.1484375" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_logauth.xml" value="0.1" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_login.xml" value="0.2" />
@@ -56,8 +56,8 @@
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_ride_details.xml" value="0.2" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_ride_preference.xml" value="0.30057803468208094" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_search.xml" value="0.264" />
-        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_searched_rides.xml" value="0.264" />
-        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_searched_rides.xml" value="0.4" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_sign_up.xml" value="0.18075801749271136" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_sign_up003.xml" value="0.2" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/activity_splash.xml" value="0.20625" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/alert_rate_driver.xml" value="0.17395833333333333" />

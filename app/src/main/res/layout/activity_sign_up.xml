@@ -19,43 +19,28 @@ tools:context=".ProfileSetup.ProfileSettings">
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-       >
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/photoUploadId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="90dp"
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImgId"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_margin="40dp"
+            android:layout_marginTop="90dp"
             android:background="@drawable/ripple"
             android:backgroundTint="@color/transparent"
             android:clickable="true"
+            android:contentDescription="SelectedImg"
             android:focusable="true"
+            android:foreground="@drawable/ripple"
+            android:foregroundTint="@color/transparentColor"
             android:padding="5dp"
-            android:orientation="vertical"
-            app:strokeColor="@color/primaryColors"
-            >
+            android:src="@color/md_grey_700"
+            app:shapeAppearance="@style/ShapeAppearance.CircularBorder"
+            app:strokeColor="@color/fadedBlue"
+            app:strokeWidth="4dp" />
 
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileImgId"
-                android:layout_width="200dp"
-                android:padding="5dp"
-                android:layout_height="200dp"
-                android:background="@color/primaryColors"
-                android:clickable="true"
-                android:contentDescription="SelectedImg"
-                android:focusable="true"
-                android:foreground="@drawable/ripple"
-                android:foregroundTint="@color/transparentColor"
-                android:src="@drawable/person_img"
-                app:shapeAppearance="@style/ShapeAppearance.CircularBorder"
-                app:strokeColor="@color/fadedBlue"
-                app:strokeWidth="4dp" />
-        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

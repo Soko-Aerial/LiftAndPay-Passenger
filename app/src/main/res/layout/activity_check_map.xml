@@ -4,34 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AVR_Activities.PickUpLocationActivity">
+    tools:context=".AVR_Activities.PickUpLocationActivity"
+    android:keepScreenOn="true"
+    >
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/useLocationBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/map_default_map_marker"
+        android:padding="5dp"
+        android:background="@drawable/bottom_sheet_bkg"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/chooseL"
-        android:layout_margin="4dp"
-        app:backgroundTint="@color/success"
+        app:layout_constraintBottom_toTopOf="@id/mapButtonId"
+        android:layout_margin="15dp"
+        android:foreground="@drawable/mapbox_plugins_ic_user_location"
+        android:foregroundTint="@color/primaryColors"
+        app:backgroundTint="@color/white"
         app:tint="@color/primaryColors"
 
         />
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
-
-    </com.mapbox.mapboxsdk.maps.MapView>
+        android:layout_height="match_parent"
+        />
 
 
     <Button
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/mapButtonId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/mapButtonId"
+        app:layout_constraintTop_toBottomOf="@id/chooseL"
         android:layout_margin="5dp"
         android:background="@drawable/searchbar_bkg"
         android:orientation="horizontal">
@@ -76,7 +77,7 @@
         android:id="@+id/chooseL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:orientation="vertical">
 
 
@@ -85,15 +86,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primaryColors"
-
             android:gravity="center"
             android:padding="8dp"
             android:text="Choose a pickup Location"
             android:textColor="@color/white" />
-
-
-
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

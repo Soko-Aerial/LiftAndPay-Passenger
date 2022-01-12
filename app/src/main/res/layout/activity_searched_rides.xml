@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     tools:context=".SearchedRide.SearchedRides">
 
     <LinearLayout
@@ -39,6 +40,7 @@
             />
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -49,10 +51,12 @@
             android:layout_weight="1"
             android:foregroundGravity="center"
             android:layout_gravity="center"
-            android:scrollbars="horizontal"
+            android:scrollbars="vertical"
             android:scrollbarAlwaysDrawHorizontalTrack="true"
             android:layout_height="wrap_content"
             >
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,12 +64,14 @@
                 android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/timeFilterId"
                 android:layout_width="70dp"
                 android:layout_height="50dp"
                 android:src="@drawable/img_time"
                 android:contentDescription="TIME FILTER" />
 
             <ImageButton
+                android:id="@+id/dateFilterId"
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/img_date"
@@ -73,6 +79,7 @@
                 />
 
                 <ImageButton
+                    android:id="@+id/seatFilterId"
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
                     android:src="@drawable/person_img"
@@ -90,13 +97,58 @@
         </ScrollView>
 
         <ImageButton
+            android:id="@+id/filterBtnId"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:layout_margin="2dp"
             android:src="@drawable/img_filter"
+
+            android:background="@color/primaryColors"
+            app:tint="@color/white"
             android:contentDescription="FILTER BUTTON"
         />
     </LinearLayout>
+
+    <TimePicker
+        android:id="@+id/timePickerId"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:timePickerMode="spinner"
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        android:background="@color/extraFadedBlue"
+        />
+
+    <DatePicker
+        android:id="@+id/datePickerId"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:calendarViewShown="false"
+        android:minDate="01/01/2022"
+        android:maxDate="01/01/2023"
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        android:background="@color/extraFadedBlue"
+        android:datePickerMode="spinner"/>
+
+
+    <EditText
+        android:id="@+id/seatPickerId"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:maxLength="1"
+        android:inputType="numberSigned"
+        android:layout_height="100dp"
+        android:gravity="center"
+        app:searchIcon="@color/transparent"
+        app:queryHint="Enter number of seats"
+        android:textSize="22sp"
+        android:animateLayoutChanges="true"
+        android:hint="Enter number of seats"
+        android:visibility="gone"
+        android:background="@color/extraFadedBlue"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

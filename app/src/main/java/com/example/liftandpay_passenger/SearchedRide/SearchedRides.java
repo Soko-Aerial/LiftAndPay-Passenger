@@ -8,12 +8,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.R;
@@ -40,6 +47,15 @@ public class SearchedRides extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SearchView searchView;
     ArrayList<carBookingModel> carholder;
+    ArrayList<carBookingModel> filteredTrip = new ArrayList<>();
+
+    private ImageButton timeFlt, dateFlt, seatFlt , fltBtn;
+
+    private DatePicker datePicker;
+    private TimePicker timePicker;
+    private EditText seatPicker;
+
+    private int filterValue;
 
     private TextView backBtn, availableRidesText;
 
@@ -56,6 +72,15 @@ public class SearchedRides extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searched_rides);
 
+
+        dateFlt = findViewById(R.id.dateFilterId);
+        timeFlt = findViewById(R.id.timeFilterId);
+        seatFlt = findViewById(R.id.seatFilterId);
+        fltBtn = findViewById(R.id.filterBtnId);
+
+        datePicker = findViewById(R.id.datePickerId);
+        timePicker = findViewById(R.id.timePickerId);
+        seatPicker = findViewById(R.id.seatPickerId);
 
         recyclerView = findViewById(R.id.searchedRidesRecycler);
         carholder = new ArrayList<>();
@@ -76,7 +101,7 @@ public class SearchedRides extends AppCompatActivity {
 
 
         db.collection("Rides")
-                .whereNotEqualTo("driversStatus","Cancelled")
+                .whereNotEqualTo("driversStatus", "Cancelled")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -170,9 +195,123 @@ public class SearchedRides extends AppCompatActivity {
                         });
 
 
+                        /*//Activate Filter Actions*/
+                        // TimeFilter
+                        timeFlt.setOnClickListener(View -> {
+                            switchFilterAction(toTIMEFILTER);
+                        });
+
+                        //DateFilter
+                        dateFlt.setOnClickListener(View -> {
+                            switchFilterAction(toDATEFILTER);
+                        });
+
+                        //SeatFilter
+                        seatFlt.setOnClickListener(View -> {
+                            switchFilterAction(toSEATFILTER);
+                        });
+
                     }
                 });
 
+
+
+        //When the filter button is clicked
+        fltBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //check fo the filterValue to perform action
+
+                //filterValue 100 means date, 200 means time, 300 means seats
+                if(filterValue == 100){
+
+                }
+                if (filterValue == 200){
+
+                }
+                if(filterValue == 300){
+                    filteredTrip.clear();
+
+                    for (carBookingModel newTrip : carholder) {
+
+                        if (Integer.valueOf(newTrip.getNumberOfSeats()).equals(Integer.valueOf(seatPicker.getText().toString()))) {
+                            filteredTrip.add(newTrip);
+                        }
+
+                    }
+                    recyclerView.setLayoutManager(new LinearLayoutManager(SearchedRides.this, LinearLayoutManager.VERTICAL, false));
+                    recyclerView.setAdapter(new carBookAdapter(filteredTrip, SearchedRides.this));
+
+                }
+            }
+        });
+
+
+
+
+
+
+    }
+
+
+    String toTIMEFILTER = "TIME";
+    String toDATEFILTER = "DATE";
+    String toSEATFILTER = "SEATS";
+
+
+
+
+    /**
+     * Switches among the filter buttons
+     * <p>
+     * toTIMEFILTER, toDATEFILTER, toSEATFILTER
+     *
+     * @param btnAction One of {@link #toTIMEFILTER}, {@link #toDATEFILTER} or {@link #toSEATFILTER}.
+     * @attr ref android.R.styleable#View_visibility
+     */
+    void switchFilterAction(String btnAction) {
+
+        switch (btnAction) {
+
+            case "DATE":
+                Log.i("Filter Action", "Date Filter");
+                //unselect all filters and select date filter;
+                datePicker.setVisibility(View.VISIBLE);
+                timePicker.setVisibility(View.GONE);
+                seatPicker.setVisibility(View.GONE);
+                filterValue = 100;
+                break;
+
+
+            case "TIME":
+                Log.i("Filter Action", "Time Filter");
+                //unselect all filters and select time filter;
+                datePicker.setVisibility(View.GONE);
+                timePicker.setVisibility(View.VISIBLE);
+                seatPicker.setVisibility(View.GONE);
+                filterValue = 200;
+                break;
+
+            case "SEATS":
+                Log.i("Filter Action", "Seats Filter");
+                //unselect all filters and select seat filter;
+                datePicker.setVisibility(View.GONE);
+                timePicker.setVisibility(View.GONE);
+                seatPicker.setVisibility(View.VISIBLE);
+                filterValue = 300;
+
+                break;
+
+            default:
+                Log.i("Filter Action", "No Filter");
+
+                datePicker.setVisibility(View.GONE);
+                timePicker.setVisibility(View.GONE);
+                seatPicker.setVisibility(View.GONE);
+                filterValue = 000;
+
+        }
     }
 
 
