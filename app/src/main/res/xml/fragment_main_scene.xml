@@ -91,6 +91,8 @@
             app:targetId="@id/scrollViewId"
             app:dragDirection="dragUp"
             app:moveWhenScrollAtTop="true"
+
+
        />
 
     </Transition>

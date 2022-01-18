@@ -42,11 +42,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 import com.google.firebase.storage.FirebaseStorage;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -55,6 +57,7 @@ import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -109,7 +112,6 @@ public class MainFragment extends AppCompatActivity {
     private LottieAnimationView clockAnimate;
 
 
-
     @Nullable
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -160,12 +162,10 @@ public class MainFragment extends AppCompatActivity {
         profileBtn = findViewById(R.id.profileBtn);
 
 
-
-
-        ArrayAdapter<CharSequence> profileSeq = ArrayAdapter.createFromResource(this,R.array.profile_settings,R.layout.single_input_model);
+        ArrayAdapter<CharSequence> profileSeq = ArrayAdapter.createFromResource(this, R.array.profile_settings, R.layout.single_input_model);
         profileSeq.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
-        clockAnimate =findViewById(R.id.reverseClock);
+        clockAnimate = findViewById(R.id.reverseClock);
         clockAnimate.animate().setDuration(4000).setStartDelay(4000);
 //        clockAnimate.reverseAnimationSpeed();
 
@@ -183,7 +183,7 @@ public class MainFragment extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainFragment.this, ProfileSettings.class);
                 startActivity(i);
-               // mAuth.signOut();
+                // mAuth.signOut();
             }
         });
 
@@ -265,15 +265,15 @@ public class MainFragment extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    AuthUI.getInstance()
-                            .signOut(MainFragment.this)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    // user is now signed out
-                                    startActivity(new Intent(MainFragment.this, MainActivity.class));
-                                    finish();
-                                }
-                            });
+                AuthUI.getInstance()
+                        .signOut(MainFragment.this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // user is now signed out
+                                startActivity(new Intent(MainFragment.this, MainActivity.class));
+                                finish();
+                            }
+                        });
 
 //                mAuth.signOut();
                 /*Intent intent = new Intent(MainFragment.this, SignUp003.class);
@@ -331,7 +331,7 @@ public class MainFragment extends AppCompatActivity {
                                                     if (value.exists()) {
                                                         Log.e("BookedRides001", "Exists");
 
-                                                        String driverStatus =": "+ value.getString("driversStatus");
+                                                        String driverStatus = ": " + value.getString("driversStatus");
 
                                                         rideStatus.setText(driverStatus);
 
@@ -352,32 +352,44 @@ public class MainFragment extends AppCompatActivity {
                                                                 lastRideSharedPrefs.edit().putFloat("ThePickupLat", Float.parseFloat(String.valueOf(value1.getDouble("Lat")))).apply();
 
                                                                 String status = value1.getString("Status");
+                                                                String arrivalFlag = value1.getString("ArrivalFlag");
+
                                                                 statusId.setText(status);
 
                                                                 Log.e("Status", status);
 
-                                                                if (status.equals("Driver almost there"))
-                                                                {
-                                                                  vibrator.vibrate(3000);
-                                                                  textToSpeech.speak(status, TextToSpeech.QUEUE_FLUSH, null,status);
-                                                                  dialogBuilder.setView(LayoutInflater.from(MainFragment.this).inflate(R.layout.dialog_status_dialog, null));
-                                                                  dialogBuilder.setCancelable(false);
-                                                                  dialogBuilder.setPositiveButton("Alright", new DialogInterface.OnClickListener() {
-                                                                      @Override
-                                                                      public void onClick(DialogInterface dialog, int which) {
-                                                                          dialog.dismiss();
-                                                                      }
-                                                                  });
-                                                                  dialog = dialogBuilder.show();
+                                                                if (status.equals("Driver almost there")) {
 
 
-                                                                  new Handler().postDelayed(new Runnable() {
-                                                                      @Override
-                                                                      public void run() {
+                                                                        if (arrivalFlag == null ) {
+                                                                            if (!lastRideSharedPrefs.getString("DriverLocation", "around").equals("set")) {
 
+                                                                                vibrator.vibrate(4000);
+                                                                                textToSpeech.speak(status, TextToSpeech.QUEUE_FLUSH, null, status);
 
-                                                                      }
-                                                                  },10000);
+                                                                                dialogBuilder.setView(LayoutInflater.from(MainFragment.this).inflate(R.layout.dialog_status_dialog, null, false));
+                                                                                dialogBuilder.setCancelable(false);
+                                                                                dialogBuilder.setPositiveButton("Alright", new DialogInterface.OnClickListener() {
+                                                                                    @Override
+                                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                                        dialog.dismiss();
+                                                                                    }
+                                                                                });
+
+                                                                                Snackbar.make(parentView, "Driver is around", 5000).show();
+
+                                                                                HashMap<String, String> arrivalData = new HashMap<>();
+                                                                                arrivalData.put("ArrivalFlag", "1");
+                                                                                db.collection("Rides").document(lastBookedRide).collection("Booked By").document(mAuth.getUid())
+                                                                                        .set(arrivalData, SetOptions.merge());
+
+                                                                                /*Dialog pop up to display.. */
+                                                                                //                                                                        dialog = dialogBuilder.show();
+                                                                            }
+
+                                                                            lastRideSharedPrefs.edit().putString("DriverLocation", "set").apply();
+
+                                                                        }
                                                                 }
 
                                                                 //Check if Status on database is empty. If it is empty, Print Current Ride.
@@ -397,7 +409,7 @@ public class MainFragment extends AppCompatActivity {
 
 
                                                                         assert value != null;
-                                                                        if(value.exists()){
+                                                                        if (value.exists()) {
 
                                                                             double stLat = value.getDouble("startLat");
                                                                             double stLon = value.getDouble("startLon");
@@ -411,7 +423,7 @@ public class MainFragment extends AppCompatActivity {
                                                                             lastRideSharedPrefs.edit().putFloat("theStartLat", Float.parseFloat(String.valueOf(stLat))).apply();
                                                                             lastRideSharedPrefs.edit().putFloat("theEndLon", Float.parseFloat(String.valueOf(eLon))).apply();
                                                                             lastRideSharedPrefs.edit().putFloat("theEndLat", Float.parseFloat(String.valueOf(eLat))).apply();
-                                                                            lastRideSharedPrefs.edit().putString("theRideCost", value.getString("rideCost")).apply();
+                                                                            lastRideSharedPrefs.edit().putString("theRideCost", String.valueOf(value.get("rideCost"))).apply();
                                                                             lastRideSharedPrefs.edit().putString("theRideTime", value.getString("rideTime")).apply();
                                                                             lastRideSharedPrefs.edit().putString("theRideDate", value.getString("rideDate")).apply();
                                                                             lastRideSharedPrefs.edit().putString("theDriverName", value.getString("driverName")).apply();
@@ -425,14 +437,15 @@ public class MainFragment extends AppCompatActivity {
                                                                             dateAndTime.setText(dateTime);
                                                                             originToDestination.setText(originDestination);
 
-                                                                            amount.setText(new StringFunction(value.getString("rideCost")).splitStringWithAndGet("/", 0));
+                                                                            String costPerPassenger = value.getString("currency") + String.valueOf(value.get("rideCost")) + "/passenger";
+                                                                            amount.setText(costPerPassenger);
                                                                             driverName.setText(value.getString("driverName"));
                                                                             carNumberPlate.setText(value.getString("plate"));
 
-                                                                            statusActionBtn.setOnClickListener(Viewv -> {
+                                                                            statusActionBtn.setOnClickListener(view -> {
 
                                                                                 Intent intent = new Intent(MainFragment.this, PendingRideMapActivity.class);
-                                                                                intent.putExtra("theDriverId",value.getString("myId") );
+                                                                                intent.putExtra("theDriverId", value.getString("myId"));
                                                                                 intent.putExtra("journey", originDestination);
                                                                                 intent.putExtra("dateTime", dateTime);
                                                                                 intent.putExtra("distance", amount.getText().toString());
@@ -444,7 +457,7 @@ public class MainFragment extends AppCompatActivity {
                                                                                 intent.putExtra("driverName", driverName.getText().toString());
                                                                                 intent.putExtra("plate", carNumberPlate.getText().toString());
 
-                                                                                Log.i("TheDriverID",intent.getStringExtra("theDriverId"));
+                                                                                Log.i("TheDriverID", intent.getStringExtra("theDriverId"));
 
                                                                                 startActivity(intent);
                                                                             });
@@ -484,8 +497,8 @@ public class MainFragment extends AppCompatActivity {
                                                                                 public void onClick(View v) {
                                                                                     Intent i = new Intent(MainFragment.this, AvailableRides.class);
                                                                                     i.putExtra("Purpose", "ForView");
-                                                                                    i.putExtra("theDriverId",value.getString("myId") );
-                                                                                    i.putExtra("theDriverId",value.getString("myId") );
+                                                                                    i.putExtra("theDriverId", value.getString("myId"));
+                                                                                    i.putExtra("theDriverId", value.getString("myId"));
                                                                                     i.putExtra("theJourney", value.getString("startLocation") + "-" + value.getString("endLocation"));
                                                                                     i.putExtra("theTime", dateTime);
                                                                                     i.putExtra("theDistance", amount.getText().toString());
@@ -499,9 +512,6 @@ public class MainFragment extends AppCompatActivity {
 
                                                                                     startActivity(i);
                                                                                 }
-
-
-
 
 
                                                                             });
@@ -583,7 +593,6 @@ public class MainFragment extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -652,13 +661,13 @@ public class MainFragment extends AppCompatActivity {
 
     }
 
-    private void checkUsersDetails(){
+    private void checkUsersDetails() {
         db.collection("Passenger").document(mAuth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                if (!value.contains("Name") || !value.contains("Email")){
-                    Intent i = new Intent(MainFragment.this, ProfileSettings.class );
+                if (!value.contains("Name") || !value.contains("Email")) {
+                    Intent i = new Intent(MainFragment.this, ProfileSettings.class);
                     startActivity(i);
                 }
 

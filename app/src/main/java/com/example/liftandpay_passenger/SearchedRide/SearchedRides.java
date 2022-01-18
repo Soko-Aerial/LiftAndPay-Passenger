@@ -114,7 +114,7 @@ public class SearchedRides extends AppCompatActivity {
                         carholder.clear();
 
                         Log.i("Search", "Completed");
-
+                        
                         if (task.isSuccessful()) {
                             Log.i("Search", "Successful");
                             Snackbar.make(recyclerView, "Successful", Snackbar.LENGTH_SHORT).show();
@@ -129,12 +129,16 @@ public class SearchedRides extends AppCompatActivity {
                                 String rideCost = Objects.requireNonNull(snapshots.getData().getOrDefault("rideCost", "null")).toString();
                                 String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("rideDate", "null")).toString();
                                 String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("rideTime", "null")).toString();
+                                String rideCurrency = Objects.requireNonNull(snapshots.getData().getOrDefault("currency", "0")).toString();
                                 double startLat = (double) snapshots.getData().getOrDefault("startLat", null);
                                 double startLon = (double) snapshots.getData().getOrDefault("startLon", null);
                                 double endLon = (double) snapshots.getData().getOrDefault("endLon", null);
                                 double endLat = (double) snapshots.getData().getOrDefault("endLat", null);
                                 int numberOfSeats = Integer.parseInt(snapshots.getData().get("Number Of Occupants").toString());
 
+                                if(!rideCurrency.equals("0")) {
+                                    rideCost = rideCurrency + rideCost + "/passenger";
+                                }
 
                                 Log.e("Name", stLoc + " ->" + endLoc + "");
 

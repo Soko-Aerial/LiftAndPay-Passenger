@@ -33,15 +33,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.liftandpay_passenger.AVR_Activities.Chats.ChatActivity_avr;
-import com.example.liftandpay_passenger.MainActivities.MainActivity;
-import com.example.liftandpay_passenger.MainActivities.MainFragment;
 import com.example.liftandpay_passenger.R;
 import com.example.liftandpay_passenger.fastClass.Ratings;
 import com.example.liftandpay_passenger.fastClass.StringFunction;
 import com.google.android.gms.location.FusedLocationProviderClient;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -50,13 +47,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineCallback;
-import com.mapbox.android.core.location.LocationEngineProvider;
-import com.mapbox.android.core.location.LocationEngineRequest;
-import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
@@ -75,17 +68,12 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
-import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.squareup.picasso.Picasso;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -102,7 +90,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconRotate;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -156,6 +144,9 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
     private FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private Map<String, Object> passengerLoc = new HashMap<>();
+
+    private Float driverOrientation = 0f;
+    private String myStatus;
 
 
     @Override
@@ -228,6 +219,8 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 addDestinationIconSymbolLayer(style);
 
 
+                driverOrientation = 55.0f;
+
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -295,6 +288,57 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
+                                myStatus = value.getString("Status");
+
+                                switch (myStatus){
+                                    case "Driver almost there":
+                                        String arrivalFlag = value.getString("ArrivalFlag");
+                                        if (arrivalFlag == null) {
+                                            switchAmongDriversStatuses(value001);
+
+                                            vibrator.vibrate(3000);
+                                            textToSpeech.speak(value.getString("Status"), TextToSpeech.QUEUE_FLUSH, null, value.getString("Status"));
+                                            dialogBuilder.setView(LayoutInflater.from(PendingRideMapActivity.this).inflate(R.layout.dialog_status_dialog, null));
+                                            dialogBuilder.setCancelable(false);
+                                            dialogBuilder.setPositiveButton("Alright", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            dialog = dialogBuilder.show();
+
+                                            HashMap<String, String> arrivalData = new HashMap<>();
+                                            arrivalData.put("ArrivalFlag", "1");
+                                            db.collection("Rides").document(rideId).collection("Booked By").document(mUid)
+                                                    .set(arrivalData, SetOptions.merge());
+                                        }
+                                        else{
+                                            switchAmongDriversStatuses(value001);
+                                        }
+
+                                        break;
+
+                                    case "Approved":
+                                        switchAmongDriversStatuses(value001);
+                                        break;
+
+                                    case "Declined":
+                                        break;
+                                    case "Cancelled":
+                                        //don't show driver's location
+                                        switchActionBtn("Oww, You cancelled the ride", R.color.orange, true);
+                                        break;
+
+                                    case "Dropped":
+                                        //Confirm drop off
+                                        switchActionBtn("You have arrived at your destination", R.color.success, true);
+                                        break;
+
+
+
+                                }
+
 
                                 if (value.getString("Status").equals("Approved")) {
                                     switchAmongDriversStatuses(value001);
@@ -303,21 +347,14 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
                                 }
                                 if (value.getString("Status").equals("Driver almost there")) {
-                                    vibrator.vibrate(3000);
-                                    textToSpeech.speak(value.getString("Status"), TextToSpeech.QUEUE_FLUSH, null, value.getString("Status"));
-                                    dialogBuilder.setView(LayoutInflater.from(PendingRideMapActivity.this).inflate(R.layout.dialog_status_dialog, null));
-                                    dialogBuilder.setCancelable(false);
-                                    dialogBuilder.setPositiveButton("Alright", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    dialog = dialogBuilder.show();
+
                                 }
                                 if (value.getString("Status").equals("Cancelled")) {
-                                    //don't show driver's location
-                                    switchActionBtn("Oww, You cancelled the ride", R.color.orange, true);
+
+                                }
+                                 if (value.getString("Status").equals("Started")) {
+                                    switchAmongDriversStatuses(value001);
+                                    //Confirm pickup
 
                                 }
                                 if (value.getString("Status").equals("Picked")) {
@@ -328,8 +365,6 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
                                 }
                                 if (value.getString("Status").equals("Dropped")) {
-                                    //Confirm drop off
-                                    switchActionBtn("You have arrived at your destination", R.color.success, true);
 
                                 }
                             }
@@ -499,7 +534,8 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
         destinationSymbolLayer.withProperties(
                 iconImage("car-icon-id"),
                 iconAllowOverlap(true),
-                iconIgnorePlacement(true)
+                iconIgnorePlacement(true),
+                iconRotate(driverOrientation)
         );
 
         loadedMapStyle.addLayer(destinationSymbolLayer);
@@ -511,6 +547,9 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
         GeoJsonSource theMainStyle = mapboxMap.getStyle().getSourceAs(destinationSource);
         if (theMainStyle != null) {
+
+            mapboxMap.getStyle().getImage("");
+
             theMainStyle.setGeoJson(FeatureCollection.fromFeature(
                     Feature.fromGeometry(Point.fromLngLat(lon, lat))
             ));
