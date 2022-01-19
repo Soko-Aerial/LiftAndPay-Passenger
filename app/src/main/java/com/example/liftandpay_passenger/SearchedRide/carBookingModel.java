@@ -14,6 +14,7 @@ public class carBookingModel {
     private String date;
     private String time;
     private String driverId;
+    private String driverStatus;
     private double stLat;
     private double stLon;
     private double endLat;
@@ -27,6 +28,7 @@ public class carBookingModel {
                            String date,
                            String time,
                            String driverId,
+                           String driversStatus,
                            double stLat,
                            double stLon,
                            double endLat,
@@ -39,12 +41,20 @@ public class carBookingModel {
         this.date = date;
         this.time = time;
         this.driverId = driverId;
+        this.driverStatus = driversStatus;
         this.stLat = stLat;
         this.stLon = stLon;
         this.endLat = endLat;
         this.endLon = endLon;
     }
 
+    public String getDriverStatus() {
+        return driverStatus;
+    }
+
+    public void setDriverStatus(String driverStatus) {
+        this.driverStatus = driverStatus;
+    }
 
     public String getDriverId() {
         return driverId;

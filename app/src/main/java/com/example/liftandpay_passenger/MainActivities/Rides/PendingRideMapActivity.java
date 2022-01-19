@@ -147,6 +147,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
     private Float driverOrientation = 0f;
     private String myStatus;
+    private SymbolLayer destinationSymbolLayer;
 
 
     @Override
@@ -219,7 +220,6 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                 addDestinationIconSymbolLayer(style);
 
 
-                driverOrientation = 55.0f;
 
                 callBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -288,6 +288,10 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
 
+                                driverOrientation = Objects.requireNonNull(value001.getDouble("driversBearing")).floatValue();
+
+                                destinationSymbolLayer.withProperties(iconRotate(driverOrientation));
+
                                 myStatus = value.getString("Status");
 
                                 switch (myStatus){
@@ -340,7 +344,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                                 }
 
 
-                                if (value.getString("Status").equals("Approved")) {
+                               /* if (value.getString("Status").equals("Approved")) {
                                     switchAmongDriversStatuses(value001);
                                 }
                                 if (value.getString("Status").equals("Declined")) {
@@ -366,7 +370,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
                                 }
                                 if (value.getString("Status").equals("Dropped")) {
 
-                                }
+                                }*/
                             }
                         });
             }
@@ -530,7 +534,7 @@ public class PendingRideMapActivity extends FragmentActivity implements OnMapRea
 
         GeoJsonSource geoJsonSource = new GeoJsonSource("destination-source-id");
 
-        SymbolLayer destinationSymbolLayer = new SymbolLayer("destination-symbol-layer-id", "destination-source-id");
+        destinationSymbolLayer = new SymbolLayer("destination-symbol-layer-id", "destination-source-id");
         destinationSymbolLayer.withProperties(
                 iconImage("car-icon-id"),
                 iconAllowOverlap(true),

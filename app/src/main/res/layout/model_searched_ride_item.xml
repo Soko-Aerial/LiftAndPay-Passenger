@@ -1,46 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="5dp"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-  >
+    android:paddingTop="5dp">
+
     <LinearLayout
         android:id="@+id/rideItemId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
-        android:backgroundTint="@color/fadedBlue"
+        android:backgroundTint="@color/extraFadedBlue"
         android:clickable="true"
         android:focusable="true"
-        android:padding="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
+
         <ImageView
             android:id="@+id/driverImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/person_img"/>
+            android:src="@drawable/person_img" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="2dp"
-            android:background="@color/fadedBlue"/>
+            android:background="@color/fadedBlue" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/driverNameId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Hubert Brako Amponsah"
                 android:textColor="@color/primaryColors"
-                android:text="Hubert Brako Amponsah"/>
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="2dp"
+                android:background="@color/fadedBlue" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -51,20 +59,27 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:text="From: "
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/startLocationId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:maxLength="20"
                     android:text="PointA Abeka labpa s d ti d44 mi"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="2dp"
+                android:background="@color/fadedBlue" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -74,89 +89,113 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
                     android:text="To: "
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/endLocationId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="Abeka"
                     android:maxLength="20"
-                    android:textColor="@color/black"/>
+                    android:text="Abeka"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="2dp"
+                android:background="@color/fadedBlue" />
 
-            <TextView
-                android:id="@+id/amountPerKilometer"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:background="@color/extraFadedBlue"
-                android:text="GHC1.20 - GHC 1.40"/>
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/amountPerKilometer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:background="@color/transparent"
+                        android:text="GHC1.20 - GHC 1.40" />
+
+
+                    <TextView
+                        android:id="@+id/rideStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="15dp"
+                        android:background="@color/white"
+                        android:paddingHorizontal="10dp"
+                        android:text="Pending" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/numberOfSeatsId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0/2 seats"
+                        android:textSize="12sp"
+                        app:drawableStartCompat="@drawable/img_seat"
+                        app:drawableTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/dateModelId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="12th Feb 2021"
+                        android:textSize="12sp"
+                        app:drawableStartCompat="@drawable/img_date"
+                        app:drawableTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/timeModelId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="12:00pm"
+                        android:textSize="12sp"
+                        app:drawableStartCompat="@drawable/img_time"
+                        app:drawableTint="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
+
 
         </LinearLayout>
-       <View
-           android:layout_width="0dp"
-           android:layout_height="match_parent"
-           android:layout_weight="1"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/numberOfSeatsId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:text="0/2 seats"
-                app:drawableTint="@color/black"
-                app:drawableStartCompat="@drawable/img_seat" />
-
-            <TextView
-                android:id="@+id/dateModelId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:text="12th Feb 2021"
-                app:drawableTint="@color/black"
-                app:drawableStartCompat="@drawable/img_date" />
-
-            <TextView
-                android:id="@+id/timeModelId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:text="12:00pm"
-                app:drawableTint="@color/black"
-                app:drawableStartCompat="@drawable/img_time" />
-        </LinearLayout>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:orientation="vertical">
-
-
-
-    </RelativeLayout>
-
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/fadedBlue"/>
+        android:background="@color/fadedBlue" />
 
 </LinearLayout>

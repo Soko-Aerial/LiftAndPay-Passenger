@@ -130,13 +130,15 @@ public class SearchedRides extends AppCompatActivity {
                                 String rideDate = Objects.requireNonNull(snapshots.getData().getOrDefault("rideDate", "null")).toString();
                                 String rideTime = Objects.requireNonNull(snapshots.getData().getOrDefault("rideTime", "null")).toString();
                                 String rideCurrency = Objects.requireNonNull(snapshots.getData().getOrDefault("currency", "0")).toString();
+                                String driverStatus = Objects.requireNonNull(snapshots.getData().getOrDefault("driversStatus","null")).toString();
                                 double startLat = (double) snapshots.getData().getOrDefault("startLat", null);
                                 double startLon = (double) snapshots.getData().getOrDefault("startLon", null);
                                 double endLon = (double) snapshots.getData().getOrDefault("endLon", null);
                                 double endLat = (double) snapshots.getData().getOrDefault("endLat", null);
                                 int numberOfSeats = Integer.parseInt(snapshots.getData().get("Number Of Occupants").toString());
 
-                                if(!rideCurrency.equals("0")) {
+
+                                if(!rideCurrency.contains("c")) {
                                     rideCost = rideCurrency + rideCost + "/passenger";
                                 }
 
@@ -172,6 +174,7 @@ public class SearchedRides extends AppCompatActivity {
                                                     rideDate,
                                                     rideTime,
                                                     snapshots.getId(),
+                                                    driverStatus,
                                                     startLat, startLon,
                                                     endLat, endLon
                                             );

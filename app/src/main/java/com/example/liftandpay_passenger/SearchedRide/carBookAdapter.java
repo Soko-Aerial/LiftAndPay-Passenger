@@ -63,6 +63,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         holder.time.setText(carHolder.get(position).getTime());
         holder.rideDriverId = carHolder.get(position).getDriverId();
         holder.numberOfSeats.setText("0/"+carHolder.get(position).getNumberOfSeats()+"seats");
+        holder.rideStatus.setText(carHolder.get(position).getDriverStatus());
         holder.stLat = carHolder.get(position).getStLat();
         holder.stLon = carHolder.get(position).getStLon();
         holder.endLat = carHolder.get(position).getEndLat();
@@ -129,6 +130,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
         TextView endLocation;
         TextView date;
         TextView time;
+        TextView rideStatus;
         TextView numberOfSeats;
         String driverId;
         String rideDriverId;
@@ -150,6 +152,7 @@ public class carBookAdapter extends RecyclerView.Adapter<carBookAdapter.myViewHo
             name = itemView.findViewById(R.id.driverNameId);
             driverImage = itemView.findViewById(R.id.driverImage);
             itemLayout = itemView.findViewById(R.id.rideItemId);
+            rideStatus = itemView.findViewById(R.id.rideStatus);
 
         }
     }
