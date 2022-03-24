@@ -47,7 +47,7 @@
                 android:id="@+id/nameId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hubert Brako Amponsah"
+                android:text="Error"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -55,7 +55,7 @@
                 android:id="@+id/journeyId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Start to Destination" />
+                android:text="Not Set" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -134,7 +134,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="1dp"
-                android:background="@color/fadedBlue"/>
+                android:background="@color/fadedBlue" />
 
             <!--The ratings-->
 
@@ -157,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="1dp"
-                android:background="@color/fadedBlue"/>
+                android:background="@color/fadedBlue" />
 
             <!--About the car-->
             <TextView

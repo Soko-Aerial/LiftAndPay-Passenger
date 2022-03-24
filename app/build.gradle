@@ -12,11 +12,11 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.liftandpay_passenger"
+        applicationId "com.LnPay.passenger"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.02"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,9 +24,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable true
+            debuggable false
             signingConfig signingConfigs.lift
         }
     }
@@ -42,12 +42,12 @@ android {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.0.1')
     implementation 'com.google.firebase:firebase-firestore'
-//    implementation 'com.google.firebase:firebase-auth'
+//  implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
     implementation 'com.google.firebase:firebase-storage'
 
 
-    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     /*MAP BOX DEPENDENCIES*/
     implementation "com.mapbox.search:mapbox-search-android-ui:1.0.0-beta.11"
@@ -71,9 +71,11 @@ dependencies {
     //Libraries for image controls
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.github.nos-digital:imagin:1.2.1'
-//    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
     implementation "androidx.work:work-runtime:2.7.0"
+    implementation 'com.google.android.libraries.places:places:2.5.0'
+    testImplementation 'junit:junit:4.12'
 
 
 }

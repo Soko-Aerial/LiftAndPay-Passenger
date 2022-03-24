@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.liftandpay_passenger">
+    package="com.LnPay.passenger">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE"/>
-
     <uses-feature android:name="android.hardware.location.network" />
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.wifi" />
@@ -22,22 +21,18 @@
 
     <application
         android:allowBackup="true"
-
         android:label="@string/app_name"
-
         android:supportsRtl="true"
         android:theme="@style/Theme.LiftAndPayPassenger"
-
         android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round">
 
-        android:roundIcon="@mipmap/ic_launcher_round"
-
-
-        >
         <activity
             android:name=".ridePrefs.RidePreference"
             android:exported="true" />
+
         <activity android:name=".ImageViewActivity" />
+
         <activity
             android:name=".SplashScreen"
             android:theme="@style/Theme.Transparent"
@@ -51,9 +46,22 @@
         <activity
             android:name=".MainActivities.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".AVR_Activities.AvailableRides" />
+        <activity android:name=".AVR_Activities.AvailableRides"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.liftandpay.com"
+                    android:scheme="http" />
+                <data android:path="/myride.php"/>
+                <data android:scheme="https"/>
+            </intent-filter>
+
+        </activity>
         <activity android:name=".menu.SettingsActivity" />
-        <activity android:name=".ProfileSetup.LogAuth" />
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".MainActivities.MainFragment" />
         <activity android:name=".ProfileSetup.ProfileSettings" />
@@ -73,7 +81,6 @@
        <!-- <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />-->
-
 
     </application>
 

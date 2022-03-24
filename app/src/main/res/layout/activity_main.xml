@@ -6,8 +6,51 @@
     android:layout_height="match_parent"
     android:id="@+id/maincontainer"
     tools:context=".MainActivities.MainActivity"
-    android:background="#F2F2F2">
+    android:background="@drawable/bkg_main">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/extraFadedBlue"
+        android:elevation="1dp"
+        android:padding="15dp"
+        android:text="Join a driver going your direction. \nA better way to carpool is made to suit both drivers and passengers."
+        android:textColor="@color/primaryColors"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/welcomeAnim"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_above="@id/footer"
+        android:layout_centerInParent="true"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/welcome"
+        app:tint="@color/primaryColors" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/footer">
+
+        <Button
+            android:id="@+id/signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:text="signin"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

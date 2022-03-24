@@ -7,57 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:11462994162:android:57b75764f5a94d37c1486b",
-        "android_client_info": {
-          "package_name": "com.LnPay.passenger"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "11462994162-uu1tor7g4iboc55cfs9njl1qf312crn1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.LnPay.passenger",
-            "certificate_hash": "fb4e4f170759473d9214ed3ec7b58351ce25a8b4"
-          }
-        },
-        {
-          "client_id": "11462994162-35kl8s0mqvjk1l8mnhj529d0e44cmr1l.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDMur9PHc8g0aGALP_QRTunTA3HMV4Y0-M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "11462994162-35kl8s0mqvjk1l8mnhj529d0e44cmr1l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:11462994162:android:01d3b9663d6fddbec1486b",
         "android_client_info": {
           "package_name": "com.example.liftandpay_driver"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "11462994162-809e5qgkdio8ijnnf4skmdmp58dcmlq7.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.liftandpay_driver",
-            "certificate_hash": "611af4be23f4094534fc5e168492ad1bfcc57d7e"
-          }
-        },
         {
           "client_id": "11462994162-n81tac9erictfitdqm40ni6fcg90nvti.apps.googleusercontent.com",
           "client_type": 1,
@@ -95,14 +50,6 @@
         }
       },
       "oauth_client": [
-        {
-          "client_id": "11462994162-1j4qjhbpfsoq7an08ho4pgo8o9sf85e2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.LnPay.passenger",
-            "certificate_hash": "fb4e4f170759473d9214ed3ec7b58351ce25a8b4"
-          }
-        },
         {
           "client_id": "11462994162-35kl8s0mqvjk1l8mnhj529d0e44cmr1l.apps.googleusercontent.com",
           "client_type": 3

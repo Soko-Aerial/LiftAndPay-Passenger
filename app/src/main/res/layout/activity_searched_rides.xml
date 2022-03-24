@@ -161,6 +161,15 @@
         android:background="@color/extraFadedBlue"
         />
 
+    <TextView
+        android:id="@+id/notAvailableId"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="There is no ride available for your search. \nA driver may go your way very soon so kindly \ncheck again."/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
