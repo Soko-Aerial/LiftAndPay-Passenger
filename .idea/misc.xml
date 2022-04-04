@@ -16,6 +16,7 @@
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/gradient.xml" value="0.1171875" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/ic_baseline_remove_24.xml" value="0.11510416666666666" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/ic_currency.xml" value="0.16458333333333333" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/ic_famasechlogo.xml" value="0.2415" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/ic_icons8_mastercard.xml" value="0.16458333333333333" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/ic_icons8_paypal.xml" value="0.16458333333333333" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3078125" />
@@ -73,6 +74,7 @@
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_pay.xml" value="0.15729166666666666" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_pending_rides.xml" value="0.16510416666666666" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/fragment_profile.xml" value="0.22760416666666666" />
+        <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/lastride_layout.xml" value="0.20512820512820512" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/model_driver_ratings.xml" value="0.25416666666666665" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/model_pending_ride.xml" value="0.4" />
         <entry key="..\:/Projects.MyProjects/AndroidProjects/sokoprojects/LiftAndPay/Passenger/app/src/main/res/layout/model_ratings.xml" value="0.25416666666666665" />

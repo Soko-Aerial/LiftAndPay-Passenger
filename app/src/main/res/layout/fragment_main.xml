@@ -10,8 +10,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        >
+
     <RelativeLayout
         android:id="@+id/topViewId"
         android:layout_width="match_parent"
@@ -154,6 +155,7 @@
                 android:drawableTint="@color/success"
                 android:padding="10dp"
                 android:visibility="visible"
+                android:tooltipText="Set your ride preference"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -187,15 +189,16 @@
         android:background="@color/white"
         android:orientation="vertical"
         android:paddingHorizontal="25dp"
-        android:scrollbars="none"
+        android:animateLayoutChanges="true"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/parentView">
 
 
         <LinearLayout
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
             <TextView
@@ -209,6 +212,12 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <LinearLayout
+                android:id="@+id/checkLastRideLayoutId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"/>
 
 
 
@@ -221,6 +230,7 @@
                 android:layout_margin="-4dp"
                 android:elevation="10dp"
                 android:visibility="gone"
+                android:animateLayoutChanges="true"
                 android:fadingEdgeLength="4dp"
                 android:orientation="vertical">
 
@@ -482,6 +492,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:padding="3dp"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:columnCount="2">
 
@@ -490,7 +501,6 @@
                     android:id="@+id/rideHistoryBtn"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:layout_marginVertical="15dp"
                     android:foreground="@drawable/ripple"
                     android:foregroundTint="@color/transparent"
                     android:layout_marginTop="15dp"
@@ -505,20 +515,13 @@
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/reverseClock"
-                        android:layout_width="120dp"
-                        android:layout_height="100dp"
+                        android:layout_width="135dp"
+                        android:layout_height="120dp"
                         app:lottie_speed="-0.01"
                         app:tint="@color/primaryColors"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/clock" />
-
-                    <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="100dp"
-                        android:padding="18dp"
-                        android:visibility="gone"
-                        android:src="@drawable/img_time" />
 
 
 
@@ -532,12 +535,12 @@
 
                 <LinearLayout
                     android:id="@+id/profileBtn"
-                    android:layout_marginVertical="15dp"
+
                     android:layout_marginTop="15dp"
                     android:foreground="@drawable/ripple"
                     android:foregroundTint="@color/transparent"
                     android:background="@drawable/type_msg_box"
-                    android:layout_gravity="center"
+                    android:layout_gravity="right"
                     android:clickable="true"
                     android:elevation="3dp"
                     android:focusable="true"
@@ -547,8 +550,8 @@
                     android:padding="5dp">
 
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="100dp"
+                        android:layout_width="135dp"
+                        android:layout_height="120dp"
                         android:padding="18dp"
                         android:src="@drawable/person_img" />
 
@@ -560,79 +563,15 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/RidesId"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/ripple"
-                    android:backgroundTint="@color/white"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    android:focusable="true"
-                    android:orientation="vertical"
-                    android:padding="5dp"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="100dp"
-                        android:padding="18dp"
-                        android:src="@drawable/img_rideupload" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Rides" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/paymentBtn"
-                    android:layout_margin="15dp"
-                    android:background="@drawable/ripple"
-                    android:backgroundTint="@color/white"
-                    android:clickable="true"
-                    android:elevation="3dp"
-                    android:focusable="true"
-                    android:orientation="vertical"
-                    android:padding="5dp"
-                    android:visibility="invisible">
-
-                    <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="100dp"
-                        android:padding="18dp"
-                        android:src="@drawable/img_money" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Paymnets" />
-
-                </LinearLayout>
-
-
             </GridLayout>
 
+
+
         </LinearLayout>
+
     </LinearLayout>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/primaryColors"
-        android:foregroundTint="@color/white"
-        android:src="@drawable/person_img"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

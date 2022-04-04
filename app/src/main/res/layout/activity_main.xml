@@ -8,7 +8,21 @@
     tools:context=".MainActivities.MainActivity"
     android:background="@drawable/bkg_main">
 
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/liftLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:lottie_colorFilter="@color/primaryColors"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/welcomeText"
+        app:tintMode="multiply"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/spalsh" />
+
     <TextView
+        android:id="@+id/welcomeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
