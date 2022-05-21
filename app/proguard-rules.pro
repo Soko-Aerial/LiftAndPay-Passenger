@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
+# EnclosingMethod is required to use InnerClasses. RETROFIT
+-dontnote okhttp3.**, okio.**, retrofit2.**
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }

@@ -61,6 +61,10 @@
             </intent-filter>
 
         </activity>
+
+        <service android:name=".fastClass.BroadcastService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
         <activity android:name=".menu.SettingsActivity" />
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".MainActivities.MainFragment" />
